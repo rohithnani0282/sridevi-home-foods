@@ -1,0 +1,35 @@
+body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+#homeFoodsList .card, #picklesList .card { cursor: default; }
+.qty-input { width: 80px; }
+.card .price { font-weight: 600; color: #0d6efd; } /* blue price */
+.product-img { width: 120px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid #e9ecef; }
+
+/* Admin Panel */
+.admin-product-row { background-color: #fff; }
+.admin-product-row .form-label-sm { font-size: 0.75rem; font-weight: 600; }
+.admin-product-row .form-control-sm, .admin-product-row .form-select-sm { font-size: 0.875rem; }
+
+@media (max-width: 576px) {
+  .product-img { width: 100px; height: 70px; }
+}
+
+/* Small brand image used in navbar */
+.brand-img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+
+/* Header banner background (uses images/banner.jpeg) */
+.header-banner {
+  position: relative;
+  background-color: #0d6efd; /* fallback */
+  background-image: url('images/banner.jpeg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+.header-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(13,110,253,0.45);
+  z-index: 0;
+}
+.header-banner .container { position: relative; z-index: 1; }

@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin Panel Test</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h1>Admin Panel Test</h1>
+  <button id="testBtn" class="btn btn-primary">Test Admin Panel Button</button>
+  <div id="adminPanel" class="card mt-3" style="display: none;">
+    <div class="card-body">
+      <h5>Admin Panel is Now Visible!</h5>
+      <p>If you can see this, the toggle button works.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('testBtn').addEventListener('click', () => {
+    const panel = document.getElementById('adminPanel');
+    if (panel.style.display === 'none' || panel.style.display === '') {
+      panel.style.display = 'block';
+      alert('Admin panel is now visible!');
+    } else {
+      panel.style.display = 'none';
+      alert('Admin panel is now hidden!');
+    }
+  });
+});
+</script>
+</body>
+</html>
