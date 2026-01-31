@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +6,11 @@
     <title>Admin Panel - SRIDEVI HOME FOODS</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -1193,30 +1197,6 @@
 <!-- Bootstrap + bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Firebase (compat) - paste your Firebase web config into the firebaseConfig object below -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script>
-  // Replace the placeholder values with your Firebase project's config
- const firebaseConfig = {
-  apiKey: "AIzaSyA7eg074HLRG5OOZOFmDk3Pg4RR0H9ywsU",
-  authDomain: "sridevi-home-foods.firebaseapp.com",
-  databaseURL: "https://sridevi-home-foods-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "sridevi-home-foods",
-  storageBucket: "sridevi-home-foods.firebasestorage.app",
-  messagingSenderId: "878449060572",
-  appId: "1:878449060572:web:97d93e079e26e9b1cda219",
-  measurementId: "G-JTZJ70R1CY"
-};
-
-  // Initialize Firebase
-  if (typeof firebase !== 'undefined') {
-    firebase.initializeApp(firebaseConfig);
-  } else {
-    console.warn('Firebase SDK not loaded');
-  }
-</script>
-<script src="app.js"></script>
-</body>
-</html>
->>>>>>> 1c20fc364c815c175519b5fb082260c8dc4704af
+<!-- Firebase Configuration -->
+<script src="firebase-config.js"></script>
+<script src="admin-firebase.js"></script>
