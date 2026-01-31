@@ -455,54 +455,119 @@
                     </div>
                 </section>
 
-                <!-- Products Section -->
-                <section class="content-section" id="products">
-                    <div class="section-header">
-                        <h2 class="section-title">Products</h2>
-                        <p class="section-subtitle">Manage your products</p>
+                <!-- Recipes Section -->
+                <section class="content-section" id="recipes">
+                    <div class="content-header">
+                        <h1 class="content-title">Menu Items</h1>
+                        <p class="content-subtitle">Manage your menu items, pricing, and inventory.</p>
                     </div>
                     
                     <div class="data-table">
                         <div class="table-header">
-                            <h3 class="table-title">Product List</h3>
-                            <button class="btn btn-success" onclick="openProductModal()">
-                                <i class="fas fa-plus"></i> Add Product
-                            </button>
+                            <h3 class="table-title">Product Management</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-primary" onclick="openProductModal()">
+                                    <i class="fas fa-plus"></i>
+                                    Add Product
+                                </button>
+                            </div>
                         </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Sakinalu</td>
-                                    <td>Snacks</td>
-                                    <td>₹150</td>
-                                    <td><span style="color: #27ae60;">Active</span></td>
-                                    <td>
-                                        <button class="btn btn-secondary" onclick="editProduct(1)">Edit</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Garelu</td>
-                                    <td>Snacks</td>
-                                    <td>₹120</td>
-                                    <td><span style="color: #27ae60;">Active</span></td>
-                                    <td>
-                                        <button class="btn btn-secondary" onclick="editProduct(2)">Edit</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-content">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Sona Masoori Rice</td>
+                                        <td>Home Foods</td>
+                                        <td>₹320/kg</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(1)">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Mixed Vegetables</td>
+                                        <td>Home Foods</td>
+                                        <td>₹350/kg</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(2)">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Sakinalu</td>
+                                        <td>Home Foods</td>
+                                        <td>₹300/kg</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(3)">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Madugulu</td>
+                                        <td>Home Foods</td>
+                                        <td>₹300/kg</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(4)">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>Laddus</td>
+                                        <td>Home Foods</td>
+                                        <td>₹400/kg</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(5)">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>Mango Pickle (veg)</td>
+                                        <td>Pickles</td>
+                                        <td>₹150/jar</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(6)">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td>Lime Pickle (veg)</td>
+                                        <td>Pickles</td>
+                                        <td>₹120/jar</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(7)">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td>Chicken Pickle (non-veg)</td>
+                                        <td>Pickles</td>
+                                        <td>₹220/jar</td>
+                                        <td><span style="color: #27ae60;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(8)">Edit</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </section>
 
@@ -792,19 +857,95 @@
                 return;
             }
             
-            showNotification('Product saved successfully!', 'success');
-            closeProductModal();
+            // Save to localStorage to sync with main website
+            const menuItems = {
+                'home-foods': [
+                    { id: 'rice', name: 'Sona Masoori Rice', pricePerKg: 320, desc: 'Aromatic everyday rice', type: 'home' },
+                    { id: 'mixveg', name: 'Mixed Vegetables', pricePerKg: 350, desc: 'Seasonal vegetables, home-style', type: 'home' },
+                    { id: 'sakinalu', name: 'Sakinalu', pricePerKg: 300, desc: 'Crispy sesame rice snack, traditional', type: 'home' },
+                    { id: 'madugulu', name: 'Madugulu', pricePerKg: 300, desc: 'Steamed rice dumplings, soft and fluffy', type: 'home' },
+                    { id: 'laddus', name: 'Laddus', pricePerKg: 400, desc: 'Sweet gram flour laddus, handmade', type: 'home' }
+                ],
+                'pickles': [
+                    { id: 'mango', name: 'Mango Pickle (veg)', price: 150, kind: 'veg', type: 'pickle' },
+                    { id: 'lime', name: 'Lime Pickle (veg)', price: 120, kind: 'veg', type: 'pickle' },
+                    { id: 'chicken', name: 'Chicken Pickle (non-veg)', price: 220, kind: 'non-veg', type: 'pickle' }
+                ]
+            };
             
-            // Clear form
-            document.getElementById('productName').value = '';
-            document.getElementById('productCategory').value = '';
-            document.getElementById('productPrice').value = '';
-            document.getElementById('productDescription').value = '';
+            // Update the item in the data
+            let updated = false;
+            for (let category in menuItems) {
+                const item = menuItems[category].find(item => 
+                    item.name.toLowerCase().includes(name.toLowerCase())
+                );
+                if (item) {
+                    item.name = name;
+                    item.desc = description;
+                    if (item.type === 'home') {
+                        item.pricePerKg = parseFloat(price);
+                    } else {
+                        item.price = parseFloat(price);
+                    }
+                    updated = true;
+                    break;
+                }
+            }
+            
+            if (updated) {
+                // Save to localStorage
+                localStorage.setItem('adminMenuItems', JSON.stringify(menuItems));
+                
+                showNotification('Product updated successfully!', 'success');
+                closeProductModal();
+                
+                // Reset form
+                document.getElementById('productName').value = '';
+                document.getElementById('productCategory').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productDescription').value = '';
+                
+                // Show info about updating main website
+                showNotification('Changes saved! Refresh main website to see updates.', 'info');
+            } else {
+                showNotification('Product not found in database', 'error');
+            }
         }
         
         // Other functions
         function editProduct(id) {
-            alert('Edit Product #' + id + '\n\nThis will open the edit modal with product data.\nFeature is ready for implementation!');
+            console.log('Editing product:', id);
+            
+            // Menu items data
+            const menuItems = {
+                1: { name: 'Sona Masoori Rice', category: 'Home Foods', price: '320', unit: 'kg', description: 'Aromatic everyday rice' },
+                2: { name: 'Mixed Vegetables', category: 'Home Foods', price: '350', unit: 'kg', description: 'Seasonal vegetables, home-style' },
+                3: { name: 'Sakinalu', category: 'Home Foods', price: '300', unit: 'kg', description: 'Crispy sesame rice snack, traditional' },
+                4: { name: 'Madugulu', category: 'Home Foods', price: '300', unit: 'kg', description: 'Steamed rice dumplings, soft and fluffy' },
+                5: { name: 'Laddus', category: 'Home Foods', price: '400', unit: 'kg', description: 'Sweet gram flour laddus, handmade' },
+                6: { name: 'Mango Pickle (veg)', category: 'Pickles', price: '150', unit: 'jar', description: 'Spicy raw mango pickle' },
+                7: { name: 'Lime Pickle (veg)', category: 'Pickles', price: '120', unit: 'jar', description: 'Tangy lime pickle' },
+                8: { name: 'Chicken Pickle (non-veg)', category: 'Pickles', price: '220', unit: 'jar', description: 'Spicy chicken pickle' }
+            };
+            
+            const product = menuItems[id];
+            if (product) {
+                // Fill the modal with product data
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category.toLowerCase().replace(' ', '-');
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productDescription').value = product.description;
+                
+                // Change modal title
+                document.querySelector('.modal-title').textContent = 'Edit Product';
+                
+                // Show modal
+                openProductModal();
+                
+                showNotification('Editing product: ' + product.name, 'info');
+            } else {
+                showNotification('Product not found!', 'error');
+            }
         }
         
         function viewOrder(id) {

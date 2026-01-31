@@ -172,8 +172,13 @@ function createProductCard(item, type) {
 }
 
 function renderCatalog() {
+  console.log('🎨 renderCatalog() called');
+  
   const menuGrid = $('#menuGrid');
+  console.log('🎯 menuGrid found:', !!menuGrid);
+  
   if (menuGrid) {
+    console.log('📋 Clearing menuGrid');
     menuGrid.innerHTML = '';
     
     // Add all items to menu grid
@@ -182,19 +187,29 @@ function renderCatalog() {
       ...PICKLES.map(item => ({...item, category: 'pickle'}))
     ];
     
-    allItems.forEach(item => {
-      menuGrid.appendChild(createProductCard(item, item.category));
+    console.log('📦 Total items to render:', allItems.length);
+    
+    allItems.forEach((item, index) => {
+      console.log(`🏷️ Rendering item ${index + 1}:`, item.name);
+      const card = createProductCard(item, item.category);
+      menuGrid.appendChild(card);
     });
+    
+    console.log('✅ Menu rendering complete');
+  } else {
+    console.error('❌ menuGrid element not found!');
   }
   
   // Also try to load into old containers if they exist
   const hList = $('#homeFoodsList');
   if (hList) {
+    console.log('📋 Found homeFoodsList, rendering there too');
     hList.innerHTML = '';
     HOME_FOODS.forEach(i => hList.appendChild(createProductCard(i, 'home')));
   }
   const pList = $('#picklesList');
   if (pList) {
+    console.log('📋 Found picklesList, rendering there too');
     pList.innerHTML = '';
     PICKLES.forEach(i => pList.appendChild(createProductCard(i, 'pickle')));
   }
@@ -678,6 +693,15 @@ function loadMenuFromLocalStorage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 DOM Content Loaded - Starting app.js');
+  console.log('📦 HOME_FOODS:', HOME_FOODS);
+  console.log('🥒 PICKLES:', PICKLES);
+  console.log('🛒 Cart:', cart);
+  
+  // Test menuGrid element
+  const menuGrid = $('#menuGrid');
+  console.log('🎯 menuGrid element:', menuGrid);
+  
   renderCatalog();
   renderCart();
   // Start watching menu updates from Firebase (if configured)
