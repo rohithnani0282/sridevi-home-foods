@@ -617,6 +617,56 @@ async function updateOrderStatus(orderId, newStatus) {
     }
 }
 
+// Modal Functions
+function openProductModal(productId = null, categoryId = null) {
+    const modal = document.getElementById('productModal');
+    const form = document.getElementById('productForm');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    // Reset form
+    form.reset();
+    document.getElementById('productId').value = '';
+    document.getElementById('categoryId').value = '';
+    
+    if (productId) {
+        // Edit existing product
+        modalTitle.textContent = 'Edit Product';
+        
+        // Find product
+        let product = null;
+        for (const [catId, catProducts] of Object.entries(recipes)) {
+            const found = catProducts.find(p => p.id === productId);
+            if (found) {
+                product = found;
+                document.getElementById('categoryId').value = catId;
+                break;
+            }
+        }
+        
+        if (product) {
+            document.getElementById('productId').value = product.id;
+            document.getElementById('name').value = product.name;
+            document.getElementById('category').value = product.category;
+            document.getElementById('price').value = product.price;
+            document.getElementById('description').value = product.description;
+            document.getElementById('image').value = product.image || '';
+        }
+    } else {
+        // Add new product
+        modalTitle.textContent = 'Add Product';
+        if (categoryId) {
+            document.getElementById('categoryId').value = categoryId;
+        }
+    }
+    
+    modal.style.display = 'block';
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('productModal');
+    modal.style.display = 'none';
+}
+
 // Test Functions
 function testOrderSave() {
     const testOrder = {
