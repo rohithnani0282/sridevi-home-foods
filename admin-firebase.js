@@ -51,8 +51,53 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAdmin();
 });
 
+// Authentication check
+function checkAuthentication() {
+    const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+    const loginTime = localStorage.getItem('adminLoginTime');
+    
+    if (!isLoggedIn || !loginTime) {
+        console.log('❌ No login session found');
+        return false;
+    }
+    
+    // Check if session is expired (24 hours)
+    const loginDate = new Date(loginTime);
+    const now = new Date();
+    const hoursDiff = (now - loginDate) / (1000 * 60 * 60);
+    
+    if (hoursDiff >= 24) {
+        console.log('❌ Login session expired');
+        localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminLoginTime');
+        return false;
+    }
+    
+    console.log('✅ Authentication valid');
+    isLoggedIn = true;
+    return true;
+}
+
+// Logout function
+function logout() {
+    console.log('🚪 Logging out...');
+    localStorage.removeItem('adminLoggedIn');
+    localStorage.removeItem('adminLoginTime');
+    showNotification('Logged out successfully', 'success');
+    setTimeout(() => {
+        window.location.href = 'admin-login.html';
+    }, 1000);
+}
+
 async function initializeAdmin() {
     console.log('🚀 Initializing Admin Panel with Firebase...');
+    
+    // Check authentication first
+    if (!checkAuthentication()) {
+        console.log('❌ Not authenticated - Redirecting to login');
+        window.location.href = 'admin-login.html';
+        return;
+    }
     
     // Initialize Firebase
     firebaseManager = initializeFirebase();
@@ -71,9 +116,7 @@ async function initializeAdmin() {
     updateUI();
     setupRealtimeListeners();
     
-    // Auto-login for simplicity (no Firebase auth)
-    isLoggedIn = true;
-    showSection('dashboard');
+    console.log('✅ Admin panel initialized successfully');
 }
 
 // Firebase Data Initialization

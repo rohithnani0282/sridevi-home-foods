@@ -3,8 +3,10 @@
 <head>
     <title>Admin Panel Launcher</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #4f46e5; margin-bottom: 10px; }
         .btn { 
             background: #4f46e5; 
             color: white; 
@@ -16,29 +18,48 @@
             margin: 10px;
             text-decoration: none;
             display: inline-block;
+            transition: all 0.3s ease;
         }
-        .btn:hover { background: #4338ca; }
+        .btn:hover { background: #4338ca; transform: translateY(-2px); }
+        .btn-danger { background: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
         .info { background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .credentials { background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .credentials h4 { color: #92400e; margin-bottom: 10px; }
+        .credentials code { background: #fff; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 SRIDEVI HOME FOODS - Admin Panel</h1>
+        <div class="header">
+            <h1>🚀 SRIDEVI HOME FOODS</h1>
+            <h2>Admin Portal</h2>
+        </div>
+        
+        <div class="credentials">
+            <h4>🔐 Admin Login Credentials:</h4>
+            <p><strong>Username:</strong> <code>admin</code></p>
+            <p><strong>Password:</strong> <code>admin123</code></p>
+        </div>
         
         <div class="info">
             <h3>📋 Access Options:</h3>
             <p><strong>Recommended:</strong> Use VS Code Live Server extension</p>
             <ol>
                 <li>Install "Live Server" extension in VS Code</li>
-                <li>Right-click on admin.html</li>
+                <li>Right-click on <strong>admin-login.html</strong></li>
                 <li>Select "Open with Live Server"</li>
             </ol>
         </div>
         
         <div class="info">
             <h3>🔗 Quick Links:</h3>
-            <a href="admin.html" class="btn" target="_blank">Open Admin Panel</a>
-            <a href="index.html" class="btn" target="_blank">Open Main Website</a>
+            <a href="admin-login.html" class="btn" target="_blank">
+                <i class="fas fa-sign-in-alt"></i> Admin Login
+            </a>
+            <a href="index.html" class="btn" target="_blank">
+                <i class="fas fa-home"></i> Main Website
+            </a>
         </div>
         
         <div class="info">
@@ -48,6 +69,14 @@
                 <li>Check for JavaScript errors</li>
                 <li>Make sure all files are in the same folder</li>
             </ul>
+        </div>
+        
+        <div class="info">
+            <h3>🌐 GitHub Pages:</h3>
+            <p>After deployment, you can access at:</p>
+            <a href="https://rohithnani0282.github.io/sridevi-home-foods/admin-login.html" class="btn" target="_blank">
+                <i class="fas fa-external-link-alt"></i> Admin Login (Live)
+            </a>
         </div>
     </div>
 </body>
