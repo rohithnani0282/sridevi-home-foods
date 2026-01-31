@@ -175,9 +175,6 @@ class CheckoutManager {
             estimatedDelivery: this.calculateEstimatedDelivery(formData.get('deliveryTime'))
         };
 
-        // Simulate order processing
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
         // Save order
         this.orders.push(order);
         localStorage.setItem('pindiOrders', JSON.stringify(this.orders));
@@ -186,13 +183,114 @@ class CheckoutManager {
         localStorage.removeItem('pindiCart');
         localStorage.removeItem('checkoutData');
 
-        // Show success message
-        this.showNotification('Order placed successfully!', 'success');
+        // Create WhatsApp message with order details
+        const fullName = `${order.customer.firstName} ${order.customer.lastName}`;
+        const fullAddress = `${order.customer.address}, ${order.customer.city}, Pincode: ${order.customer.pincode}`;
+        
+        // Create order items list
+        const orderItemsList = order.items.map(item => 
+            `${item.name} x ${item.quantity} = ₹${item.price * item.quantity}`
+        ).join('\n');
+        
+        const whatsappMessage = `🍽️ NEW ORDER - SRIDEVI HOME FOODS
 
-        // Redirect to order confirmation
+📋 ORDER NUMBER: ${order.orderNumber}
+
+👤 CUSTOMER DETAILS:
+Name: ${fullName}
+Phone: ${order.customer.phone}
+Email: ${order.customer.email}
+Address: ${fullAddress}
+
+📦 ORDER ITEMS:
+${orderItemsList}
+
+💳 PAYMENT METHOD:
+${order.payment.method.toUpperCase()}
+
+💰 ORDER TOTAL:
+Subtotal: ₹${order.pricing.subtotal}
+Delivery: ₹${order.pricing.delivery}
+Total: ₹${order.pricing.total}
+
+🚚 DELIVERY:
+Time: ${order.delivery.time}
+Instructions: ${order.delivery.instructions || 'None'}
+
+📅 Order Date: ${new Date().toLocaleString('en-IN')}
+📅 Estimated Delivery: ${order.estimatedDelivery.toLocaleString('en-IN')}
+
+Please confirm this order! 🙏
+Call us at +91 98664 06807 for any queries.`;
+
+        // Create WhatsApp URL
+        const yourPhoneNumber = '+91 98664 06807';
+        const cleanPhone = yourPhoneNumber.replace(/[^\d]/g, '');
+        const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(whatsappMessage)}`;
+
+        console.log('📱 WhatsApp Order Details:');
+        console.log('Order Number:', order.orderNumber);
+        console.log('Customer:', fullName);
+        console.log('Phone:', order.customer.phone);
+        console.log('Total:', order.pricing.total);
+        console.log('WhatsApp URL:', whatsappUrl);
+
+        // Show success message
+        this.showNotification('Redirecting to WhatsApp...', 'success');
+
+        // Redirect to WhatsApp
         setTimeout(() => {
-            window.location.href = `order-confirmation.html?orderId=${order.id}`;
+            this.openWhatsApp(whatsappUrl);
         }, 1000);
+    }
+
+    openWhatsApp(whatsappUrl) {
+        // Use multiple methods for WhatsApp redirect
+        try {
+            console.log('📱 Method 1: Direct location redirect');
+            window.location.href = whatsappUrl;
+            
+            // Fallback if direct redirect doesn't work
+            setTimeout(() => {
+                console.log('📱 Method 2: Link element click');
+                const link = document.createElement('a');
+                link.href = whatsappUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+            }, 1000);
+            
+        } catch (error) {
+            console.log('❌ Method 1 failed, trying window.open:', error.message);
+            
+            // Fallback to window.open
+            try {
+                console.log('📱 Method 3: window.open');
+                window.open(whatsappUrl, '_blank');
+                
+            } catch (error2) {
+                console.log('❌ All methods failed:', error2.message);
+                
+                // Final fallback - show URL for manual copy
+                alert('Unable to open WhatsApp automatically. Please copy this URL and paste in your browser:\n\n' + whatsappUrl + '\n\nOr contact us directly at +91 98664 06807');
+                
+                // Also show the URL on screen
+                const urlDiv = document.createElement('div');
+                urlDiv.innerHTML = `
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #25d366;">
+                        <h3 style="color: #25d366; margin-bottom: 10px;">📱 WhatsApp Order Link</h3>
+                        <p style="margin-bottom: 10px;">Click this link to send your order via WhatsApp:</p>
+                        <a href="${whatsappUrl}" target="_blank" style="color: #25d366; text-decoration: underline; font-weight: bold;">Click here to open WhatsApp</a>
+                        <p style="margin-top: 10px; font-size: 12px; color: #666;">Or copy this URL: ${whatsappUrl}</p>
+                    </div>
+                `;
+                document.querySelector('.checkout-container').appendChild(urlDiv);
+            }
+        }
     }
 
     generateOrderNumber() {
