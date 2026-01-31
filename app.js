@@ -219,61 +219,74 @@ function addToCart(item, type, qty) {
 }
 
 function renderCart() {
-  const area = $('#cartArea');
+  const area = $('#cartContent') || $('#cartArea'); // Try both elements
+  if (!area) return; // Exit if no cart element found
+  
   if (cart.length === 0) {
-    area.textContent = 'Cart is empty';
-    $('#cartTotal').textContent = '₹0';
-    $('#cartCount').textContent = '0';
-    $('#sendWhatsApp').disabled = true;
-    return;
+    area.innerHTML = `
+      <div style="text-align: center; padding: 3rem;">
+        <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+        <h3 style="color: #666;">Your cart is empty</h3>
+        <p style="color: #999;">Add some delicious items to get started!</p>
+        <a href="index.html#menu" style="display: inline-block; background: #3498db; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 1rem;">Browse Menu</a>
+      </div>
+    `;
+  } else {
+    let total = 0;
+    let html = '<div class="cart-items">';
+    
+    cart.forEach(item => {
+      const itemTotal = item.qty * (item.type === 'home' ? item.pricePerKg : item.price);
+      total += itemTotal;
+      
+      html += `
+        <div class="cart-item" style="display: flex; align-items: center; padding: 1.5rem; border-bottom: 1px solid #e1e1e1;">
+          <div style="flex: 1;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #2c3e50;">${item.name}</h4>
+            <p style="margin: 0; color: #7f8c8d; font-size: 0.9rem;">${item.desc || (item.kind || '')}</p>
+            <p style="margin: 0.5rem 0 0 0; color: #3498db; font-weight: bold;">
+              ${item.type === 'home' ? '₹' + item.pricePerKg + '/kg' : '₹' + item.price + ' / jar'} x ${item.qty}
+            </p>
+          </div>
+          <div style="text-align: right;">
+            <p style="margin: 0; font-weight: bold; color: #2c3e50;">₹${itemTotal}</p>
+            <button onclick="removeFromCart('${item.id}', '${item.type}')" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 0.5rem;">Remove</button>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += '</div>';
+    html += `
+      <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e1e1e1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h3 style="margin: 0; color: #2c3e50;">Total: ₹${total}</h3>
+          <button onclick="clearCart()" style="background: #95a5a6; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Clear Cart</button>
+        </div>
+        <a href="checkout.html" style="display: block; width: 100%; background: #27ae60; color: white; text-align: center; padding: 15px; text-decoration: none; border-radius: 6px; font-weight: bold;">Proceed to Checkout</a>
+      </div>
+    `;
+    
+    area.innerHTML = html;
   }
-  area.innerHTML = '';
-  let total = 0;
-  cart.forEach((c, idx) => {
-    const row = document.createElement('div');
-    row.className = 'd-flex justify-content-between align-items-center mb-2';
-    const left = document.createElement('div');
-    left.innerHTML = '<div><small class="text-muted">' + c.unit.toUpperCase() + '</small><div>' + c.name + '</div></div>';
-    const qtyControls = document.createElement('div');
-    qtyControls.className = 'd-flex align-items-center';
-    const minusBtn = document.createElement('button');
-    minusBtn.className = 'btn btn-outline-secondary btn-sm me-1';
-    minusBtn.textContent = '-';
-    minusBtn.onclick = () => {
-      if (c.qty > (c.type === 'home' ? 0.1 : 1)) {
-        c.qty -= (c.type === 'home' ? 0.1 : 1);
-        renderCart();
-      }
-    };
-    const qtyDisplay = document.createElement('span');
-    qtyDisplay.className = 'me-1';
-    qtyDisplay.textContent = c.qty + ' ' + c.unit;
-    const plusBtn = document.createElement('button');
-    plusBtn.className = 'btn btn-outline-secondary btn-sm me-2';
-    plusBtn.textContent = '+';
-    plusBtn.onclick = () => {
-      c.qty += (c.type === 'home' ? 0.1 : 1);
-      renderCart();
-    };
-    qtyControls.appendChild(minusBtn);
-    qtyControls.appendChild(qtyDisplay);
-    qtyControls.appendChild(plusBtn);
-    left.appendChild(qtyControls);
-    row.appendChild(left);
-    const right = document.createElement('div');
-    right.innerHTML = '₹' + (c.qty * c.unitPrice).toFixed(0) + ' <button class="btn btn-link btn-sm text-danger">Remove</button>';
-    right.querySelector('button').onclick = () => {
-      cart.splice(idx, 1);
-      renderCart();
-    };
-    row.appendChild(right);
-    area.appendChild(row);
-    total += c.qty * c.unitPrice;
-  });
-  $('#cartTotal').textContent = '₹' + total.toFixed(0);
-  const totalQty = cart.reduce((sum, c) => sum + c.qty, 0);
-  $('#cartCount').textContent = String(totalQty.toFixed(1));
-  $('#sendWhatsApp').disabled = false;
+  
+  // Update cart count
+  const cartCount = $('#cartCount');
+  if (cartCount) {
+    cartCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+  }
+}
+
+function removeFromCart(id, type) {
+  cart = cart.filter(item => !(item.id === id && item.type === type));
+  renderCart();
+}
+
+function clearCart() {
+  if (confirm('Are you sure you want to clear your cart?')) {
+    cart = [];
+    renderCart();
+  }
 }
 
 function buildOrderPayload(form) {
