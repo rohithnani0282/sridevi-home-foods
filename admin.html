@@ -1168,7 +1168,7 @@
     /* Sidebar */
     .sidebar {
         width: var(--sidebar-width);
-        background: linear-gradient(180deg, var(--dark) 0%, #111827 100%);
+        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
         color: var(--white);
         position: fixed;
         height: 100vh;
@@ -1186,88 +1186,91 @@
         background: rgba(255, 255, 255, 0.05);
     }
     
-    .sidebar-logo {
+    .brand {
         display: flex;
         align-items: center;
-        gap: 12px;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--white);
+        gap: 1rem;
     }
     
-    .sidebar-logo i {
-        width: 40px;
-        height: 40px;
-        background: var(--primary);
-        border-radius: 10px;
+    .brand-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+        color: var(--white);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
     
-    .sidebar-menu {
+    .brand-text {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .brand-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--white);
+        line-height: 1.2;
+    }
+    
+    .brand-subtitle {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+    }
+    
+    .sidebar-nav {
         padding: 1.5rem 0;
     }
     
-    .menu-section {
+    .nav-section {
         margin-bottom: 2rem;
     }
     
-    .menu-section-title {
+    .nav-title {
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: rgba(255, 255, 255, 0.5);
         padding: 0 2rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
     }
     
-    .menu-item {
+    .nav-link {
         display: flex;
         align-items: center;
         padding: 0.875rem 2rem;
-        cursor: pointer;
-        transition: var(--transition);
-        position: relative;
         color: rgba(255, 255, 255, 0.8);
         text-decoration: none;
+        transition: var(--transition);
+        position: relative;
         border-left: 3px solid transparent;
+        font-weight: 500;
     }
     
-    .menu-item:hover {
+    .nav-link:hover {
         background: rgba(255, 255, 255, 0.1);
         color: var(--white);
     }
     
-    .menu-item.active {
+    .nav-link.active {
         background: rgba(79, 70, 229, 0.2);
         color: var(--white);
         border-left-color: var(--primary);
     }
     
-    .menu-item.active::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        background: var(--primary);
-    }
-    
-    .menu-item i {
+    .nav-link i {
         width: 20px;
         margin-right: 12px;
         font-size: 1.1rem;
     }
     
-    .menu-item span {
-        font-weight: 500;
-    }
-    
-    .menu-badge {
+    .nav-badge {
         margin-left: auto;
         background: var(--primary);
         color: var(--white);
@@ -1275,6 +1278,8 @@
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 600;
+        min-width: 24px;
+        text-align: center;
     }
     
     /* Main Content */
@@ -1914,48 +1919,53 @@
 
 <div class="admin-container">
     <!-- Left Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <i class="fas fa-utensils"></i>
-                <span>SRIDEVI HOME FOODS</span>
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-name">SRIDEVI</div>
+                    <div class="brand-subtitle">Home Foods</div>
+                </div>
             </div>
         </div>
-        <div class="sidebar-menu">
-            <div class="menu-section">
-                <div class="menu-section-title">Main</div>
-                <a href="#" class="menu-item active" onclick="showSection('dashboard')">
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-title">Main</div>
+                <a href="#" class="nav-link active" onclick="showSection('dashboard')">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="menu-item" onclick="showSection('recipes')">
+                <a href="#" class="nav-link" onclick="showSection('recipes')">
                     <i class="fas fa-book"></i>
-                    <span>Recipes</span>
-                    <span class="menu-badge" id="recipesCount">0</span>
+                    <span>Menu Items</span>
+                    <span class="nav-badge" id="recipesCount">0</span>
                 </a>
-                <a href="#" class="menu-item" onclick="showSection('orders')">
+                <a href="#" class="nav-link" onclick="showSection('orders')">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Orders</span>
-                    <span class="menu-badge" id="ordersCount">0</span>
+                    <span class="nav-badge" id="ordersCount">0</span>
                 </a>
             </div>
-            <div class="menu-section">
-                <div class="menu-section-title">Management</div>
-                <a href="#" class="menu-item" onclick="showSection('categories')">
+            <div class="nav-section">
+                <div class="nav-title">Management</div>
+                <a href="#" class="nav-link" onclick="showSection('categories')">
                     <i class="fas fa-tags"></i>
                     <span>Categories</span>
                 </a>
-                <a href="#" class="menu-item" onclick="showSection('payments')">
+                <a href="#" class="nav-link" onclick="showSection('payments')">
                     <i class="fas fa-credit-card"></i>
-                    <span>Payment Methods</span>
+                    <span>Payments</span>
                 </a>
-                <a href="#" class="menu-item" onclick="showSection('settings')">
+                <a href="#" class="nav-link" onclick="showSection('settings')">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
             </div>
-        </div>
-    </div>
+        </nav>
+    </aside>
 
     <!-- Main Content Wrapper -->
     <div class="main-wrapper">

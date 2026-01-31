@@ -697,12 +697,12 @@ function showSection(sectionId) {
         targetSection.classList.add('active');
     }
     
-    // Update menu items
-    const menuItems = document.querySelectorAll('.menu-item');
-    menuItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('onclick') === `showSection('${sectionId}')`) {
-            item.classList.add('active');
+    // Update navigation items
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('onclick') === `showSection('${sectionId}')`) {
+            link.classList.add('active');
         }
     });
 }
