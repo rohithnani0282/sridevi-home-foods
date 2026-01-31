@@ -238,28 +238,22 @@ Call us at +91 98664 06807 for any queries.`;
         // Show success message
         this.showNotification('Redirecting to WhatsApp...', 'success');
 
-        // Redirect to WhatsApp
-        setTimeout(() => {
-            this.openWhatsApp(whatsappUrl);
-        }, 1000);
+        // Redirect to WhatsApp immediately
+        this.openWhatsApp(whatsappUrl);
     }
 
     openWhatsApp(whatsappUrl) {
         console.log('📱 Opening WhatsApp with order details...');
         console.log('📱 WhatsApp URL:', whatsappUrl);
         
-        // Use the most reliable method first - direct window.location change
-        try {
-            console.log('📱 Method 1: Direct location redirect to customer WhatsApp');
-            window.location.href = whatsappUrl;
-            console.log('✅ Redirecting to customer WhatsApp app...');
-            
-        } catch (error) {
-            console.log('❌ Direct redirect failed, trying link element:', error.message);
-            
-            // Fallback 1: Create and click link element
+        // Method 1: Direct window.location change (most reliable)
+        console.log('📱 Method 1: Direct location redirect to customer WhatsApp');
+        window.location.href = whatsappUrl;
+        
+        // Method 2: Backup - try link element after a short delay
+        setTimeout(() => {
+            console.log('📱 Method 2: Backup link element click');
             try {
-                console.log('📱 Method 2: Link element click');
                 const link = document.createElement('a');
                 link.href = whatsappUrl;
                 link.target = '_blank';
@@ -268,39 +262,47 @@ Call us at +91 98664 06807 for any queries.`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                console.log('✅ Link element method executed');
+                console.log('✅ Backup method executed');
+            } catch (error) {
+                console.log('❌ Backup method failed:', error.message);
                 
-            } catch (error2) {
-                console.log('❌ Link element failed, trying window.open:', error2.message);
-                
-                // Fallback 2: window.open
-                try {
-                    console.log('📱 Method 3: window.open');
-                    window.open(whatsappUrl, '_blank');
-                    console.log('✅ Window.open method executed');
-                    
-                } catch (error3) {
-                    console.log('❌ All automatic methods failed:', error3.message);
-                    
-                    // Final fallback - show manual link
-                    alert('Unable to open WhatsApp automatically. Please click this link to send your order:\n\n' + whatsappUrl + '\n\nOr contact us directly at +91 98664 06807');
-                    
-                    // Show clickable link on page
-                    const urlDiv = document.createElement('div');
-                    urlDiv.innerHTML = `
-                        <div style="background: #d4edda; border: 2px solid #25d366; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 600px; text-align: center;">
-                            <h3 style="color: #155724; margin-bottom: 15px;">📱 Send Order via WhatsApp</h3>
-                            <p style="margin-bottom: 15px; color: #155724;">Click the button below to send your order to SRIDEVI HOME FOODS:</p>
-                            <a href="${whatsappUrl}" target="_blank" style="background: #25d366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px;">
-                                <i class="fab fa-whatsapp" style="font-size: 20px;"></i>
-                                Send Order via WhatsApp
-                            </a>
-                            <p style="margin-top: 15px; font-size: 12px; color: #666;">This will open your WhatsApp with the order details ready to send to +91 98664 06807</p>
-                        </div>
-                    `;
-                    document.querySelector('.checkout-container').appendChild(urlDiv);
-                }
+                // Method 3: Show manual link as last resort
+                this.showManualWhatsAppLink(whatsappUrl);
             }
+        }, 500);
+    }
+
+    showManualWhatsAppLink(whatsappUrl) {
+        console.log('📱 Showing manual WhatsApp link as fallback');
+        
+        // Disable the place order button
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        if (placeOrderBtn) {
+            placeOrderBtn.disabled = true;
+            placeOrderBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> WhatsApp Redirect Failed';
+        }
+        
+        // Show manual link
+        const linkDiv = document.createElement('div');
+        linkDiv.innerHTML = `
+            <div style="background: #fff3cd; border: 2px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 600px; text-align: center;">
+                <h3 style="color: #856404; margin-bottom: 15px;">📱 Send Order via WhatsApp</h3>
+                <p style="margin-bottom: 15px; color: #856404;">Automatic redirect failed. Please click the button below to send your order:</p>
+                <a href="${whatsappUrl}" target="_blank" style="background: #25d366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; font-size: 16px;">
+                    <i class="fab fa-whatsapp" style="font-size: 20px;"></i>
+                    Send Order via WhatsApp
+                </a>
+                <p style="margin-top: 15px; font-size: 12px; color: #666;">This will open your WhatsApp with the order details ready to send to +91 98664 06807</p>
+                <p style="margin-top: 10px; font-size: 11px; color: #999;">WhatsApp URL: ${whatsappUrl}</p>
+            </div>
+        `;
+        
+        // Insert after the checkout form
+        const checkoutForm = document.getElementById('checkoutForm');
+        if (checkoutForm) {
+            checkoutForm.parentNode.insertBefore(linkDiv, checkoutForm.nextSibling);
+        } else {
+            document.querySelector('.checkout-container').appendChild(linkDiv);
         }
     }
 
