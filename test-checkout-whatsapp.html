@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Checkout WhatsApp Redirect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .btn:hover {
+            background: #128c7e;
+        }
+        .btn-primary {
+            background: #007bff;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .debug {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test Checkout WhatsApp Redirect</h1>
+        <p>This page tests different methods to redirect to WhatsApp with order details.</p>
+        
+        <div class="form-group">
+            <label>Customer Name:</label>
+            <input type="text" id="customerName" value="Test Customer" placeholder="Enter customer name">
+        </div>
+        
+        <div class="form-group">
+            <label>Customer Phone:</label>
+            <input type="tel" id="customerPhone" value="+91 98664 06807" placeholder="Enter phone number">
+        </div>
+        
+        <div class="form-group">
+            <label>Order Items:</label>
+            <input type="text" id="orderItems" value="Sakinalu x 2 = ₹300, Garelu x 1 = ₹120" placeholder="Enter order items">
+        </div>
+        
+        <div class="form-group">
+            <label>Total Amount:</label>
+            <input type="text" id="totalAmount" value="₹420" placeholder="Enter total amount">
+        </div>
+        
+        <div class="form-group">
+            <label>Payment Method:</label>
+            <select id="paymentMethod">
+                <option value="COD">Cash on Delivery</option>
+                <option value="UPI">UPI</option>
+                <option value="Card">Credit/Debit Card</option>
+            </select>
+        </div>
+        
+        <h3>Test Different WhatsApp Methods:</h3>
+        
+        <button class="btn" onclick="testMethod1()">
+            📱 Method 1: Direct window.location.href
+        </button>
+        
+        <button class="btn" onclick="testMethod2()">
+            📱 Method 2: Link Element Click
+        </button>
+        
+        <button class="btn" onclick="testMethod3()">
+            📱 Method 3: window.open
+        </button>
+        
+        <button class="btn" onclick="testMethod4()">
+            📱 Method 4: Direct Link (manual click)
+        </button>
+        
+        <button class="btn btn-primary" onclick="testCompleteFlow()">
+            🛒 Test Complete Checkout Flow
+        </button>
+        
+        <div id="debug" class="debug">Debug information will appear here...</div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function updateDebug(message) {
+            const debug = document.getElementById('debug');
+            debug.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            console.log(message);
+        }
+
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+
+        function createWhatsAppMessage() {
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const orderItems = document.getElementById('orderItems').value;
+            const totalAmount = document.getElementById('totalAmount').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            const message = `🍽️ NEW ORDER - SRIDEVI HOME FOODS
+
+👤 CUSTOMER DETAILS:
+Name: ${customerName}
+Phone: ${customerPhone}
+
+📦 ORDER ITEMS:
+${orderItems}
+
+💳 PAYMENT METHOD:
+${paymentMethod}
+
+💰 TOTAL AMOUNT: ${totalAmount}
+
+📅 Date: ${new Date().toLocaleString('en-IN')}
+
+Please confirm this order! 🙏
+Call us at +91 98664 06807 for any queries.`;
+            
+            return message;
+        }
+
+        function createWhatsAppUrl(message) {
+            const yourPhoneNumber = '+91 98664 06807';
+            const cleanPhone = yourPhoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+            return whatsappUrl;
+        }
+
+        function testMethod1() {
+            updateDebug('🧪 Testing Method 1: Direct window.location.href');
+            
+            const message = createWhatsAppMessage();
+            const whatsappUrl = createWhatsAppUrl(message);
+            
+            updateDebug('📱 Message created: ' + message.substring(0, 50) + '...');
+            updateDebug('📱 WhatsApp URL: ' + whatsappUrl);
+            
+            try {
+                updateDebug('📱 Executing: window.location.href = whatsappUrl');
+                window.location.href = whatsappUrl;
+                updateStatus('✅ Method 1 executed - WhatsApp should open', 'success');
+            } catch (error) {
+                updateDebug('❌ Method 1 failed: ' + error.message);
+                updateStatus('❌ Method 1 failed: ' + error.message, 'error');
+            }
+        }
+
+        function testMethod2() {
+            updateDebug('🧪 Testing Method 2: Link Element Click');
+            
+            const message = createWhatsAppMessage();
+            const whatsappUrl = createWhatsAppUrl(message);
+            
+            updateDebug('📱 Message created: ' + message.substring(0, 50) + '...');
+            updateDebug('📱 WhatsApp URL: ' + whatsappUrl);
+            
+            try {
+                updateDebug('📱 Creating link element');
+                const link = document.createElement('a');
+                link.href = whatsappUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                
+                updateDebug('📱 Adding link to body');
+                document.body.appendChild(link);
+                
+                updateDebug('📱 Clicking link element');
+                link.click();
+                
+                updateDebug('📱 Removing link from body');
+                document.body.removeChild(link);
+                
+                updateStatus('✅ Method 2 executed - WhatsApp should open', 'success');
+            } catch (error) {
+                updateDebug('❌ Method 2 failed: ' + error.message);
+                updateStatus('❌ Method 2 failed: ' + error.message, 'error');
+            }
+        }
+
+        function testMethod3() {
+            updateDebug('🧪 Testing Method 3: window.open');
+            
+            const message = createWhatsAppMessage();
+            const whatsappUrl = createWhatsAppUrl(message);
+            
+            updateDebug('📱 Message created: ' + message.substring(0, 50) + '...');
+            updateDebug('📱 WhatsApp URL: ' + whatsappUrl);
+            
+            try {
+                updateDebug('📱 Executing: window.open(whatsappUrl, "_blank")');
+                window.open(whatsappUrl, '_blank');
+                updateStatus('✅ Method 3 executed - WhatsApp should open in new tab', 'success');
+            } catch (error) {
+                updateDebug('❌ Method 3 failed: ' + error.message);
+                updateStatus('❌ Method 3 failed: ' + error.message, 'error');
+            }
+        }
+
+        function testMethod4() {
+            updateDebug('🧪 Testing Method 4: Direct Link (manual click)');
+            
+            const message = createWhatsAppMessage();
+            const whatsappUrl = createWhatsAppUrl(message);
+            
+            updateDebug('📱 Message created: ' + message.substring(0, 50) + '...');
+            updateDebug('📱 WhatsApp URL: ' + whatsappUrl);
+            
+            // Create a clickable link
+            const linkContainer = document.createElement('div');
+            linkContainer.innerHTML = `
+                <h3>📱 Click this link to test WhatsApp:</h3>
+                <a href="${whatsappUrl}" target="_blank" class="btn" style="margin: 10px 0;">
+                    <i class="fab fa-whatsapp"></i> Open WhatsApp with Order
+                </a>
+                <p><strong>URL:</strong> ${whatsappUrl}</p>
+            `;
+            
+            document.getElementById('status').appendChild(linkContainer);
+            updateStatus('✅ Method 4 created - Click the link above to test', 'success');
+        }
+
+        function testCompleteFlow() {
+            updateDebug('🧪 Testing Complete Checkout Flow');
+            
+            // Simulate the exact checkout process
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const orderItems = document.getElementById('orderItems').value;
+            const totalAmount = document.getElementById('totalAmount').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            updateDebug('📋 Customer: ' + customerName);
+            updateDebug('📋 Phone: ' + customerPhone);
+            updateDebug('📋 Items: ' + orderItems);
+            updateDebug('📋 Total: ' + totalAmount);
+            updateDebug('📋 Payment: ' + paymentMethod);
+            
+            // Create order like in checkout.js
+            const order = {
+                id: 'ORD' + Date.now(),
+                orderNumber: 'TEST' + Date.now(),
+                customer: {
+                    firstName: customerName.split(' ')[0],
+                    lastName: customerName.split(' ')[1] || '',
+                    phone: customerPhone,
+                    email: 'test@example.com',
+                    address: 'Test Address, Hyderabad',
+                    city: 'Hyderabad',
+                    pincode: '500001'
+                },
+                items: orderItems.split(',').map(item => ({
+                    name: item.split('x')[0].trim(),
+                    quantity: parseInt(item.split('x')[1]),
+                    price: parseInt(item.split('=')[1].replace('₹', '').trim())
+                })),
+                payment: {
+                    method: paymentMethod,
+                    status: 'pending'
+                },
+                total: totalAmount
+            };
+            
+            updateDebug('📋 Order created: ' + JSON.stringify(order, null, 2));
+            
+            // Create WhatsApp message exactly like checkout.js
+            const fullName = `${order.customer.firstName} ${order.customer.lastName}`;
+            const fullAddress = `${order.customer.address}, ${order.customer.city}, Pincode: ${order.customer.pincode}`;
+            
+            const orderItemsList = order.items.map(item => 
+                `${item.name} x ${item.quantity} = ₹${item.price * item.quantity}`
+            ).join('\n');
+            
+            const whatsappMessage = `🍽️ NEW ORDER - SRIDEVI HOME FOODS
+
+📋 ORDER NUMBER: ${order.orderNumber}
+
+👤 CUSTOMER DETAILS:
+Name: ${fullName}
+Phone: ${order.customer.phone}
+Email: ${order.customer.email}
+Address: ${fullAddress}
+
+📦 ORDER ITEMS:
+${orderItemsList}
+
+💳 PAYMENT METHOD:
+${order.payment.method.toUpperCase()}
+
+💰 ORDER TOTAL:
+Total: ${order.total}
+
+📅 Order Date: ${new Date().toLocaleString('en-IN')}
+
+Please confirm this order! 🙏
+Call us at +91 98664 06807 for any queries.`;
+
+            const yourPhoneNumber = '+91 98664 06807';
+            const cleanPhone = yourPhoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(whatsappMessage)}`;
+
+            updateDebug('📱 WhatsApp Message: ' + whatsappMessage.substring(0, 100) + '...');
+            updateDebug('📱 WhatsApp URL: ' + whatsappUrl);
+            
+            // Test the redirect
+            try {
+                updateDebug('📱 Executing complete flow redirect...');
+                window.location.href = whatsappUrl;
+                updateStatus('✅ Complete flow executed - WhatsApp should open with full order details', 'success');
+            } catch (error) {
+                updateDebug('❌ Complete flow failed: ' + error.message);
+                updateStatus('❌ Complete flow failed: ' + error.message, 'error');
+            }
+        }
+
+        // Initialize
+        window.onload = function() {
+            updateDebug('🧪 Test page loaded');
+            updateDebug('📱 Target WhatsApp Number: +91 98664 06807');
+            updateDebug('📱 Ready to test WhatsApp redirect methods');
+            updateDebug('');
+            updateDebug('📋 Instructions:');
+            updateDebug('1. Fill in the test data above');
+            updateDebug('2. Click each test button to try different methods');
+            updateDebug('3. Check browser console for detailed logs');
+            updateDebug('4. Note which method works for your device/browser');
+        };
+    </script>
+</body>
+</html>
