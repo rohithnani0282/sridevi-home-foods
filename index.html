@@ -3,32 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRIDEVI HOME FOODS - Authentic Home Foods</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="SRIDEVI HOME FOODS - Authentic Andhra home foods, pindi vantalu, pickles, sweets, and podi. Order via WhatsApp for fresh, homemade goodness.">
+    <meta name="keywords" content="pindi vantalu, andhra foods, home foods, pickles, sweets, podi, homemade, whatsapp order">
+    <title>SRIDEVI HOME FOODS - Authentic Andhra Home Foods</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="SRIDEVI HOME FOODS - Authentic Andhra Home Foods">
+    <meta property="og:description" content="Order authentic Andhra home foods, pindi vantalu, pickles, sweets via WhatsApp">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rohithnani0282.github.io/sridevi-home-foods/">
+    
+    <!-- WhatsApp Meta -->
+    <meta property="og:site_name" content="SRIDEVI HOME FOODS">
+    <meta property="og:locale" content="en_IN">
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FoodEstablishment",
+        "name": "SRIDEVI HOME FOODS",
+        "description": "Authentic Andhra home foods, pindi vantalu, pickles, sweets, and podi",
+        "url": "https://rohithnani0282.github.io/sridevi-home-foods/",
+        "telephone": "+919866406807",
+        "servesCuisine": "Andhra",
+        "priceRange": "$"
+    }
+    </script>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header Navigation -->
     <header class="header">
         <nav class="navbar">
             <div class="nav-container">
                 <div class="logo">
                     <a href="#home" class="logo-link">
-                        <i class="fas fa-utensils"></i>
-                        <span>SRIDEVI HOME FOODS</span>
+                        <div class="logo-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-name">SRIDEVI</span>
+                            <span class="logo-subtitle">Home Foods</span>
+                        </div>
                     </a>
                 </div>
+                
                 <ul class="nav-menu">
                     <li><a href="#home" class="nav-link">Home</a></li>
-                    <li><a href="#recipes" class="nav-link">Recipes</a></li>
+                    <li><a href="#menu" class="nav-link">Menu</a></li>
                     <li><a href="#categories" class="nav-link">Categories</a></li>
                     <li><a href="#about" class="nav-link">About</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
-                    <li><a href="customer-order.html" class="nav-link whatsapp-link" style="color: #25d366; font-weight: 600;"><i class="fab fa-whatsapp"></i> Order</a></li>
-                    <li><a href="admin.html" class="nav-link admin-link" style="color: #ff6b35; font-weight: 600;"><i class="fas fa-user-shield"></i> Admin</a></li>
-                    <li><a href="cart.html" class="nav-link cart-link" style="color: #27ae60; font-weight: 600;"><i class="fas fa-shopping-cart"></i> Cart <span id="cartCount" class="cart-count">0</span></a></li>
+                    <li><a href="customer-order.html" class="nav-link whatsapp-link">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Order</span>
+                    </a></li>
+                    <li><a href="admin.html" class="nav-link admin-link">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin</span>
+                    </a></li>
+                    <li><a href="cart.html" class="nav-link cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Cart</span>
+                        <span id="cartCount" class="cart-count">0</span>
+                    </a></li>
                 </ul>
+                
                 <div class="hamburger">
                     <span></span>
                     <span></span>
@@ -40,14 +93,315 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+        </div>
         <div class="hero-content">
-            <h1>Authentic <span class="highlight">Pindi Vantalu</span></h1>
-            <p>Discover the rich flavors of traditional home-cooked recipes passed down through generations</p>
-            <div class="hero-buttons">
-                <a href="#recipes" class="btn btn-primary">Explore Recipes</a>
-                <a href="#categories" class="btn btn-secondary">Browse Categories</a>
-                <a href="customer-order.html" class="btn btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> Place Order via WhatsApp
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Authentic <span class="highlight">Andhra Home Foods</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Discover the rich flavors of traditional homemade recipes passed down through generations. 
+                    Fresh, authentic, and made with love.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn btn-primary">
+                        <i class="fas fa-book-open"></i>
+                        Explore Menu
+                    </a>
+                    <a href="customer-order.html" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        Order via WhatsApp
+                    </a>
+                    <a href="#categories" class="btn btn-secondary">
+                        <i class="fas fa-th-large"></i>
+                        Browse Categories
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-image-content">
+                    <i class="fas fa-utensils"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose SRIDEVI HOME FOODS?</h2>
+                <p class="section-subtitle">Experience the authentic taste of homemade goodness</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Made with Love</h3>
+                    <p>Every dish is prepared with care and attention to detail, just like homemade food should be.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Fresh Ingredients</h3>
+                    <p>We use only the freshest, high-quality ingredients to ensure authentic taste and quality.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trademark"></i>
+                    </div>
+                    <h3>Traditional Recipes</h3>
+                    <p>Our recipes are passed down through generations, preserving the authentic Andhra flavors.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Fresh Daily</h3>
+                    <p>All our items are prepared fresh daily to ensure maximum freshness and taste.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Categories</h2>
+                <p class="section-subtitle">Explore our wide range of authentic Andhra delicacies</p>
+            </div>
+            
+            <div class="categories-grid">
+                <div class="category-card" data-category="pindi-vantalu">
+                    <div class="category-icon">
+                        <i class="fas fa-cookie-bite"></i>
+                    </div>
+                    <h3>Pindi Vantalu</h3>
+                    <p>Traditional savory snacks and delicacies from Andhra cuisine</p>
+                    <a href="#menu" class="btn btn-outline">Explore</a>
+                </div>
+                
+                <div class="category-card" data-category="pickles">
+                    <div class="category-icon">
+                        <i class="fas fa-lemon"></i>
+                    </div>
+                    <h3>Pickles</h3>
+                    <p>Homemade pickles with authentic Andhra flavors and spices</p>
+                    <a href="#menu" class="btn btn-outline">Explore</a>
+                </div>
+                
+                <div class="category-card" data-category="sweets">
+                    <div class="category-icon">
+                        <i class="fas fa-candy-cane"></i>
+                    </div>
+                    <h3>Sweets</h3>
+                    <p>Traditional Indian sweets prepared with love and care</p>
+                    <a href="#menu" class="btn btn-outline">Explore</a>
+                </div>
+                
+                <div class="category-card" data-category="podi">
+                    <div class="category-icon">
+                        <i class="fas fa-mortar-pestle"></i>
+                    </div>
+                    <h3>Podi</h3>
+                    <p>Authentic spice powders and masalas for everyday cooking</p>
+                    <a href="#menu" class="btn btn-outline">Explore</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Menu</h2>
+                <p class="section-subtitle">Explore our delicious range of homemade delicacies</p>
+            </div>
+            
+            <div class="menu-categories">
+                <div class="menu-tabs">
+                    <button class="menu-tab active" data-category="all">All Items</button>
+                    <button class="menu-tab" data-category="pindi-vantalu">Pindi Vantalu</button>
+                    <button class="menu-tab" data-category="pickles">Pickles</button>
+                    <button class="menu-tab" data-category="sweets">Sweets</button>
+                    <button class="menu-tab" data-category="podi">Podi</button>
+                </div>
+                
+                <div class="menu-grid" id="menuGrid">
+                    <!-- Menu items will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">About SRIDEVI HOME FOODS</h2>
+                    <p>
+                        Welcome to SRIDEVI HOME FOODS, where we bring you the authentic taste of Andhra cuisine 
+                        right to your home. Our journey began with a simple mission - to preserve and share the 
+                        traditional recipes that have been passed down through generations in our family.
+                    </p>
+                    <p>
+                        Every item we prepare is made with the same love and care that goes into homemade food. 
+                        We use traditional methods, fresh ingredients, and authentic spices to ensure that each bite 
+                        takes you back to the flavors of home.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h3>50+</h3>
+                            <p>Traditional Recipes</p>
+                        </div>
+                        <div class="stat">
+                            <h3>100%</h3>
+                            <p>Homemade</p>
+                        </div>
+                        <div class="stat">
+                            <h3>5★</h3>
+                            <p>Quality</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="about-image-content">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get in Touch</h2>
+                <p class="section-subtitle">Order your favorite delicacies or ask about our products</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h3>WhatsApp</h3>
+                        <p>+91 98664 06807</p>
+                        <a href="https://wa.me/919866406807" class="btn btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                            Message on WhatsApp
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h3>Phone</h3>
+                        <p>+91 98664 06807</p>
+                        <a href="tel:+919866406807" class="btn btn-primary">
+                            <i class="fas fa-phone"></i>
+                            Call Now
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email</h3>
+                        <p>info@sridevihomefoods.com</p>
+                        <a href="mailto:info@sridevihomefoods.com" class="btn btn-secondary">
+                            <i class="fas fa-envelope"></i>
+                            Send Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-utensils"></i>
+                        <span>SRIDEVI</span>
+                        <span class="footer-subtitle">Home Foods</span>
+                    </div>
+                    <p>Bringing authentic Andhra flavors to your home with love and tradition.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#menu">Pindi Vantalu</a></li>
+                        <li><a href="#menu">Pickles</a></li>
+                        <li><a href="#menu">Sweets</a></li>
+                        <li><a href="#menu">Podi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="https://wa.me/919866406807" class="social-link" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="tel:+919866406807" class="social-link">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                        <a href="mailto:info@sridevihomefoods.com" class="social-link">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 SRIDEVI HOME FOODS. All rights reserved. Made with <i class="fas fa-heart"></i> in Andhra.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="app-firebase.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- WhatsApp Widget -->
+    <div class="whatsapp-widget" id="whatsappWidget">
+        <a href="https://wa.me/919866406807" target="_blank" class="whatsapp-button">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+</body>
+</html>
                 </a>
             </div>
         </div>
