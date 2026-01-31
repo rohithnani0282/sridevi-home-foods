@@ -18,14 +18,13 @@ if (typeof firebase !== 'undefined') {
 }
 
 // Firebase services
-let db, auth;
+let db;
 
 if (typeof firebase !== 'undefined') {
-    // Use Real-time Database instead of Firestore
+    // Use Real-time Database only (no authentication)
     db = firebase.database();
-    auth = firebase.auth();
     
-    console.log('✅ Real-time Database initialized');
+    console.log('✅ Real-time Database initialized (no auth required)');
 }
 
 // Firebase Collections
@@ -37,11 +36,10 @@ const collections = {
     users: 'users'
 };
 
-// Firebase Manager Class for Real-time Database
+// Firebase Manager Class for Real-time Database (No Authentication)
 class FirebaseManager {
     constructor() {
         this.db = db;
-        this.auth = auth;
         this.listeners = [];
     }
 
@@ -207,33 +205,6 @@ class FirebaseManager {
         });
         this.listeners = [];
         console.log('✅ All Firebase listeners cleaned up');
-    }
-
-    // Authentication
-    async signIn(email, password) {
-        try {
-            const result = await this.auth.signInWithEmailAndPassword(email, password);
-            console.log('✅ User signed in:', result.user.email);
-            return result.user;
-        } catch (error) {
-            console.error('❌ Sign in error:', error);
-            throw error;
-        }
-    }
-
-    async signOut() {
-        try {
-            await this.auth.signOut();
-            console.log('✅ User signed out');
-            return true;
-        } catch (error) {
-            console.error('❌ Sign out error:', error);
-            throw error;
-        }
-    }
-
-    onAuthChange(callback) {
-        return this.auth.onAuthStateChanged(callback);
     }
 }
 

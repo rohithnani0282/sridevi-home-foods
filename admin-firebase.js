@@ -69,6 +69,10 @@ async function initializeAdmin() {
     setupEventListeners();
     updateUI();
     setupRealtimeListeners();
+    
+    // Auto-login for simplicity (no Firebase auth)
+    isLoggedIn = true;
+    showSection('dashboard');
 }
 
 // Firebase Data Initialization
