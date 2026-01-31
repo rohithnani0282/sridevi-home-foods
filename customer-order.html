@@ -415,30 +415,38 @@ Call us at +91 98664 06807 for any queries.`;
             console.log('📱 WhatsApp URL:', whatsappUrl);
             console.log('📱 Opening WhatsApp...');
             
-            // Use the working method from test page
+            // Use multiple methods for WhatsApp redirect
             try {
-                // Create a link element and click it (working method)
-                const link = document.createElement('a');
-                link.href = whatsappUrl;
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
+                console.log('📱 Method 1: Direct location redirect');
+                window.location.href = whatsappUrl;
                 
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                console.log('✅ WhatsApp opened successfully using link method');
-                
-                // Show confirmation
+                // Fallback if direct redirect doesn't work
                 setTimeout(() => {
-                    alert('Opening WhatsApp with your order details to SRIDEVI HOME FOODS...');
-                }, 500);
+                    console.log('📱 Method 2: Link element click');
+                    const link = document.createElement('a');
+                    link.href = whatsappUrl;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    console.log('✅ WhatsApp opened using link method');
+                    
+                    // Show confirmation
+                    setTimeout(() => {
+                        alert('Opening WhatsApp with your order details to SRIDEVI HOME FOODS...');
+                    }, 500);
+                    
+                }, 1000);
                 
             } catch (error) {
-                console.log('❌ Link method failed, trying window.open:', error.message);
+                console.log('❌ Method 1 failed, trying window.open:', error.message);
                 
                 // Fallback to window.open
                 try {
+                    console.log('📱 Method 3: window.open');
                     window.open(whatsappUrl, '_blank');
                     console.log('✅ WhatsApp opened using window.open fallback');
                     
@@ -448,7 +456,21 @@ Call us at +91 98664 06807 for any queries.`;
                     
                 } catch (error2) {
                     console.log('❌ All methods failed:', error2.message);
-                    alert('Unable to open WhatsApp. Please try again or contact us directly at +91 98664 06807');
+                    
+                    // Final fallback - show URL for manual copy
+                    alert('Unable to open WhatsApp automatically. Please copy this URL and paste in your browser:\n\n' + whatsappUrl + '\n\nOr contact us directly at +91 98664 06807');
+                    
+                    // Also show the URL on screen
+                    const urlDiv = document.createElement('div');
+                    urlDiv.innerHTML = `
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #25d366;">
+                            <h3 style="color: #25d366; margin-bottom: 10px;">📱 WhatsApp Order Link</h3>
+                            <p style="margin-bottom: 10px;">Click this link to send your order via WhatsApp:</p>
+                            <a href="${whatsappUrl}" target="_blank" style="color: #25d366; text-decoration: underline; font-weight: bold;">Click here to open WhatsApp</a>
+                            <p style="margin-top: 10px; font-size: 12px; color: #666;">Or copy this URL: ${whatsappUrl}</p>
+                        </div>
+                    `;
+                    document.querySelector('.order-container').appendChild(urlDiv);
                 }
             }
         }
