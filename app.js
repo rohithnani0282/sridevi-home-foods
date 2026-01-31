@@ -26,17 +26,38 @@ function $all(sel){ return Array.from(document.querySelectorAll(sel)); }
 
 function createProductCard(item, type) {
   const wrapper = document.createElement('div');
-  wrapper.className = 'card mb-2 shadow-sm';
-  const body = document.createElement('div');
-  body.className = 'card-body d-flex align-items-center justify-content-between';
-
+  wrapper.className = 'product-card';
+  wrapper.style.cssText = `
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.3s ease;
+  `;
+  
   const left = document.createElement('div');
-  left.className = 'd-flex align-items-center';
+  left.style.cssText = `
+    display: flex;
+    align-items: center;
+    flex: 1;
+  `;
+  
   const img = document.createElement('img');
-  img.className = 'me-3 product-img';
-  img.src = item.image || 'https://via.placeholder.com/160x100?text=Image';
+  img.style.cssText = `
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 15px;
+  `;
+  img.src = item.image || 'https://via.placeholder.com/80x60?text=Image';
   img.alt = item.name;
-  const _fallbackSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="100"><rect width="100%" height="100%" fill="#f8f9fa"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#495057" font-size="14">Image</text></svg>';
+  
+  const _fallbackSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="60"><rect width="100%" height="100%" fill="#f8f9fa"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#495057" font-size="12">Image</text></svg>';
   img.onerror = () => {
     try {
       if (img.src && img.src.match(/\.jpg(\?|$)/i)) {
@@ -47,45 +68,136 @@ function createProductCard(item, type) {
     img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(_fallbackSVG);
     img.onerror = null;
   };
+  
   const info = document.createElement('div');
-  info.innerHTML = '<h6 class="mb-1">' + item.name + '</h6><div class="text-muted small">' + (item.desc || (item.kind || '')) + '</div>';
+  info.innerHTML = `
+    <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">${item.name}</h3>
+    <p style="margin: 0; color: #7f8c8d; font-size: 0.9rem;">${item.desc || (item.kind || '')}</p>
+  `;
+  
   left.appendChild(img);
   left.appendChild(info);
 
   const right = document.createElement('div');
+  right.style.cssText = `
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  `;
+  
   const priceText = type === 'home' ? '₹' + item.pricePerKg + '/kg' : '₹' + item.price + ' / jar';
-  right.innerHTML = '<div class="price mb-2">' + priceText + '</div>';
+  right.innerHTML = `<div style="font-weight: bold; color: #2c3e50; margin-bottom: 10px;">${priceText}</div>`;
+  
   const controls = document.createElement('div');
-  controls.className = 'd-flex align-items-center';
+  controls.style.cssText = `
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  `;
+  
   const qty = document.createElement('input');
   qty.type = 'number';
   qty.min = 1;
   qty.value = 1;
-  qty.className = 'form-control form-control-sm me-2 qty-input';
+  qty.style.cssText = `
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+  `;
+  
   const btn = document.createElement('button');
-  btn.className = 'btn btn-danger btn-sm';
-  btn.textContent = 'Add';
+  btn.textContent = 'Add to Cart';
+  btn.style.cssText = `
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+  `;
+  
+  btn.onmouseover = () => {
+    btn.style.background = '#2980b9';
+  };
+  
+  btn.onmouseout = () => {
+    btn.style.background = '#3498db';
+  };
+  
   btn.onclick = () => {
     const q = type === 'home' ? parseFloat(qty.value || 1) : parseInt(qty.value || 1);
     addToCart(Object.assign({}, item), type, q);
+    // Visual feedback
+    btn.textContent = 'Added!';
+    btn.style.background = '#27ae60';
+    setTimeout(() => {
+      btn.textContent = 'Add to Cart';
+      btn.style.background = '#3498db';
+    }, 1000);
   };
+  
   controls.appendChild(qty);
   controls.appendChild(btn);
   right.appendChild(controls);
 
+  const body = document.createElement('div');
+  body.style.cssText = `
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  `;
+  
   body.appendChild(left);
   body.appendChild(right);
   wrapper.appendChild(body);
+  
+  // Add hover effect
+  wrapper.onmouseover = () => {
+    wrapper.style.transform = 'translateY(-2px)';
+    wrapper.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+  };
+  
+  wrapper.onmouseout = () => {
+    wrapper.style.transform = 'translateY(0)';
+    wrapper.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+  };
+  
   return wrapper;
 }
 
 function renderCatalog() {
+  const menuGrid = $('#menuGrid');
+  if (menuGrid) {
+    menuGrid.innerHTML = '';
+    
+    // Add all items to menu grid
+    const allItems = [
+      ...HOME_FOODS.map(item => ({...item, category: 'home'})),
+      ...PICKLES.map(item => ({...item, category: 'pickle'}))
+    ];
+    
+    allItems.forEach(item => {
+      menuGrid.appendChild(createProductCard(item, item.category));
+    });
+  }
+  
+  // Also try to load into old containers if they exist
   const hList = $('#homeFoodsList');
-  hList.innerHTML = '';
-  HOME_FOODS.forEach(i => hList.appendChild(createProductCard(i, 'home')));
+  if (hList) {
+    hList.innerHTML = '';
+    HOME_FOODS.forEach(i => hList.appendChild(createProductCard(i, 'home')));
+  }
   const pList = $('#picklesList');
-  pList.innerHTML = '';
-  PICKLES.forEach(i => pList.appendChild(createProductCard(i, 'pickle')));
+  if (pList) {
+    pList.innerHTML = '';
+    PICKLES.forEach(i => pList.appendChild(createProductCard(i, 'pickle')));
+  }
 }
 
 function addToCart(item, type, qty) {
