@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRIDEVI HOME FOODS - Authentic Home Foods</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="#home" class="logo-link">
+                        <i class="fas fa-utensils"></i>
+                        <span>SRIDEVI HOME FOODS</span>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#recipes" class="nav-link">Recipes</a></li>
+                    <li><a href="#categories" class="nav-link">Categories</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                    <li><a href="admin.html" class="nav-link admin-link" style="color: #ff6b35; font-weight: 600;"><i class="fas fa-user-shield"></i> Admin</a></li>
+                    <li><a href="cart.html" class="nav-link cart-link" style="color: #27ae60; font-weight: 600;"><i class="fas fa-shopping-cart"></i> Cart <span id="cartCount" class="cart-count">0</span></a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Authentic <span class="highlight">Pindi Vantalu</span></h1>
+            <p>Discover the rich flavors of traditional home-cooked recipes passed down through generations</p>
+            <div class="hero-buttons">
+                <a href="#recipes" class="btn btn-primary">Explore Recipes</a>
+                <a href="#categories" class="btn btn-secondary">Browse Categories</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="food-animation">
+                <i class="fas fa-bowl-food"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories">
+        <div class="container">
+            <h2 class="section-title">Popular Categories</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-bread-slice"></i>
+                    </div>
+                    <h3>Breakfast</h3>
+                    <p>Start your day with traditional breakfast items</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-drumstick-bite"></i>
+                    </div>
+                    <h3>Curries</h3>
+                    <p>Flavorful curries with authentic spices</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-bowl-rice"></i>
+                    </div>
+                    <h3>Rice Items</h3>
+                    <p>Aromatic rice preparations and biryanis</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-cookie-bite"></i>
+                    </div>
+                    <h3>Sweets</h3>
+                    <p>Traditional desserts and sweet treats</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-pepper-hot"></i>
+                    </div>
+                    <h3>Snacks</h3>
+                    <p>Crispy and savory snack items</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-mortar-pestle"></i>
+                    </div>
+                    <h3>Pickles</h3>
+                    <p>Homemade pickles and preserves</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Recipes -->
+    <section id="recipes" class="featured-recipes">
+        <div class="container">
+            <h2 class="section-title">Featured Recipes</h2>
+            <div class="recipes-grid">
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Gongura Pappu</h3>
+                        <p>Tangy sorrel leaves dal with authentic Andhra flavors</p>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 30 mins</span>
+                            <span><i class="fas fa-signal"></i> Easy</span>
+                            <span><i class="fas fa-rupee-sign"></i> 120</span>
+                            <span><i class="fas fa-users"></i> 4 persons</span>
+                        </div>
+                        <div class="recipe-quantity">
+                            <label>Quantity:</label>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn minus" onclick="updateQuantity(this, -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" readonly>
+                                <button class="quantity-btn plus" onclick="updateQuantity(this, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn btn-outline view-recipe">View Recipe</button>
+                            <button class="btn btn-primary add-to-cart" data-recipe="Gongura Pappu" data-price="120">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Ulava Charu</h3>
+                        <p>Traditional horse gram soup with rich spices</p>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 45 mins</span>
+                            <span><i class="fas fa-signal"></i> Medium</span>
+                            <span><i class="fas fa-rupee-sign"></i> 150</span>
+                            <span><i class="fas fa-users"></i> 4 persons</span>
+                        </div>
+                        <div class="recipe-quantity">
+                            <label>Quantity:</label>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn minus" onclick="updateQuantity(this, -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" readonly>
+                                <button class="quantity-btn plus" onclick="updateQuantity(this, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn btn-outline view-recipe">View Recipe</button>
+                            <button class="btn btn-primary add-to-cart" data-recipe="Ulava Charu" data-price="150">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Pootharekulu</h3>
+                        <p>Delicate paper sweets made with rice flour and jaggery</p>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 60 mins</span>
+                            <span><i class="fas fa-signal"></i> Hard</span>
+                            <span><i class="fas fa-rupee-sign"></i> 200</span>
+                            <span><i class="fas fa-users"></i> 6 persons</span>
+                        </div>
+                        <div class="recipe-quantity">
+                            <label>Quantity:</label>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn minus" onclick="updateQuantity(this, -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" readonly>
+                                <button class="quantity-btn plus" onclick="updateQuantity(this, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn btn-outline view-recipe">View Recipe</button>
+                            <button class="btn btn-primary add-to-cart" data-recipe="Pootharekulu" data-price="200">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Andhra Chicken Curry</h3>
+                        <p>Spicy and flavorful chicken curry with regional spices</p>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 50 mins</span>
+                            <span><i class="fas fa-signal"></i> Medium</span>
+                            <span><i class="fas fa-rupee-sign"></i> 250</span>
+                            <span><i class="fas fa-users"></i> 4 persons</span>
+                        </div>
+                        <div class="recipe-quantity">
+                            <label>Quantity:</label>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn minus" onclick="updateQuantity(this, -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" readonly>
+                                <button class="quantity-btn plus" onclick="updateQuantity(this, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn btn-outline view-recipe">View Recipe</button>
+                            <button class="btn btn-primary add-to-cart" data-recipe="Andhra Chicken Curry" data-price="250">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Bobbatlu</h3>
+                        <p>Sweet flatbread stuffed with lentil and jaggery filling</p>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 40 mins</span>
+                            <span><i class="fas fa-signal"></i> Medium</span>
+                            <span><i class="fas fa-rupee-sign"></i> 180</span>
+                            <span><i class="fas fa-users"></i> 6 persons</span>
+                        </div>
+                        <div class="recipe-quantity">
+                            <label>Quantity:</label>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn minus" onclick="updateQuantity(this, -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" readonly>
+                                <button class="quantity-btn plus" onclick="updateQuantity(this, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn btn-outline view-recipe">View Recipe</button>
+                            <button class="btn btn-primary add-to-cart" data-recipe="Bobbatlu" data-price="180">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="recipe-content">
+                        <h3>Avakaya Pickle</h3>
+                        <p>Tangy and spicy raw mango pickle with traditional preparation</p>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 2 days</span>
+                            <span><i class="fas fa-signal"></i> Hard</span>
+                            <span><i class="fas fa-rupee-sign"></i> 300</span>
+                            <span><i class="fas fa-users"></i> 10 persons</span>
+                        </div>
+                        <div class="recipe-quantity">
+                            <label>Quantity:</label>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn minus" onclick="updateQuantity(this, -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="10" readonly>
+                                <button class="quantity-btn plus" onclick="updateQuantity(this, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn btn-outline view-recipe">View Recipe</button>
+                            <button class="btn btn-primary add-to-cart" data-recipe="Avakaya Pickle" data-price="300">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="hero-content">
+                <h1>SRIDEVI HOME FOODS</h1>
+                <p>Authentic Andhra Homemade Foods Delivered to Your Doorstep</p>
+                <p>Pindi Vantalu represents the heart and soul of traditional Andhra cuisine. These home-cooked recipes have been passed down through generations, preserving the authentic flavors and cooking techniques that make our food special.</p>
+                    <p>Our collection brings you the most beloved recipes from Andhra households, from spicy curries to delicate sweets, each prepared with love and traditional wisdom.</p>
+                    <div class="about-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Authentic Recipes</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Traditional Methods</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Step-by-Step Instructions</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="about-animation">
+                        <i class="fas fa-mortar-pestle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contact & Order</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>SRIDEVI HOME FOODS</h3>
+                    <p>Order delicious homemade Andhra foods directly from us!</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+91 98664 06807</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>+91 98664 06807</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>sridevihomefoods@gmail.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Andhra Pradesh, India</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Mon-Sun: 9:00 AM - 9:00 PM</span>
+                        </div>
+                    </div>
+                    <div class="whatsapp-order">
+                        <h4>Quick Order via WhatsApp</h4>
+                        <p>Send your order directly on WhatsApp for fastest service!</p>
+                        <button class="btn btn-whatsapp" onclick="orderViaWhatsApp()">
+                            <i class="fab fa-whatsapp"></i>
+                            Order on WhatsApp
+                        </button>
+                    </div>
+                </div>
+                <div class="order-info">
+                    <h3>How to Order</h3>
+                    <div class="order-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Browse Menu</h4>
+                                <p>Explore our delicious homemade recipes</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Add to Cart</h4>
+                                <p>Select your favorite items</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Order via WhatsApp</h4>
+                                <p>Click the WhatsApp button for instant ordering</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Enjoy!</h4>
+                                <p>Receive your fresh homemade food</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-utensils"></i>
+                        <span>Pindi Vantalu</span>
+                    </div>
+                    <p>Preserving the authentic flavors of Andhra home cooking</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#recipes">Recipes</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Pindi Vantalu. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Recipe Modal -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalRecipeTitle">Recipe Title</h2>
+            <div class="recipe-details">
+                <div class="recipe-info">
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-clock"></i> <span id="modalTime">30 mins</span></span>
+                        <span><i class="fas fa-signal"></i> <span id="modalDifficulty">Easy</span></span>
+                        <span><i class="fas fa-rupee-sign"></i> <span id="modalPrice">120</span></span>
+                        <span><i class="fas fa-users"></i> <span id="modalServing">4 persons</span></span>
+                    </div>
+                </div>
+                <div class="recipe-ingredients">
+                    <h3>Ingredients</h3>
+                    <ul id="modalIngredients">
+                        <!-- Ingredients will be populated here -->
+                    </ul>
+                </div>
+                <div class="recipe-instructions">
+                    <h3>Instructions</h3>
+                    <ol id="modalInstructions">
+                        <!-- Instructions will be populated here -->
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="background-manager.js"></script>
+    <script src="realtime-sync.js"></script>
+    <script src="whatsapp-order.js"></script>
+    <script src="payment-handler.js"></script>
+    <script src="payment-handler.js"></script>
+</body>
+</html>

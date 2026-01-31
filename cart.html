@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Pindi Vantalu</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .cart-container {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 100px 20px 50px;
+        }
+        
+        .cart-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .cart-header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cart-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        
+        .cart-items {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e1e1;
+            transition: background 0.3s ease;
+        }
+        
+        .cart-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-right: 1.5rem;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-price {
+            color: #ff6b35;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .quantity-btn:hover {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+        
+        .quantity-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .item-total {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-left: 1rem;
+        }
+        
+        .remove-item {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .remove-item:hover {
+            background: #c0392b;
+        }
+        
+        .cart-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        
+        .summary-row.total {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            border-top: 2px solid #e1e1e1;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+        
+        .checkout-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+        }
+        
+        .continue-shopping {
+            display: block;
+            text-align: center;
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .continue-shopping:hover {
+            color: #e55a2b;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .empty-cart i {
+            font-size: 4rem;
+            color: #bdc3c7;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-cart h2 {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-cart p {
+            color: #999;
+            margin-bottom: 2rem;
+        }
+        
+        .back-to-shop {
+            background: #ff6b35;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-shop:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .cart-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-summary {
+                position: static;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .item-image {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .item-quantity {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>Pindi Vantalu</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#recipes" class="nav-link">Recipes</a></li>
+                    <li><a href="index.html#categories" class="nav-link">Categories</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                    <li><a href="cart.html" class="nav-link cart-link" style="color: #27ae60; font-weight: 600;"><i class="fas fa-shopping-cart"></i> Cart <span id="cartCount" class="cart-count">0</span></a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Cart Container -->
+    <div class="cart-container">
+        <div class="container">
+            <div class="cart-header">
+                <h1><i class="fas fa-shopping-cart"></i> Your Shopping Cart</h1>
+                <p>Review and manage your selected items</p>
+            </div>
+
+            <div class="cart-content" id="cartContent">
+                <!-- Cart items will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="cart.js"></script>
+</body>
+</html>

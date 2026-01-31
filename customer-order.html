@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Now - SRIDEVI HOME FOODS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .order-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .menu-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .menu-item h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .menu-item p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .quantity-selector span {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 16px;
+        }
+        
+        .quantity-selector input {
+            width: 100px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .total-section {
+            background: #e8f5e8;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .total-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
+        }
+        
+        .whatsapp-btn i {
+            font-size: 24px;
+        }
+        
+        .info-text {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        
+        .contact-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .contact-info h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info p {
+            color: #856404;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="order-container">
+        <div class="header">
+            <h1>🍽️ SRIDEVI HOME FOODS</h1>
+            <p>Order delicious homemade Andhra foods via WhatsApp</p>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-item">
+                <h3>Sakinalu</h3>
+                <p>Traditional rice flour snack with sesame seeds</p>
+                <div class="quantity-selector">
+                    <span>₹150 each</span>
+                    <input type="number" id="sakinala-qty" value="1" min="0" onchange="updateTotal()">
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h3>Garelu</h3>
+                <p>Crispy lentil fritters</p>
+                <div class="quantity-selector">
+                    <span>₹120 each</span>
+                    <input type="number" id="garelu-qty" value="1" min="0" onchange="updateTotal()">
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h3>Murukulu</h3>
+                <p>Spiral shaped savory snack</p>
+                <div class="quantity-selector">
+                    <span>₹100 each</span>
+                    <input type="number" id="murukulu-qty" value="0" min="0" onchange="updateTotal()">
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h3>Mango Pickle</h3>
+                <p>Spicy raw mango pickle</p>
+                <div class="quantity-selector">
+                    <span>₹200 each</span>
+                    <input type="number" id="pickle-qty" value="0" min="0" onchange="updateTotal()">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>👤 Your Details</h3>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="customer-name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="customer-phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <textarea id="customer-address" placeholder="Enter your complete delivery address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="payment-method" required>
+                    <option value="">Select Payment Method</option>
+                    <option value="cod">Cash on Delivery (COD)</option>
+                    <option value="upi">UPI (Google Pay, PhonePe, Paytm)</option>
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="netbanking">Net Banking</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="total-section">
+            <div class="total-amount">Total: ₹270</div>
+        </div>
+
+        <button class="whatsapp-btn" onclick="placeOrder()">
+            <i>📱</i>
+            Place Order via WhatsApp
+        </button>
+
+        <p class="info-text">
+            Click to send your order details to SRIDEVI HOME FOODS via WhatsApp
+        </p>
+
+        <div class="contact-info">
+            <h4>📞 Contact Information</h4>
+            <p><strong>Phone:</strong> +91 98664 06807</p>
+            <p><strong>Email:</strong> sridevihomefoods@gmail.com</p>
+            <p><strong>Location:</strong> Andhra Pradesh, India</p>
+        </div>
+    </div>
+
+    <script>
+        const menuItems = {
+            'sakinalu': { name: 'Sakinalu', price: 150 },
+            'garelu': { name: 'Garelu', price: 120 },
+            'murukulu': { name: 'Murukulu', price: 100 },
+            'pickle': { name: 'Mango Pickle', price: 200 }
+        };
+
+        function updateTotal() {
+            let total = 0;
+            
+            const sakinalaQty = parseInt(document.getElementById('sakinala-qty').value) || 0;
+            const gareluQty = parseInt(document.getElementById('garelu-qty').value) || 0;
+            const murukuluQty = parseInt(document.getElementById('murukulu-qty').value) || 0;
+            const pickleQty = parseInt(document.getElementById('pickle-qty').value) || 0;
+            
+            total += sakinalaQty * menuItems.sakinala.price;
+            total += gareluQty * menuItems.garelu.price;
+            total += murukuluQty * menuItems.murukulu.price;
+            total += pickleQty * menuItems.pickle.price;
+            
+            document.querySelector('.total-amount').textContent = `Total: ₹${total}`;
+        }
+
+        function placeOrder() {
+            console.log('🚀 Place Order button clicked');
+            
+            const customerName = document.getElementById('customer-name').value;
+            const customerPhone = document.getElementById('customer-phone').value;
+            const customerAddress = document.getElementById('customer-address').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+            
+            console.log('📋 Customer Details:');
+            console.log('  Name:', customerName);
+            console.log('  Phone:', customerPhone);
+            console.log('  Address:', customerAddress);
+            console.log('  Payment:', paymentMethod);
+            
+            // Validation
+            if (!customerName || !customerPhone || !customerAddress || !paymentMethod) {
+                alert('Please fill in all your details before placing the order.');
+                return;
+            }
+            
+            console.log('✅ Validation passed');
+            
+            // Get order items
+            let orderItems = [];
+            let total = 0;
+            
+            const sakinalaQty = parseInt(document.getElementById('sakinala-qty').value) || 0;
+            const gareluQty = parseInt(document.getElementById('garelu-qty').value) || 0;
+            const murukuluQty = parseInt(document.getElementById('murukulu-qty').value) || 0;
+            const pickleQty = parseInt(document.getElementById('pickle-qty').value) || 0;
+            
+            if (sakinalaQty > 0) {
+                orderItems.push(`${menuItems.sakinala.name} x ${sakinalaQty} = ₹${sakinalaQty * menuItems.sakinala.price}`);
+                total += sakinalaQty * menuItems.sakinala.price;
+            }
+            
+            if (gareluQty > 0) {
+                orderItems.push(`${menuItems.garelu.name} x ${gareluQty} = ₹${gareluQty * menuItems.garelu.price}`);
+                total += gareluQty * menuItems.garelu.price;
+            }
+            
+            if (murukuluQty > 0) {
+                orderItems.push(`${menuItems.murukulu.name} x ${murukuluQty} = ₹${murukuluQty * menuItems.murukulu.price}`);
+                total += murukuluQty * menuItems.murukulu.price;
+            }
+            
+            if (pickleQty > 0) {
+                orderItems.push(`${menuItems.pickle.name} x ${pickleQty} = ₹${pickleQty * menuItems.pickle.price}`);
+                total += pickleQty * menuItems.pickle.price;
+            }
+            
+            console.log('📋 Order Items:', orderItems);
+            console.log('💰 Total:', total);
+            
+            if (orderItems.length === 0) {
+                alert('Please add at least one item to your order.');
+                return;
+            }
+            
+            console.log('✅ Order items validated');
+            
+            // Create WhatsApp message
+            const message = `🍽️ NEW ORDER - SRIDEVI HOME FOODS
+
+👤 CUSTOMER DETAILS:
+Name: ${customerName}
+Phone: ${customerPhone}
+Address: ${customerAddress}
+
+💳 PAYMENT METHOD:
+${paymentMethod.toUpperCase()}
+
+📋 ORDER ITEMS:
+${orderItems.join('\n')}
+
+💰 TOTAL AMOUNT: ₹${total}
+
+📅 Date: ${new Date().toLocaleString('en-IN')}
+
+Please confirm this order! 🙏
+Call us at +91 98664 06807 for any queries.`;
+            
+            console.log('📱 Message created');
+            console.log('📱 Message length:', message.length);
+            
+            // Create WhatsApp URL using working method
+            const yourPhoneNumber = '+91 98664 06807';
+            const cleanPhone = yourPhoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+            
+            console.log('📱 WhatsApp URL:', whatsappUrl);
+            console.log('📱 Opening WhatsApp...');
+            
+            // Use the working method from test page
+            try {
+                // Create a link element and click it (working method)
+                const link = document.createElement('a');
+                link.href = whatsappUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                console.log('✅ WhatsApp opened successfully using link method');
+                
+                // Show confirmation
+                setTimeout(() => {
+                    alert('Opening WhatsApp with your order details to SRIDEVI HOME FOODS...');
+                }, 500);
+                
+            } catch (error) {
+                console.log('❌ Link method failed, trying window.open:', error.message);
+                
+                // Fallback to window.open
+                try {
+                    window.open(whatsappUrl, '_blank');
+                    console.log('✅ WhatsApp opened using window.open fallback');
+                    
+                    setTimeout(() => {
+                        alert('Opening WhatsApp with your order details to SRIDEVI HOME FOODS...');
+                    }, 500);
+                    
+                } catch (error2) {
+                    console.log('❌ All methods failed:', error2.message);
+                    alert('Unable to open WhatsApp. Please try again or contact us directly at +91 98664 06807');
+                }
+            }
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            updateTotal();
+            console.log('🚀 Customer Order page loaded');
+            console.log('📱 Target WhatsApp Number: +91 98664 06807');
+            console.log('📱 Ready to accept orders');
+        };
+    </script>
+</body>
+</html>

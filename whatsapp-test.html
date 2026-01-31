@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Order Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+        }
+        .btn:hover {
+            background: #128c7e;
+        }
+        .debug {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📱 WhatsApp Order Test</h1>
+        <p>Test if WhatsApp messages are working for SRIDEVI HOME FOODS</p>
+        
+        <div class="form-group">
+            <label for="customer-name">Customer Name:</label>
+            <input type="text" id="customer-name" value="Test Customer" placeholder="Enter customer name">
+        </div>
+        
+        <div class="form-group">
+            <label for="customer-phone">Phone Number:</label>
+            <input type="tel" id="customer-phone" value="+91 98664 06807" placeholder="Enter phone number">
+        </div>
+        
+        <div class="form-group">
+            <label for="customer-address">Delivery Address:</label>
+            <textarea id="customer-address" placeholder="Enter delivery address">123 Test Street, Andhra Pradesh, India</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="order-items">Order Items:</label>
+            <textarea id="order-items" placeholder="Enter order items">Sakinalu x 2 = ₹300
+Garelu x 1 = ₹120
+Total: ₹420</textarea>
+        </div>
+        
+        <button class="btn" onclick="sendTestOrder()">
+            📱 Send Test Order to WhatsApp
+        </button>
+        
+        <button class="btn" onclick="sendDirectMessage()">
+            📱 Send Direct Message
+        </button>
+        
+        <button class="btn" onclick="testPhoneOnly()">
+            📱 Test Phone Number Only
+        </button>
+        
+        <div id="debug" class="debug">Debug information will appear here...</div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function updateDebug(message) {
+            const debug = document.getElementById('debug');
+            debug.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+        
+        function sendTestOrder() {
+            updateDebug('Starting test order...');
+            
+            const customerName = document.getElementById('customer-name').value;
+            const customerPhone = document.getElementById('customer-phone').value;
+            const customerAddress = document.getElementById('customer-address').value;
+            const orderItems = document.getElementById('order-items').value;
+            
+            if (!customerName || !customerPhone || !customerAddress || !orderItems) {
+                updateStatus('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Create order message
+            const orderMessage = `🍽️ NEW ORDER - SRIDEVI HOME FOODS
+
+👤 CUSTOMER DETAILS:
+Name: ${customerName}
+Phone: ${customerPhone}
+Address: ${customerAddress}
+
+📋 ORDER ITEMS:
+${orderItems}
+
+💰 TOTAL: ₹420
+
+📅 Date: ${new Date().toLocaleString('en-IN')}
+
+Please confirm this order! 🙏
+Call us at +91 98664 06807 for any queries.`;
+            
+            updateDebug('Message created');
+            updateDebug('Message length: ' + orderMessage.length + ' characters');
+            
+            // Create WhatsApp URL
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(orderMessage)}`;
+            
+            updateDebug('Phone number: ' + phoneNumber);
+            updateDebug('Clean phone: ' + cleanPhone);
+            updateDebug('WhatsApp URL: ' + whatsappUrl);
+            
+            // Open WhatsApp
+            updateDebug('Opening WhatsApp...');
+            window.open(whatsappUrl, '_blank');
+            
+            updateStatus('✅ WhatsApp opened with order details!', 'success');
+        }
+        
+        function sendDirectMessage() {
+            updateDebug('Testing direct message...');
+            
+            const simpleMessage = 'Hello! I would like to place an order from SRIDEVI HOME FOODS. Please call me at +91 98664 06807. Thank you!';
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(simpleMessage)}`;
+            
+            updateDebug('Simple message: ' + simpleMessage);
+            updateDebug('WhatsApp URL: ' + whatsappUrl);
+            
+            window.open(whatsappUrl, '_blank');
+            
+            updateStatus('✅ Direct message sent!', 'success');
+        }
+        
+        function testPhoneOnly() {
+            updateDebug('Testing phone number only...');
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}`;
+            
+            updateDebug('Phone number: ' + phoneNumber);
+            updateDebug('Clean phone: ' + cleanPhone);
+            updateDebug('WhatsApp URL: ' + whatsappUrl);
+            
+            window.open(whatsappUrl, '_blank');
+            
+            updateStatus('✅ WhatsApp opened with phone number only!', 'success');
+        }
+        
+        // Auto-clear debug on load
+        window.onload = function() {
+            updateDebug('WhatsApp test page loaded');
+            updateDebug('Target phone: +91 98664 06807');
+            updateDebug('Ready to test...');
+        };
+    </script>
+</body>
+</html>

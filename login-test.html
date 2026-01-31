@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test - SRIDEVI HOME FOODS</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .test-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .btn:hover {
+            background: #229954;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .result {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .credentials-display {
+            background: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🔐 Admin Login Test</h1>
+            <p>SRIDEVI HOME FOODS - Debug Login Issues</p>
+        </div>
+
+        <div class="credentials-display">
+            <strong>Default Credentials:</strong><br>
+            Username: <code>admin</code><br>
+            Password: <code>admin123</code>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Test Login</h3>
+            <form id="testLoginForm">
+                <div class="form-group">
+                    <label for="testUsername">Username</label>
+                    <input type="text" id="testUsername" value="admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="testPassword">Password</label>
+                    <input type="password" id="testPassword" value="admin123" required>
+                </div>
+                <button type="submit" class="btn">Test Login</button>
+            </form>
+            <div id="loginResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Quick Fixes</h3>
+            <button class="btn" onclick="resetCredentials()">Reset Admin Credentials</button>
+            <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+            <div id="fixResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Current Status</h3>
+            <div id="statusDisplay"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🚀 Go to Admin Panel</h3>
+            <button class="btn" onclick="window.open('admin.html', '_blank')">Open Admin Panel</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus();
+        });
+
+        // Test login form
+        document.getElementById('testLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            testLogin();
+        });
+
+        function testLogin() {
+            const username = document.getElementById('testUsername').value;
+            const password = document.getElementById('testPassword').value;
+            const resultDiv = document.getElementById('loginResult');
+            
+            // Get stored credentials
+            const stored = localStorage.getItem('pindiAdminCredentials');
+            let adminCredentials = { username: 'admin', password: 'admin123' };
+            
+            if (stored) {
+                try {
+                    adminCredentials = JSON.parse(stored);
+                } catch (e) {
+                    resultDiv.innerHTML = '<div class="error">❌ Error reading stored credentials</div>';
+                    return;
+                }
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="info">
+                    <strong>Testing with:</strong><br>
+                    Input: ${username} / ${password}<br>
+                    Stored: ${adminCredentials.username} / ${adminCredentials.password}
+                </div>
+            `;
+            
+            // Test login
+            if (username === adminCredentials.username && password === adminCredentials.password) {
+                resultDiv.innerHTML += '<div class="success">✅ Login SUCCESSFUL!</div>';
+                sessionStorage.setItem('adminLoggedIn', 'true');
+            } else if (username === 'admin' && password === 'admin123') {
+                resultDiv.innerHTML += '<div class="success">✅ Login SUCCESSFUL with fallback!</div>';
+                sessionStorage.setItem('adminLoggedIn', 'true');
+            } else {
+                resultDiv.innerHTML += '<div class="error">❌ Login FAILED</div>';
+            }
+        }
+
+        function resetCredentials() {
+            const adminCredentials = { username: 'admin', password: 'admin123' };
+            localStorage.setItem('pindiAdminCredentials', JSON.stringify(adminCredentials));
+            
+            document.getElementById('fixResult').innerHTML = '<div class="success">✅ Admin credentials reset to admin/admin123</div>';
+            updateStatus();
+        }
+
+        function clearAllData() {
+            if (confirm('This will clear ALL data including categories, recipes, orders, and settings. Are you sure?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Reset to defaults
+                const adminCredentials = { username: 'admin', password: 'admin123' };
+                localStorage.setItem('pindiAdminCredentials', JSON.stringify(adminCredentials));
+                
+                document.getElementById('fixResult').innerHTML = '<div class="success">✅ All data cleared. Use admin/admin123 to login.</div>';
+                updateStatus();
+            }
+        }
+
+        function updateStatus() {
+            const statusDiv = document.getElementById('statusDisplay');
+            const stored = localStorage.getItem('pindiAdminCredentials');
+            const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+            
+            let statusHTML = '<strong>Current Status:</strong><br>';
+            
+            if (stored) {
+                try {
+                    const creds = JSON.parse(stored);
+                    statusHTML += `Stored Credentials: ${creds.username} / ${creds.password}<br>`;
+                } catch (e) {
+                    statusHTML += 'Stored Credentials: CORRUPTED<br>';
+                }
+            } else {
+                statusHTML += 'Stored Credentials: NONE (using defaults)<br>';
+            }
+            
+            statusHTML += `Session Login: ${isLoggedIn === 'true' ? 'LOGGED IN' : 'NOT LOGGED IN'}<br>`;
+            statusHTML += `LocalStorage Items: ${localStorage.length} items`;
+            
+            statusDiv.innerHTML = statusHTML;
+        }
+    </script>
+</body>
+</html>

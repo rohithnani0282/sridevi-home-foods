@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRIDEVI HOME FOODS - Quick Admin Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .test-header h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .payment-methods {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-method {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        .payment-method h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .payment-method p {
+            color: #666;
+            margin: 0.25rem 0;
+        }
+        
+        .add-payment-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 2rem auto;
+            transition: all 0.3s ease;
+        }
+        
+        .add-payment-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-save {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .qr-preview {
+            margin-top: 1rem;
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .qr-preview img {
+            max-width: 200px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1><i class="fas fa-credit-card"></i> SRIDEVI HOME FOODS - Payment Methods Management</h1>
+            <p>Quick access to add and manage UPI payments with QR codes</p>
+        </div>
+
+        <div class="payment-methods" id="paymentMethodsList">
+            <!-- Payment methods will be loaded here -->
+        </div>
+
+        <button class="add-payment-btn" onclick="openPaymentModal()">
+            <i class="fas fa-plus"></i> Add New Payment Method
+        </button>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Payment Method</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="paymentName">Payment Method Name</label>
+                    <input type="text" id="paymentName" required placeholder="Google Pay UPI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentType">Payment Type</label>
+                    <select id="paymentType" required onchange="updateFields()">
+                        <option value="upi">UPI Payment</option>
+                        <option value="wallet">Digital Wallet</option>
+                        <option value="bank">Bank Transfer</option>
+                        <option value="cod">Cash on Delivery</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentIcon">Icon Class</label>
+                    <input type="text" id="paymentIcon" placeholder="fab fa-google-pay">
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentDescription">Description</label>
+                    <textarea id="paymentDescription" placeholder="Scan QR code or use UPI ID"></textarea>
+                </div>
+                
+                <!-- UPI Fields -->
+                <div id="upiFields">
+                    <div class="form-group">
+                        <label for="upiId">UPI ID / VPA</label>
+                        <input type="text" id="upiId" placeholder="sridevihomefoods@okhdfcbank">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="upiName">UPI Display Name</label>
+                        <input type="text" id="upiName" placeholder="SRIDEVI HOME FOODS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="upiAmount">Default Amount (optional)</label>
+                        <input type="number" id="upiAmount" placeholder="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Generated QR Code URL</label>
+                        <input type="text" id="upiQRCode" readonly style="background: #f8f9fa;">
+                    </div>
+                    
+                    <div class="qr-preview">
+                        <p>QR Code Preview:</p>
+                        <img id="qrPreview" src="" alt="QR Code" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-save">Save Payment Method</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Payment methods data
+        let paymentMethods = [
+            {
+                id: 1,
+                name: 'Google Pay UPI',
+                type: 'upi',
+                icon: 'fab fa-google-pay',
+                description: 'Scan QR code or use UPI ID',
+                upiId: 'sridevihomefoods@okhdfcbank',
+                upiName: 'SRIDEVI HOME FOODS',
+                upiQRCode: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=sridevihomefoods@okhdfcbank&pn=SRIDEVI%20HOME%20FOODS&am=0&cu=INR'
+            },
+            {
+                id: 2,
+                name: 'PhonePe UPI',
+                type: 'upi',
+                icon: 'fas fa-mobile',
+                description: 'Fast and secure UPI payments',
+                upiId: 'sridevihomefoods@ybl',
+                upiName: 'SRIDEVI HOME FOODS',
+                upiQRCode: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=sridevihomefoods@ybl&pn=SRIDEVI%20HOME%20FOODS&am=0&cu=INR'
+            }
+        ];
+
+        // Load payment methods
+        function loadPaymentMethods() {
+            const container = document.getElementById('paymentMethodsList');
+            container.innerHTML = '';
+            
+            paymentMethods.forEach(payment => {
+                const div = document.createElement('div');
+                div.className = 'payment-method';
+                div.innerHTML = `
+                    <h3><i class="${payment.icon}"></i> ${payment.name}</h3>
+                    <p><strong>Type:</strong> ${payment.type.toUpperCase()}</p>
+                    <p><strong>Description:</strong> ${payment.description}</p>
+                    ${payment.upiId ? `<p><strong>UPI ID:</strong> ${payment.upiId}</p>` : ''}
+                    ${payment.upiQRCode ? `<p><strong>QR Code:</strong> <a href="${payment.upiQRCode}" target="_blank">View QR</a></p>` : ''}
+                    <button onclick="editPayment(${payment.id})" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 0.5rem;">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Generate QR code URL
+        function generateQRURL() {
+            const upiId = document.getElementById('upiId').value;
+            const upiName = document.getElementById('upiName').value;
+            const amount = document.getElementById('upiAmount').value || '0';
+            
+            if (upiId && upiName) {
+                const qrData = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}&am=${amount}&cu=INR`;
+                const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
+                
+                document.getElementById('upiQRCode').value = qrURL;
+                document.getElementById('qrPreview').src = qrURL;
+                document.getElementById('qrPreview').style.display = 'block';
+            }
+        }
+
+        // Update fields based on payment type
+        function updateFields() {
+            const type = document.getElementById('paymentType').value;
+            const upiFields = document.getElementById('upiFields');
+            
+            if (type === 'upi') {
+                upiFields.style.display = 'block';
+                generateQRURL();
+            } else {
+                upiFields.style.display = 'none';
+            }
+        }
+
+        // Open modal
+        function openPaymentModal() {
+            document.getElementById('modalTitle').textContent = 'Add Payment Method';
+            document.getElementById('paymentForm').reset();
+            document.getElementById('upiFields').style.display = 'block';
+            document.getElementById('paymentModal').style.display = 'block';
+        }
+
+        // Edit payment
+        function editPayment(id) {
+            const payment = paymentMethods.find(p => p.id === id);
+            if (payment) {
+                document.getElementById('modalTitle').textContent = 'Edit Payment Method';
+                document.getElementById('paymentName').value = payment.name;
+                document.getElementById('paymentType').value = payment.type;
+                document.getElementById('paymentIcon').value = payment.icon;
+                document.getElementById('paymentDescription').value = payment.description;
+                
+                if (payment.type === 'upi') {
+                    document.getElementById('upiId').value = payment.upiId || '';
+                    document.getElementById('upiName').value = payment.upiName || '';
+                    document.getElementById('upiQRCode').value = payment.upiQRCode || '';
+                    document.getElementById('qrPreview').src = payment.upiQRCode || '';
+                    document.getElementById('qrPreview').style.display = payment.upiQRCode ? 'block' : 'none';
+                    document.getElementById('upiFields').style.display = 'block';
+                }
+                
+                document.getElementById('paymentModal').style.display = 'block';
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        // Save payment
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const paymentData = {
+                name: document.getElementById('paymentName').value,
+                type: document.getElementById('paymentType').value,
+                icon: document.getElementById('paymentIcon').value || 'fas fa-credit-card',
+                description: document.getElementById('paymentDescription').value,
+                upiId: document.getElementById('upiId').value,
+                upiName: document.getElementById('upiName').value,
+                upiQRCode: document.getElementById('upiQRCode').value
+            };
+            
+            // Add to payment methods array
+            paymentMethods.push({
+                id: Date.now(),
+                ...paymentData
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('pindiPaymentMethods', JSON.stringify(paymentMethods));
+            
+            // Reload display
+            loadPaymentMethods();
+            closeModal();
+            
+            alert('Payment method saved successfully!');
+        });
+
+        // Auto-generate QR code when UPI fields change
+        document.getElementById('upiId').addEventListener('input', generateQRURL);
+        document.getElementById('upiName').addEventListener('input', generateQRURL);
+        document.getElementById('upiAmount').addEventListener('input', generateQRURL);
+
+        // Load on page load
+        loadPaymentMethods();
+    </script>
+</body>
+</html>

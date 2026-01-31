@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SRIDEVI HOME FOODS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .admin-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1200px;
+            min-height: 600px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Login Container */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .login-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .admin-logo i {
+            color: #27ae60;
+            margin-right: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .login-hint {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            display: none;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-logo i {
+            color: #27ae60;
+            margin-right: 0.5rem;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .menu-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item:hover {
+            background: #34495e;
+        }
+
+        .menu-item.active {
+            background: #27ae60;
+        }
+
+        .menu-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: #666;
+        }
+
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            background: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-content {
+            padding: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            margin: 0 0.25rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 1rem 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Login Container -->
+        <div class="login-container" id="loginContainer">
+            <div class="login-form">
+                <div class="admin-logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>SRIDEVI HOME FOODS</span>
+                </div>
+                <h2>Admin Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container" id="dashboardContainer">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-logo">
+                        <i class="fas fa-utensils"></i>
+                        <span>SRIDEVI HOME FOODS</span>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <div class="menu-item active" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="menu-item" onclick="showSection('categories')">
+                        <i class="fas fa-tags"></i>
+                        <span>Categories</span>
+                    </div>
+                    <div class="menu-item" onclick="showSection('recipes')">
+                        <i class="fas fa-book"></i>
+                        <span>Recipes</span>
+                    </div>
+                    <div class="menu-item" onclick="showSection('orders')">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </div>
+                    <div class="menu-item" onclick="showSection('payments')">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payment Methods</span>
+                    </div>
+                    <div class="menu-item" onclick="showSection('settings')">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                    <div class="menu-item" onclick="showSection('sync-status')">
+                        <i class="fas fa-sync"></i>
+                        <span>Sync Status</span>
+                    </div>
+                    <div class="menu-item" onclick="showSection('background')">
+                        <i class="fas fa-image"></i>
+                        <span>Background</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="header">
+                    <div class="header-title">Admin Dashboard</div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="text-align: right; margin-right: 1rem;">
+                            <div style="font-size: 0.9rem; color: #666;">Logged in as:</div>
+                            <div style="font-weight: 600; color: #333;" id="headerUsername">admin</div>
+                        </div>
+                        <button class="logout-btn" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <!-- Dashboard Section -->
+                    <div class="content-section active" id="dashboard">
+                        <h2>Dashboard Overview</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <i class="fas fa-tags" style="color: #3498db;"></i>
+                                <h3 id="totalCategories">0</h3>
+                                <p>Total Categories</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-book" style="color: #e74c3c;"></i>
+                                <h3 id="totalRecipes">0</h3>
+                                <p>Total Recipes</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-shopping-cart" style="color: #f39c12;"></i>
+                                <h3 id="totalOrders">0</h3>
+                                <p>Total Orders</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-credit-card" style="color: #27ae60;"></i>
+                                <h3 id="totalPayments">0</h3>
+                                <p>Payment Methods</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categories Section -->
+                    <div class="content-section" id="categories">
+                        <h2>Categories Management</h2>
+                        <div class="data-table">
+                            <div class="table-header">
+                                <h3>Categories</h3>
+                                <button class="btn btn-small" onclick="openCategoryModal()">Add Category</button>
+                            </div>
+                            <div class="table-content">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="categoriesTable">
+                                        <!-- Categories will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recipes Section -->
+                    <div class="content-section" id="recipes">
+                        <h2>Recipes</h2>
+                        <div class="data-table">
+                            <div class="table-header">
+                                <h3>Recipe Management</h3>
+                                <button class="btn" onclick="openRecipeModal()">Add Recipe</button>
+                            </div>
+                            <div class="table-content">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Name</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recipesTable">
+                                        <!-- Recipes will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Section -->
+                    <div class="content-section" id="orders">
+                        <h2>Orders Management</h2>
+                        <div class="data-table">
+                            <div class="table-header">
+                                <h3>Customer Orders</h3>
+                                <div>
+                                    <button class="btn" onclick="testOrderSave()">Add Test Order</button>
+                                    <button class="btn" onclick="refreshOrders()">Refresh Orders</button>
+                                </div>
+                            </div>
+                            <div class="table-content">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer Name</th>
+                                            <th>Phone</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Items</th>
+                                            <th>Total</th>
+                                            <th>Payment</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ordersTable">
+                                        <!-- Orders will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods Section -->
+                    <div class="content-section" id="payments">
+                        <h2>Payment Methods</h2>
+                        <div class="data-table">
+                            <div class="table-header">
+                                <h3>Payment Methods</h3>
+                                <button class="btn btn-small" onclick="openPaymentModal()">Add Payment Method</button>
+                            </div>
+                            <div class="table-content">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="paymentsTable">
+                                        <!-- Payment methods will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div class="content-section" id="settings">
+                        <h2>Settings</h2>
+                        <div class="data-table">
+                            <div class="table-content">
+                                <div style="padding: 2rem;">
+                                    <h3>Admin Credentials</h3>
+                                    <p>Update your admin username and password for security.</p>
+                                    <br>
+                                    
+                                    <form id="adminCredentialsForm">
+                                        <div class="form-group">
+                                            <label for="currentPassword">Current Password</label>
+                                            <input type="password" id="currentPassword" required placeholder="Enter current password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="newUsername">New Username</label>
+                                            <input type="text" id="newUsername" required placeholder="Enter new username">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="newPassword">New Password</label>
+                                            <input type="password" id="newPassword" required placeholder="Enter new password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="confirmPassword">Confirm New Password</label>
+                                            <input type="password" id="confirmPassword" required placeholder="Confirm new password">
+                                        </div>
+                                        <button type="submit" class="btn">Update Admin Credentials</button>
+                                    </form>
+                                    
+                                    <div style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                                        <h4>Current Status:</h4>
+                                        <p><strong>Username:</strong> <span id="currentUsername">admin</span></p>
+                                        <p><strong>Last Updated:</strong> <span id="credentialsLastUpdated">Never</span></p>
+                                    </div>
+                                    
+                                    <br><br>
+                                    <h3>Data Management</h3>
+                                    <button class="btn" onclick="resetData()">Reset All Data</button>
+                                    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sync Status Section -->
+                    <div class="content-section" id="sync-status">
+                        <h2>Real-time Sync Status</h2>
+                        <div class="data-table">
+                            <div class="table-content">
+                                <div style="padding: 2rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                        <div>
+                                            <h3>🔄 Live Synchronization Monitor</h3>
+                                            <p>Monitor real-time sync between admin panel and website</p>
+                                        </div>
+                                        <div>
+                                            <button class="btn" onclick="testSyncNow()">Test Sync</button>
+                                            <button class="btn btn-secondary" onclick="openWebsite()">Open Website</button>
+                                            <button class="btn btn-secondary" onclick="performFullSync()">Full Sync</button>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: #e8f5e8; border-radius: 10px; padding: 1rem; margin-bottom: 2rem; border-left: 4px solid #27ae60;">
+                                        <h4 style="margin-bottom: 0.5rem; color: #27ae60;">🏥 System Health</h4>
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <span style="font-weight: 600;">Status:</span>
+                                                <span id="systemHealthStatus" style="margin-left: 0.5rem;">Healthy</span>
+                                            </div>
+                                            <div>
+                                                <span style="font-weight: 600;">Total Syncs:</span>
+                                                <span id="totalSyncs" style="margin-left: 0.5rem;">0</span>
+                                            </div>
+                                            <div>
+                                                <span style="font-weight: 600;">Failed:</span>
+                                                <span id="failedSyncs" style="margin-left: 0.5rem;">0</span>
+                                            </div>
+                                            <div>
+                                                <span style="font-weight: 600;">Uptime:</span>
+                                                <span id="systemUptime" style="margin-left: 0.5rem;">0m</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sync-status-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #27ae60;">
+                                            <h4 style="margin-bottom: 1rem; color: #333;">📦 Categories</h4>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Total Items:</span>
+                                                <span style="font-weight: 600; color: #27ae60;" id="syncCategoryCount">0</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Last Sync:</span>
+                                                <span style="font-weight: 600; color: #27ae60;" id="syncCategoryLastSync">Never</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                                <span>Status:</span>
+                                                <span style="font-weight: 600; color: #27ae60;" id="syncCategoryStatus">Active</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                                            <h4 style="margin-bottom: 1rem; color: #333;">🍽️ Recipes/Menu Items</h4>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Total Items:</span>
+                                                <span style="font-weight: 600; color: #e74c3c;" id="syncRecipeCount">0</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Last Sync:</span>
+                                                <span style="font-weight: 600; color: #e74c3c;" id="syncRecipeLastSync">Never</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                                <span>Status:</span>
+                                                <span style="font-weight: 600; color: #e74c3c;" id="syncRecipeStatus">Active</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #f39c12;">
+                                            <h4 style="margin-bottom: 1rem; color: #333;">💳 Payment Methods</h4>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Total Items:</span>
+                                                <span style="font-weight: 600; color: #f39c12;" id="syncPaymentCount">0</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Last Sync:</span>
+                                                <span style="font-weight: 600; color: #f39c12;" id="syncPaymentLastSync">Never</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                                <span>Status:</span>
+                                                <span style="font-weight: 600; color: #f39c12;" id="syncPaymentStatus">Active</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #9b59b6;">
+                                            <h4 style="margin-bottom: 1rem; color: #333;">🔐 Admin Credentials</h4>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Username:</span>
+                                                <span style="font-weight: 600; color: #9b59b6;" id="syncAdminUsername">admin</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                                <span>Last Updated:</span>
+                                                <span style="font-weight: 600; color: #9b59b6;" id="syncAdminLastUpdate">Never</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                                <span>Status:</span>
+                                                <span style="font-weight: 600; color: #9b59b6;" id="syncAdminStatus">Active</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: #f8f9fa; border-radius: 10px; padding: 1.5rem;">
+                                        <h4 style="margin-bottom: 1rem; color: #333;">📋 Sync Activity Log</h4>
+                                        <div id="syncActivityLog" style="max-height: 200px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.85rem;">
+                                            <div style="padding: 0.5rem; margin-bottom: 0.5rem; background: #d1ecf1; color: #0c5460; border-radius: 5px;">
+                                                [${new Date().toLocaleTimeString('en-IN')}] ℹ️ Sync status monitor initialized
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top: 2rem; padding: 1rem; background: #d1ecf1; color: #0c5460; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                                        <strong>ℹ️ How it works:</strong><br>
+                                        Any changes made in admin panel (categories, recipes, prices, payment methods) automatically sync to the website within 1 second. This monitor shows the live status of all synchronization activities.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Background Management Section -->
+                    <div class="content-section" id="background">
+                        <h2>Background Management</h2>
+                        <div class="data-table">
+                            <div class="table-content">
+                                <div style="padding: 2rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                        <div>
+                                            <h3>🎨 Website Background Settings</h3>
+                                            <p>Customize the background appearance of your website</p>
+                                        </div>
+                                        <div>
+                                            <button class="btn" onclick="previewBackground()">Preview</button>
+                                            <button class="btn btn-secondary" onclick="resetBackground()">Reset</button>
+                                            <button class="btn btn-secondary" onclick="openWebsite()">View Website</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Background Type Selection -->
+                                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+                                        <h4 style="margin-bottom: 1rem;">Background Type</h4>
+                                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                                <input type="radio" name="bgType" value="image" checked onchange="showBackgroundType('image')">
+                                                <span style="margin-left: 0.5rem;">Image Background</span>
+                                            </label>
+                                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                                <input type="radio" name="bgType" value="gradient" onchange="showBackgroundType('gradient')">
+                                                <span style="margin-left: 0.5rem;">Gradient Background</span>
+                                            </label>
+                                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                                <input type="radio" name="bgType" value="color" onchange="showBackgroundType('color')">
+                                                <span style="margin-left: 0.5rem;">Solid Color</span>
+                                            </label>
+                                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                                <input type="radio" name="bgType" value="pattern" onchange="showBackgroundType('pattern')">
+                                                <span style="margin-left: 0.5rem;">Pattern</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Image Background Options -->
+                                    <div id="imageOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+                                        <h4 style="margin-bottom: 1rem;">Image Background</h4>
+                                        <form id="imageBackgroundForm">
+                                            <div class="form-group">
+                                                <label for="bgImageUrl">Image URL</label>
+                                                <input type="url" id="bgImageUrl" placeholder="https://example.com/image.jpg">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bgImageSize">Background Size</label>
+                                                <select id="bgImageSize">
+                                                    <option value="cover">Cover (Recommended)</option>
+                                                    <option value="contain">Contain</option>
+                                                    <option value="100% 100%">Stretch</option>
+                                                    <option value="auto">Auto</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bgImagePosition">Background Position</label>
+                                                <select id="bgImagePosition">
+                                                    <option value="center center">Center</option>
+                                                    <option value="top center">Top</option>
+                                                    <option value="bottom center">Bottom</option>
+                                                    <option value="left center">Left</option>
+                                                    <option value="right center">Right</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bgImageRepeat">Background Repeat</label>
+                                                <select id="bgImageRepeat">
+                                                    <option value="no-repeat">No Repeat</option>
+                                                    <option value="repeat">Repeat</option>
+                                                    <option value="repeat-x">Repeat Horizontal</option>
+                                                    <option value="repeat-y">Repeat Vertical</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bgImageOverlay">Overlay Opacity</label>
+                                                <input type="range" id="bgImageOverlay" min="0" max="100" value="30">
+                                                <small>Current: <span id="overlayValue">30</span>%</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bgImageOverlayColor">Overlay Color</label>
+                                                <input type="color" id="bgImageOverlayColor" value="#000000">
+                                            </div>
+                                            <button type="submit" class="btn">Apply Image Background</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Gradient Background Options -->
+                                    <div id="gradientOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; display: none;">
+                                        <h4 style="margin-bottom: 1rem;">Gradient Background</h4>
+                                        <form id="gradientBackgroundForm">
+                                            <div class="form-group">
+                                                <label for="gradientType">Gradient Type</label>
+                                                <select id="gradientType">
+                                                    <option value="linear">Linear Gradient</option>
+                                                    <option value="radial">Radial Gradient</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gradientDirection">Direction (Linear)</label>
+                                                <select id="gradientDirection">
+                                                    <option value="135deg">Diagonal (↘)</option>
+                                                    <option value="90deg">Horizontal (→)</option>
+                                                    <option value="180deg">Horizontal (←)</option>
+                                                    <option value="0deg">Vertical (↓)</option>
+                                                    <option value="270deg">Vertical (↑)</option>
+                                                    <option value="45deg">Diagonal (↗)</option>
+                                                    <option value="225deg">Diagonal (↙)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gradientColor1">Start Color</label>
+                                                <input type="color" id="gradientColor1" value="#667eea">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gradientColor2">End Color</label>
+                                                <input type="color" id="gradientColor2" value="#764ba2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gradientColor3">Middle Color (Optional)</label>
+                                                <input type="color" id="gradientColor3" value="#f093fb">
+                                            </div>
+                                            <button type="submit" class="btn">Apply Gradient Background</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Solid Color Options -->
+                                    <div id="colorOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; display: none;">
+                                        <h4 style="margin-bottom: 1rem;">Solid Color Background</h4>
+                                        <form id="colorBackgroundForm">
+                                            <div class="form-group">
+                                                <label for="solidColor">Background Color</label>
+                                                <input type="color" id="solidColor" value="#ffffff">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="solidTextColor">Text Color</label>
+                                                <input type="color" id="solidTextColor" value="#333333">
+                                            </div>
+                                            <button type="submit" class="btn">Apply Solid Color</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Pattern Options -->
+                                    <div id="patternOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; display: none;">
+                                        <h4 style="margin-bottom: 1rem;">Pattern Background</h4>
+                                        <form id="patternBackgroundForm">
+                                            <div class="form-group">
+                                                <label for="patternType">Pattern Type</label>
+                                                <select id="patternType">
+                                                    <option value="dots">Dots</option>
+                                                    <option value="lines">Lines</option>
+                                                    <option value="grid">Grid</option>
+                                                    <option value="zigzag">Zigzag</option>
+                                                    <option value="waves">Waves</option>
+                                                    <option value="circles">Circles</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="patternColor">Pattern Color</label>
+                                                <input type="color" id="patternColor" value="#cccccc">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="patternBgColor">Background Color</label>
+                                                <input type="color" id="patternBgColor" value="#ffffff">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="patternSize">Pattern Size</label>
+                                                <input type="range" id="patternSize" min="10" max="100" value="20">
+                                                <small>Current: <span id="patternSizeValue">20</span>px</small>
+                                            </div>
+                                            <button type="submit" class="btn">Apply Pattern</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Preset Backgrounds -->
+                                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+                                        <h4 style="margin-bottom: 1rem;">Preset Backgrounds</h4>
+                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                            <div class="preset-bg" onclick="applyPreset('food')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
+                                                <div style="height: 80px; background: linear-gradient(135deg, #ff6b6b, #feca57); border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                                <strong>Food Theme</strong>
+                                            </div>
+                                            <div class="preset-bg" onclick="applyPreset('nature')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
+                                                <div style="height: 80px; background: linear-gradient(135deg, #56ab2f, #a8e063); border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                                <strong>Nature</strong>
+                                            </div>
+                                            <div class="preset-bg" onclick="applyPreset('ocean')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
+                                                <div style="height: 80px; background: linear-gradient(135deg, #2193b0, #6dd5ed); border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                                <strong>Ocean</strong>
+                                            </div>
+                                            <div class="preset-bg" onclick="applyPreset('sunset')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
+                                                <div style="height: 80px; background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb); border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                                <strong>Sunset</strong>
+                                            </div>
+                                            <div class="preset-bg" onclick="applyPreset('professional')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
+                                                <div style="height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                                <strong>Professional</strong>
+                                            </div>
+                                            <div class="preset-bg" onclick="applyPreset('minimal')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
+                                                <div style="height: 80px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                                <strong>Minimal</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Current Background Preview -->
+                                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
+                                        <h4 style="margin-bottom: 1rem;">Current Background Preview</h4>
+                                        <div id="backgroundPreview" style="height: 200px; border-radius: 8px; border: 2px solid #ddd; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                            Preview Area
+                                        </div>
+                                        <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                                            <strong>Current Settings:</strong>
+                                            <div id="currentBgSettings" style="margin-top: 0.5rem;">
+                                                Type: Default Gradient<br>
+                                                Applied: Never
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Category Modal -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Category</h3>
+                <button class="close-btn" onclick="closeModal('categoryModal')">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label for="categoryDescription">Description</label>
+                    <textarea id="categoryDescription" rows="3" style="width: 100%; padding: 10px; border: 2px solid #e1e1e1; border-radius: 6px;"></textarea>
+                </div>
+                <button type="submit" class="btn">Save Category</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div class="modal" id="recipeModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('recipeModal')">&times;</span>
+            <h2>Add Recipe</h2>
+            <form id="recipeForm">
+                <div class="form-group">
+                    <label for="recipeName">Recipe Name</label>
+                    <input type="text" id="recipeName" required placeholder="Enter recipe name">
+                </div>
+                <div class="form-group">
+                    <label for="recipeCategory">Category</label>
+                    <select id="recipeCategory" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="recipePrice">Price (₹)</label>
+                    <input type="number" id="recipePrice" required placeholder="Enter price" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="recipeDescription">Description</label>
+                    <textarea id="recipeDescription" required placeholder="Enter recipe description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="recipeImage">Recipe Image</label>
+                    <input type="file" id="recipeImage" accept="image/*" onchange="previewRecipeImage(event)">
+                    <small>Upload an image for this recipe (JPG, PNG, GIF - Max 5MB)</small>
+                    <div id="imagePreview" style="margin-top: 10px; display: none;">
+                        <img id="previewImg" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 1px solid #ddd;">
+                        <button type="button" class="btn btn-small btn-danger" onclick="removeRecipeImage()" style="margin-left: 10px;">Remove</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="recipeImageUrl">Or Enter Image URL</label>
+                    <input type="url" id="recipeImageUrl" placeholder="https://example.com/image.jpg" onchange="previewRecipeImageUrl(event)">
+                    <small>Alternatively, enter a direct image URL</small>
+                </div>
+                <button type="submit" class="btn">Save Recipe</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Payment Method</h3>
+                <button class="close-btn" onclick="closeModal('paymentModal')">&times;</button>
+            </div>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="paymentName">Payment Name</label>
+                    <input type="text" id="paymentName" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentType">Type</label>
+                    <select id="paymentType" style="width: 100%; padding: 10px; border: 2px solid #e1e1e1; border-radius: 6px;">
+                        <option value="online">Online</option>
+                        <option value="cod">Cash on Delivery</option>
+                        <option value="wallet">Wallet</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paymentStatus">Status</label>
+                    <select id="paymentStatus" style="width: 100%; padding: 10px; border: 2px solid #e1e1e1; border-radius: 6px;">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Save Payment Method</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script src="realtime-sync.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple WhatsApp Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+        }
+        .btn:hover {
+            background: #128c7e;
+        }
+        .debug {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .phone-display {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📱 Simple WhatsApp Test</h1>
+        <p>Test if WhatsApp redirect is working</p>
+        
+        <div class="phone-display">
+            Target: +91 98664 06807
+        </div>
+        
+        <button class="btn" onclick="testWhatsApp()">
+            📱 Click to Test WhatsApp
+        </button>
+        
+        <button class="btn" onclick="testWhatsAppWithMessage()">
+            📱 Test WhatsApp with Message
+        </button>
+        
+        <button class="btn" onclick="testDifferentApproach()">
+            📱 Test Different Approach
+        </button>
+        
+        <button class="btn" onclick="testDirectURL()">
+            🔗 Test Direct URL
+        </button>
+        
+        <div id="debug" class="debug">Debug information will appear here...</div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function updateDebug(message) {
+            const debug = document.getElementById('debug');
+            debug.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+        
+        function testWhatsApp() {
+            updateDebug('Testing basic WhatsApp redirect...');
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}`;
+            
+            updateDebug('Phone: ' + phoneNumber);
+            updateDebug('Clean: ' + cleanPhone);
+            updateDebug('URL: ' + whatsappUrl);
+            
+            // Try to open in same window first
+            try {
+                window.location.href = whatsappUrl;
+                updateStatus('✅ Redirecting to WhatsApp...', 'success');
+            } catch (error) {
+                updateDebug('Error with location.href: ' + error.message);
+                // Try window.open
+                try {
+                    window.open(whatsappUrl, '_blank');
+                    updateStatus('✅ Opening WhatsApp in new tab...', 'success');
+                } catch (error) {
+                    updateDebug('Error with window.open: ' + error.message);
+                    updateStatus('❌ Failed to open WhatsApp', 'error');
+                }
+            }
+        }
+        
+        function testWhatsAppWithMessage() {
+            updateDebug('Testing WhatsApp with message...');
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const message = 'Hello! Test message from SRIDEVI HOME FOODS';
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+            
+            updateDebug('Phone: ' + phoneNumber);
+            updateDebug('Clean: ' + cleanPhone);
+            updateDebug('Message: ' + message);
+            updateDebug('URL: ' + whatsappUrl);
+            
+            try {
+                window.location.href = whatsappUrl;
+                updateStatus('✅ Redirecting to WhatsApp with message...', 'success');
+            } catch (error) {
+                updateDebug('Error: ' + error.message);
+                try {
+                    window.open(whatsappUrl, '_blank');
+                    updateStatus('✅ Opening WhatsApp with message...', 'success');
+                } catch (error) {
+                    updateStatus('❌ Failed to open WhatsApp', 'error');
+                }
+            }
+        }
+        
+        function testDifferentApproach() {
+            updateDebug('Testing different approach...');
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const message = 'Hello! Different approach test';
+            
+            // Try different URL formats
+            const urls = [
+                `https://wa.me/${cleanPhone}`,
+                `https://api.whatsapp.com/send?phone=${cleanPhone}`,
+                `https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`
+            ];
+            
+            urls.forEach((url, index) => {
+                updateDebug(`URL ${index + 1}: ${url}`);
+            });
+            
+            // Try first URL
+            try {
+                window.open(urls[0], '_blank');
+                updateStatus('✅ Testing different URL format...', 'success');
+            } catch (error) {
+                updateDebug('Error: ' + error.message);
+                updateStatus('❌ Failed', 'error');
+            }
+        }
+        
+        function testDirectURL() {
+            updateDebug('Testing direct URL...');
+            
+            const directUrl = 'https://wa.me/919866406807?text=Hello%20from%20SRIDEVI%20HOME%20FOODS';
+            
+            updateDebug('Direct URL: ' + directUrl);
+            
+            // Create a link element and click it
+            const link = document.createElement('a');
+            link.href = directUrl;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            updateStatus('✅ Testing direct link approach...', 'success');
+        }
+        
+        // Auto-load debug info
+        window.onload = function() {
+            updateDebug('Simple WhatsApp test loaded');
+            updateDebug('Target: +91 98664 06807');
+            updateDebug('Testing multiple approaches...');
+            updateDebug('');
+            updateDebug('Try each button to see which one works:');
+            updateDebug('1. Basic redirect');
+            updateDebug('2. Message redirect');
+            updateDebug('3. Different approach');
+            updateDebug('4. Direct URL');
+        };
+    </script>
+</body>
+</html>

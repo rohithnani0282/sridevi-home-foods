@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Order System - SRIDEVI HOME FOODS</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-whatsapp {
+            background: #25d366;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #128c7e;
+        }
+        
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            background: #e8f5e8;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .error {
+            background: #f8d7da;
+            border-left-color: #e74c3c;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-left-color: #17a2b8;
+        }
+        
+        pre {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Order System Test</h1>
+            <p>Test WhatsApp order functionality for SRIDEVI HOME FOODS</p>
+        </div>
+
+        <div class="test-section">
+            <h3>📦 Test Cart Data</h3>
+            <p>Check current cart contents:</p>
+            <button class="btn" onclick="checkCart()">Check Cart</button>
+            <button class="btn" onclick="addTestItems()">Add Test Items</button>
+            <button class="btn btn-danger" onclick="clearCart()">Clear Cart</button>
+            <div id="cartStatus" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📱 Test WhatsApp Order</h3>
+            <p>Test direct WhatsApp order:</p>
+            <button class="btn btn-whatsapp" onclick="testWhatsAppOrder()">Test WhatsApp Order</button>
+            <div id="whatsappStatus" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💳 Test Payment Flow</h3>
+            <p>Test payment completion with WhatsApp:</p>
+            <button class="btn" onclick="testPaymentFlow()">Test Payment Flow</button>
+            <div id="paymentStatus" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 Check Admin Orders</h3>
+            <p>Check orders in admin panel:</p>
+            <button class="btn" onclick="checkAdminOrders()">Check Admin Orders</button>
+            <button class="btn btn-danger" onclick="clearAllOrders()">Clear All Orders</button>
+            <div id="adminStatus" class="status"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Debug Information</h3>
+            <p>System debugging information:</p>
+            <button class="btn" onclick="showDebugInfo()">Show Debug Info</button>
+            <div id="debugInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        function checkCart() {
+            const cart = localStorage.getItem('pindiCart');
+            const cartData = cart ? JSON.parse(cart) : [];
+            
+            const status = document.getElementById('cartStatus');
+            if (cartData.length === 0) {
+                status.innerHTML = '🛒 Cart is empty';
+                status.className = 'status error';
+            } else {
+                let cartHTML = `🛒 Cart has ${cartData.length} items:<br>`;
+                let total = 0;
+                cartData.forEach(item => {
+                    cartHTML += `- ${item.name} x ${item.quantity} = ₹${item.price * item.quantity}<br>`;
+                    total += item.price * item.quantity;
+                });
+                cartHTML += `<strong>Total: ₹${total}</strong>`;
+                status.innerHTML = cartHTML;
+                status.className = 'status';
+            }
+        }
+
+        function addTestItems() {
+            const testCart = [
+                { id: 1, name: 'Sakinalu', price: 150, quantity: 2 },
+                { id: 2, name: 'Garelu', price: 120, quantity: 1 }
+            ];
+            
+            localStorage.setItem('pindiCart', JSON.stringify(testCart));
+            
+            const status = document.getElementById('cartStatus');
+            status.innerHTML = '✅ Test items added to cart';
+            status.className = 'status';
+            
+            // Update cart count if on main page
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                const totalItems = testCart.reduce((count, item) => count + item.quantity, 0);
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        function clearCart() {
+            localStorage.removeItem('pindiCart');
+            
+            const status = document.getElementById('cartStatus');
+            status.innerHTML = '🗑️ Cart cleared';
+            status.className = 'status info';
+            
+            // Update cart count if on main page
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                cartCount.textContent = '0';
+            }
+        }
+
+        function testWhatsAppOrder() {
+            const cart = localStorage.getItem('pindiCart');
+            const cartData = cart ? JSON.parse(cart) : [];
+            
+            if (cartData.length === 0) {
+                const status = document.getElementById('whatsappStatus');
+                status.innerHTML = '❌ Cart is empty. Add items first.';
+                status.className = 'status error';
+                return;
+            }
+            
+            if (window.sendOrderToWhatsApp) {
+                window.sendOrderToWhatsApp();
+                const status = document.getElementById('whatsappStatus');
+                status.innerHTML = '✅ WhatsApp order triggered';
+                status.className = 'status';
+            } else {
+                const status = document.getElementById('whatsappStatus');
+                status.innerHTML = '❌ WhatsApp order function not available';
+                status.className = 'status error';
+            }
+        }
+
+        function testPaymentFlow() {
+            const cart = localStorage.getItem('pindiCart');
+            const cartData = cart ? JSON.parse(cart) : [];
+            
+            if (cartData.length === 0) {
+                const status = document.getElementById('paymentStatus');
+                status.innerHTML = '❌ Cart is empty. Add items first.';
+                status.className = 'status error';
+                return;
+            }
+            
+            const testPaymentDetails = {
+                name: 'Test Customer',
+                phone: '+91 98664 06807',
+                address: '123 Test Street, Andhra Pradesh',
+                method: 'upi',
+                transactionId: 'TEST123456',
+                amount: cartData.reduce((total, item) => total + (item.price * item.quantity), 0)
+            };
+            
+            if (window.sendWhatsAppAfterPayment) {
+                window.sendWhatsAppAfterPayment(testPaymentDetails);
+                const status = document.getElementById('paymentStatus');
+                status.innerHTML = '✅ Payment flow triggered with test data';
+                status.className = 'status';
+            } else {
+                const status = document.getElementById('paymentStatus');
+                status.innerHTML = '❌ Payment function not available';
+                status.className = 'status error';
+            }
+        }
+
+        function checkAdminOrders() {
+            const orders = localStorage.getItem('pindiOrders');
+            const ordersData = orders ? JSON.parse(orders) : [];
+            
+            const status = document.getElementById('adminStatus');
+            if (ordersData.length === 0) {
+                status.innerHTML = '📋 No orders found in admin panel';
+                status.className = 'status info';
+            } else {
+                let ordersHTML = `📋 Found ${ordersData.length} orders:<br>`;
+                ordersData.forEach((order, index) => {
+                    ordersHTML += `${index + 1}. Order #${order.id} - ${order.customer} - ₹${order.total} - ${order.status}<br>`;
+                });
+                status.innerHTML = ordersHTML;
+                status.className = 'status';
+            }
+        }
+
+        function clearAllOrders() {
+            localStorage.removeItem('pindiOrders');
+            
+            const status = document.getElementById('adminStatus');
+            status.innerHTML = '🗑️ All orders cleared';
+            status.className = 'status info';
+        }
+
+        function showDebugInfo() {
+            const debugInfo = document.getElementById('debugInfo');
+            
+            const info = {
+                cart: localStorage.getItem('pindiCart'),
+                orders: localStorage.getItem('pindiOrders'),
+                cartCount: localStorage.getItem('pindiCart') ? JSON.parse(localStorage.getItem('pindiCart')).length : 0,
+                orderCount: localStorage.getItem('pindiOrders') ? JSON.parse(localStorage.getItem('pindiOrders')).length : 0,
+                whatsappConfig: '+91 98664 06807'
+            };
+            
+            debugInfo.innerHTML = `
+                <h4>🔧 Debug Information:</h4>
+                <pre>${JSON.stringify(info, null, 2)}</pre>
+            `;
+        }
+
+        // Auto-check on load
+        window.onload = function() {
+            checkCart();
+            checkAdminOrders();
+        };
+    </script>
+</body>
+</html>

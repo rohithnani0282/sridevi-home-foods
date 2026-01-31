@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login Fix - SRIDEVI HOME FOODS</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .fix-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .fix-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .fix-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn:hover {
+            background: #229954;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .result {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .credentials-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="fix-container">
+        <div class="fix-header">
+            <h1>🔧 Admin Login Fix</h1>
+            <p>SRIDEVI HOME FOODS - Immediate Access Solution</p>
+        </div>
+
+        <div class="credentials-box">
+            <strong>📋 Default Credentials:</strong><br>
+            Username: <code>admin</code><br>
+            Password: <code>admin123</code>
+        </div>
+
+        <h3>🚀 Quick Solutions:</h3>
+        
+        <button class="btn" onclick="fixAndLogin()">
+            <i class="fas fa-magic"></i> Fix Login & Open Admin Panel
+        </button>
+        
+        <button class="btn" onclick="forceLogin()">
+            <i class="fas fa-key"></i> Force Login (Bypass)
+        </button>
+        
+        <button class="btn btn-danger" onclick="completeReset()">
+            <i class="fas fa-undo"></i> Complete Reset (Last Resort)
+        </button>
+
+        <div id="result"></div>
+
+        <div class="warning">
+            <strong>💡 Instructions:</strong><br>
+            1. Try "Fix Login & Open Admin Panel" first<br>
+            2. If that fails, use "Force Login"<br>
+            3. Use "Complete Reset" only if nothing else works
+        </div>
+    </div>
+
+    <script>
+        function fixAndLogin() {
+            // Reset admin credentials
+            const adminCredentials = { username: 'admin', password: 'admin123' };
+            localStorage.setItem('pindiAdminCredentials', JSON.stringify(adminCredentials));
+            
+            // Set login session
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            
+            document.getElementById('result').innerHTML = '<div class="success">✅ Login fixed! Opening admin panel...</div>';
+            
+            // Open admin panel
+            setTimeout(() => {
+                window.open('admin.html', '_blank');
+            }, 1000);
+        }
+
+        function forceLogin() {
+            // Set login session directly
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            
+            document.getElementById('result').innerHTML = '<div class="success">✅ Force login successful! Opening admin panel...</div>';
+            
+            // Open admin panel
+            setTimeout(() => {
+                window.open('admin.html', '_blank');
+            }, 1000);
+        }
+
+        function completeReset() {
+            if (confirm('This will clear ALL data including categories, recipes, orders, and settings. Are you absolutely sure?')) {
+                // Clear everything
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Reset to defaults
+                const adminCredentials = { username: 'admin', password: 'admin123' };
+                localStorage.setItem('pindiAdminCredentials', JSON.stringify(adminCredentials));
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                
+                document.getElementById('result').innerHTML = '<div class="success">✅ Complete reset done! Opening admin panel...</div>';
+                
+                // Open admin panel
+                setTimeout(() => {
+                    window.open('admin.html', '_blank');
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

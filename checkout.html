@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Pindi Vantalu</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .checkout-container {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 100px 20px 50px;
+        }
+        
+        .checkout-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .checkout-header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .checkout-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        
+        .checkout-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+        
+        .payment-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .payment-option {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .payment-option:hover {
+            border-color: #ff6b35;
+        }
+        
+        .payment-option.selected {
+            border-color: #ff6b35;
+            background: #fff5f2;
+        }
+        
+        .payment-option i {
+            font-size: 2rem;
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .order-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .item-quantity {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .item-price {
+            color: #ff6b35;
+            font-weight: 500;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            color: #666;
+        }
+        
+        .summary-row.total {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            border-top: 2px solid #e1e1e1;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .place-order-btn {
+            width: 100%;
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+        
+        .place-order-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+        }
+        
+        .place-order-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .back-to-cart {
+            display: block;
+            text-align: center;
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-to-cart:hover {
+            color: #e55a2b;
+        }
+        
+        .delivery-time {
+            background: #e8f5e8;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .delivery-time i {
+            color: #27ae60;
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-summary {
+                position: static;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>Pindi Vantalu</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#recipes" class="nav-link">Recipes</a></li>
+                    <li><a href="index.html#categories" class="nav-link">Categories</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                    <li><a href="cart.html" class="nav-link cart-link" style="color: #27ae60; font-weight: 600;"><i class="fas fa-shopping-cart"></i> Cart <span id="cartCount" class="cart-count">0</span></a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Checkout Container -->
+    <div class="checkout-container">
+        <div class="container">
+            <div class="checkout-header">
+                <h1><i class="fas fa-credit-card"></i> Checkout</h1>
+                <p>Complete your order details</p>
+            </div>
+
+            <div class="checkout-content">
+                <form class="checkout-form" id="checkoutForm">
+                    <!-- Delivery Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-truck"></i> Delivery Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Delivery Address *</label>
+                            <textarea id="address" name="address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">Pincode *</label>
+                                <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" maxlength="6" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Time -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-clock"></i> Delivery Time</h3>
+                        <div class="delivery-time">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Standard delivery: 30-45 minutes</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="deliveryTime">Preferred Delivery Time</label>
+                            <select id="deliveryTime" name="deliveryTime">
+                                <option value="asap">As Soon As Possible</option>
+                                <option value="30min">30 Minutes</option>
+                                <option value="45min">45 Minutes</option>
+                                <option value="1hour">1 Hour</option>
+                                <option value="2hour">2 Hours</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-payment"></i> Payment Method</h3>
+                        <div class="payment-options">
+                            <div class="payment-option" data-payment="cod">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <div>Cash on Delivery</div>
+                            </div>
+                            <div class="payment-option" data-payment="online">
+                                <i class="fas fa-credit-card"></i>
+                                <div>Online Payment</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="paymentMethod" name="paymentMethod" required>
+                    </div>
+
+                    <!-- Order Notes -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-sticky-note"></i> Order Notes (Optional)</h3>
+                        <div class="form-group">
+                            <textarea id="orderNotes" name="orderNotes" rows="3" placeholder="Special instructions or requests..."></textarea>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h3 class="summary-title">Order Summary</h3>
+                    <div id="orderItems">
+                        <!-- Order items will be populated here -->
+                    </div>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Fee</span>
+                        <span id="deliveryFee">₹0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="total">₹0</span>
+                    </div>
+                    <button type="submit" form="checkoutForm" class="place-order-btn" id="placeOrderBtn">
+                        <i class="fas fa-check"></i> Place Order
+                    </button>
+                    <a href="cart.html" class="back-to-cart">
+                        <i class="fas fa-arrow-left"></i> Back to Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="checkout.js"></script>
+</body>
+</html>

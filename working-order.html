@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Order - SRIDEVI HOME FOODS</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .menu-section {
+            margin-bottom: 2rem;
+        }
+        
+        .menu-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+        
+        .btn-whatsapp {
+            background: #25d366;
+            font-size: 18px;
+            padding: 15px 30px;
+            width: 100%;
+            margin-top: 2rem;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #128c7e;
+        }
+        
+        .cart {
+            background: #e8f5e8;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity input {
+            width: 60px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #27ae60;
+            text-align: right;
+            margin: 1rem 0;
+        }
+        
+        .customer-form {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .debug {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ SRIDEVI HOME FOODS</h1>
+            <p>Order delicious homemade Andhra foods</p>
+        </div>
+
+        <div class="menu-section">
+            <h2>📋 Menu Items</h2>
+            
+            <div class="menu-item">
+                <div>
+                    <h3>Sakinalu</h3>
+                    <p>Traditional rice flour snack with sesame seeds</p>
+                </div>
+                <div class="quantity">
+                    <span>₹150 each</span>
+                    <input type="number" id="sakinalu-qty" value="0" min="0" onchange="updateCart()">
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <div>
+                    <h3>Garelu</h3>
+                    <p>Crispy lentil fritters</p>
+                </div>
+                <div class="quantity">
+                    <span>₹120 each</span>
+                    <input type="number" id="garelu-qty" value="0" min="0" onchange="updateCart()">
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <div>
+                    <h3>Murukulu</h3>
+                    <p>Spiral shaped savory snack</p>
+                </div>
+                <div class="quantity">
+                    <span>₹100 each</span>
+                    <input type="number" id="murukulu-qty" value="0" min="0" onchange="updateCart()">
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <div>
+                    <h3>Mango Pickle</h3>
+                    <p>Spicy raw mango pickle</p>
+                </div>
+                <div class="quantity">
+                    <span>₹200 each</span>
+                    <input type="number" id="pickle-qty" value="0" min="0" onchange="updateCart()">
+                </div>
+            </div>
+        </div>
+
+        <div class="cart">
+            <h3>🛒 Your Order</h3>
+            <div id="cart-items"></div>
+            <div class="total" id="total">Total: ₹0</div>
+        </div>
+
+        <div class="customer-form">
+            <h3>👤 Your Details</h3>
+            <div class="form-group">
+                <label for="customer-name">Full Name</label>
+                <input type="text" id="customer-name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="customer-phone">Phone Number</label>
+                <input type="tel" id="customer-phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="customer-address">Delivery Address</label>
+                <textarea id="customer-address" placeholder="Enter your complete delivery address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="payment-method">Payment Method</label>
+                <select id="payment-method" required>
+                    <option value="">Select Payment Method</option>
+                    <option value="cod">Cash on Delivery (COD)</option>
+                    <option value="upi">UPI (Google Pay, PhonePe, Paytm)</option>
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="netbanking">Net Banking</option>
+                </select>
+            </div>
+            <div class="form-group" id="transaction-group" style="display: none;">
+                <label for="transaction-id">Transaction ID (Optional)</label>
+                <input type="text" id="transaction-id" placeholder="Enter transaction ID if paid online">
+            </div>
+        </div>
+
+        <button class="btn btn-whatsapp" onclick="placeOrder()">
+            📱 Place Order via WhatsApp
+        </button>
+
+        <div class="debug" id="debug">Debug information will appear here...</div>
+    </div>
+
+    <script>
+        const menuItems = {
+            'sakinalu': { name: 'Sakinalu', price: 150 },
+            'garelu': { name: 'Garelu', price: 120 },
+            'murukulu': { name: 'Murukulu', price: 100 },
+            'pickle': { name: 'Mango Pickle', price: 200 }
+        };
+
+        function updateDebug(message) {
+            const debug = document.getElementById('debug');
+            debug.innerHTML += new Date().toLocaleTimeString() + ': ' + message + '<br>';
+            console.log(message);
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const totalElement = document.getElementById('total');
+            
+            let cartHTML = '';
+            let total = 0;
+            
+            for (const [key, item] of Object.entries(menuItems)) {
+                const qty = parseInt(document.getElementById(`${key}-qty`).value) || 0;
+                if (qty > 0) {
+                    const itemTotal = item.price * qty;
+                    total += itemTotal;
+                    cartHTML += `<div>${item.name} x ${qty} = ₹${itemTotal}</div>`;
+                }
+            }
+            
+            cartItems.innerHTML = cartHTML || '<div>Your cart is empty</div>';
+            totalElement.textContent = `Total: ₹${total}`;
+        }
+
+        function placeOrder() {
+            const customerName = document.getElementById('customer-name').value;
+            const customerPhone = document.getElementById('customer-phone').value;
+            const customerAddress = document.getElementById('customer-address').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+            const transactionId = document.getElementById('transaction-id').value;
+            
+            updateDebug('Starting order process...');
+            
+            // Validate customer details
+            if (!customerName || !customerPhone || !customerAddress || !paymentMethod) {
+                updateDebug('ERROR: Please fill in all your details including payment method');
+                alert('Please fill in all your details including payment method before placing the order.');
+                return;
+            }
+            
+            updateDebug('Customer details validated');
+            
+            // Build order message
+            let orderMessage = `🍽️ NEW ORDER - SRIDEVI HOME FOODS\n\n`;
+            orderMessage += `👤 CUSTOMER DETAILS:\n`;
+            orderMessage += `Name: ${customerName}\n`;
+            orderMessage += `Phone: ${customerPhone}\n`;
+            orderMessage += `Address: ${customerAddress}\n\n`;
+            orderMessage += `💳 PAYMENT METHOD:\n`;
+            orderMessage += `${getPaymentMethodText(paymentMethod)}\n`;
+            if (transactionId) {
+                orderMessage += `Transaction ID: ${transactionId}\n`;
+            }
+            orderMessage += `\n📋 ORDER ITEMS:\n`;
+            
+            let total = 0;
+            let hasItems = false;
+            
+            for (const [key, item] of Object.entries(menuItems)) {
+                const qty = parseInt(document.getElementById(`${key}-qty`).value) || 0;
+                if (qty > 0) {
+                    hasItems = true;
+                    const itemTotal = item.price * qty;
+                    total += itemTotal;
+                    orderMessage += `• ${item.name} x ${qty} = ₹${itemTotal}\n`;
+                }
+            }
+            
+            if (!hasItems) {
+                updateDebug('ERROR: No items in order');
+                alert('Please add items to your order.');
+                return;
+            }
+            
+            orderMessage += `\n💰 TOTAL AMOUNT: ₹${total}\n`;
+            orderMessage += `\n📅 Date: ${new Date().toLocaleString('en-IN')}\n\n`;
+            orderMessage += `Please confirm this order! 🙏\n`;
+            orderMessage += `Call us at +91 98664 06807 for any queries.`;
+            
+            updateDebug('Order message built successfully');
+            updateDebug('Message length: ' + orderMessage.length + ' characters');
+            
+            // Create WhatsApp URL - THIS WILL OPEN CUSTOMER'S WHATSAPP
+            const yourPhoneNumber = '+91 98664 06807';
+            const cleanPhone = yourPhoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(orderMessage)}`;
+            
+            updateDebug('WhatsApp URL created: ' + whatsappUrl);
+            updateDebug('Opening WhatsApp...');
+            
+            // Open WhatsApp - This opens customer's WhatsApp with message to your number
+            window.open(whatsappUrl, '_blank');
+            
+            updateDebug('WhatsApp opened successfully');
+            
+            // Show confirmation
+            alert('Opening WhatsApp with your order details to SRIDEVI HOME FOODS...');
+        }
+
+        function getPaymentMethodText(method) {
+            const paymentMethods = {
+                'cod': 'Cash on Delivery (COD)',
+                'upi': 'UPI (Google Pay, PhonePe, Paytm)',
+                'card': 'Credit/Debit Card',
+                'netbanking': 'Net Banking'
+            };
+            return paymentMethods[method] || method;
+        }
+
+        // Handle payment method change
+        document.getElementById('payment-method').addEventListener('change', function() {
+            const transactionGroup = document.getElementById('transaction-group');
+            if (this.value === 'upi' || this.value === 'card' || this.value === 'netbanking') {
+                transactionGroup.style.display = 'block';
+            } else {
+                transactionGroup.style.display = 'none';
+            }
+        });
+
+        // Initialize cart on load
+        window.onload = function() {
+            updateCart();
+            updateDebug('Page loaded and ready');
+        };
+    </script>
+</body>
+</html>

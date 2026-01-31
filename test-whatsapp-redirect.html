@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test WhatsApp Redirect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+        }
+        .btn:hover {
+            background: #128c7e;
+        }
+        .debug {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .phone-display {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📱 WhatsApp Redirect Test</h1>
+        <p>Test if WhatsApp redirect is working for SRIDEVI HOME FOODS</p>
+        
+        <div class="phone-display">
+            Target WhatsApp Number: +91 98664 06807
+        </div>
+        
+        <button class="btn" onclick="testBasicRedirect()">
+            📱 Test Basic WhatsApp Redirect
+        </button>
+        
+        <button class="btn" onclick="testMessageRedirect()">
+            📱 Test Message Redirect
+        </button>
+        
+        <button class="btn" onclick="testOrderRedirect()">
+            📱 Test Order Redirect
+        </button>
+        
+        <button class="btn" onclick="testDirectLink()">
+            🔗 Test Direct WhatsApp Link
+        </button>
+        
+        <div id="debug" class="debug">Debug information will appear here...</div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function updateDebug(message) {
+            const debug = document.getElementById('debug');
+            debug.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+        
+        function testBasicRedirect() {
+            updateDebug('Testing basic WhatsApp redirect...');
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const whatsappUrl = `https://wa.me/${cleanPhone}`;
+            
+            updateDebug('Phone number: ' + phoneNumber);
+            updateDebug('Clean phone: ' + cleanPhone);
+            updateDebug('WhatsApp URL: ' + whatsappUrl);
+            
+            updateDebug('Opening WhatsApp...');
+            window.open(whatsappUrl, '_blank');
+            
+            updateStatus('✅ Basic WhatsApp redirect test completed!', 'success');
+        }
+        
+        function testMessageRedirect() {
+            updateDebug('Testing message redirect...');
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            const message = 'Hello! This is a test message from SRIDEVI HOME FOODS website.';
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+            
+            updateDebug('Phone number: ' + phoneNumber);
+            updateDebug('Clean phone: ' + cleanPhone);
+            updateDebug('Message: ' + message);
+            updateDebug('WhatsApp URL: ' + whatsappUrl);
+            
+            updateDebug('Opening WhatsApp with message...');
+            window.open(whatsappUrl, '_blank');
+            
+            updateStatus('✅ Message redirect test completed!', 'success');
+        }
+        
+        function testOrderRedirect() {
+            updateDebug('Testing order redirect...');
+            
+            const phoneNumber = '+91 98664 06807';
+            const cleanPhone = phoneNumber.replace(/[^\d]/g, '');
+            
+            const orderMessage = `🍽️ NEW ORDER - SRIDEVI HOME FOODS
+
+👤 CUSTOMER DETAILS:
+Name: Test Customer
+Phone: +91 98664 06807
+Address: 123 Test Street, Andhra Pradesh
+
+📋 ORDER ITEMS:
+• Sakinalu x 2 = ₹300
+• Garelu x 1 = ₹120
+
+💰 TOTAL AMOUNT: ₹420
+
+📅 Date: ${new Date().toLocaleString('en-IN')}
+
+Please confirm this order! 🙏`;
+            
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(orderMessage)}`;
+            
+            updateDebug('Phone number: ' + phoneNumber);
+            updateDebug('Clean phone: ' + cleanPhone);
+            updateDebug('Message length: ' + orderMessage.length + ' characters');
+            updateDebug('WhatsApp URL: ' + whatsappUrl.substring(0, 100) + '...');
+            
+            updateDebug('Opening WhatsApp with order...');
+            window.open(whatsappUrl, '_blank');
+            
+            updateStatus('✅ Order redirect test completed!', 'success');
+        }
+        
+        function testDirectLink() {
+            updateDebug('Testing direct link...');
+            
+            const directLink = 'https://wa.me/919866406807?text=Hello%20from%20SRIDEVI%20HOME%20FOODS';
+            
+            updateDebug('Direct link: ' + directLink);
+            
+            updateDebug('Opening direct link...');
+            window.open(directLink, '_blank');
+            
+            updateStatus('✅ Direct link test completed!', 'success');
+        }
+        
+        // Auto-load debug info
+        window.onload = function() {
+            updateDebug('WhatsApp redirect test page loaded');
+            updateDebug('Target phone: +91 98664 06807');
+            updateDebug('Testing different redirect methods...');
+            updateDebug('');
+            updateDebug('Instructions:');
+            updateDebug('1. Test Basic Redirect - Opens WhatsApp chat');
+            updateDebug('2. Test Message Redirect - Opens WhatsApp with message');
+            updateDebug('3. Test Order Redirect - Opens WhatsApp with order details');
+            updateDebug('4. Test Direct Link - Tests direct WhatsApp link');
+            updateDebug('');
+            updateDebug('Expected behavior:');
+            updateDebug('- WhatsApp should open in customer\'s device');
+            updateDebug('- Message should be pre-filled');
+            updateDebug('- Customer can send message to your number');
+        };
+    </script>
+</body>
+</html>
