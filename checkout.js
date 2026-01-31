@@ -245,13 +245,20 @@ Call us at +91 98664 06807 for any queries.`;
     }
 
     openWhatsApp(whatsappUrl) {
-        // Use multiple methods for WhatsApp redirect
+        console.log('📱 Opening WhatsApp with order details...');
+        console.log('📱 WhatsApp URL:', whatsappUrl);
+        
+        // Use the most reliable method first - direct window.location change
         try {
-            console.log('📱 Method 1: Direct location redirect');
+            console.log('📱 Method 1: Direct location redirect to customer WhatsApp');
             window.location.href = whatsappUrl;
+            console.log('✅ Redirecting to customer WhatsApp app...');
             
-            // Fallback if direct redirect doesn't work
-            setTimeout(() => {
+        } catch (error) {
+            console.log('❌ Direct redirect failed, trying link element:', error.message);
+            
+            // Fallback 1: Create and click link element
+            try {
                 console.log('📱 Method 2: Link element click');
                 const link = document.createElement('a');
                 link.href = whatsappUrl;
@@ -261,34 +268,38 @@ Call us at +91 98664 06807 for any queries.`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
-            }, 1000);
-            
-        } catch (error) {
-            console.log('❌ Method 1 failed, trying window.open:', error.message);
-            
-            // Fallback to window.open
-            try {
-                console.log('📱 Method 3: window.open');
-                window.open(whatsappUrl, '_blank');
+                console.log('✅ Link element method executed');
                 
             } catch (error2) {
-                console.log('❌ All methods failed:', error2.message);
+                console.log('❌ Link element failed, trying window.open:', error2.message);
                 
-                // Final fallback - show URL for manual copy
-                alert('Unable to open WhatsApp automatically. Please copy this URL and paste in your browser:\n\n' + whatsappUrl + '\n\nOr contact us directly at +91 98664 06807');
-                
-                // Also show the URL on screen
-                const urlDiv = document.createElement('div');
-                urlDiv.innerHTML = `
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #25d366;">
-                        <h3 style="color: #25d366; margin-bottom: 10px;">📱 WhatsApp Order Link</h3>
-                        <p style="margin-bottom: 10px;">Click this link to send your order via WhatsApp:</p>
-                        <a href="${whatsappUrl}" target="_blank" style="color: #25d366; text-decoration: underline; font-weight: bold;">Click here to open WhatsApp</a>
-                        <p style="margin-top: 10px; font-size: 12px; color: #666;">Or copy this URL: ${whatsappUrl}</p>
-                    </div>
-                `;
-                document.querySelector('.checkout-container').appendChild(urlDiv);
+                // Fallback 2: window.open
+                try {
+                    console.log('📱 Method 3: window.open');
+                    window.open(whatsappUrl, '_blank');
+                    console.log('✅ Window.open method executed');
+                    
+                } catch (error3) {
+                    console.log('❌ All automatic methods failed:', error3.message);
+                    
+                    // Final fallback - show manual link
+                    alert('Unable to open WhatsApp automatically. Please click this link to send your order:\n\n' + whatsappUrl + '\n\nOr contact us directly at +91 98664 06807');
+                    
+                    // Show clickable link on page
+                    const urlDiv = document.createElement('div');
+                    urlDiv.innerHTML = `
+                        <div style="background: #d4edda; border: 2px solid #25d366; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 600px; text-align: center;">
+                            <h3 style="color: #155724; margin-bottom: 15px;">📱 Send Order via WhatsApp</h3>
+                            <p style="margin-bottom: 15px; color: #155724;">Click the button below to send your order to SRIDEVI HOME FOODS:</p>
+                            <a href="${whatsappUrl}" target="_blank" style="background: #25d366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px;">
+                                <i class="fab fa-whatsapp" style="font-size: 20px;"></i>
+                                Send Order via WhatsApp
+                            </a>
+                            <p style="margin-top: 15px; font-size: 12px; color: #666;">This will open your WhatsApp with the order details ready to send to +91 98664 06807</p>
+                        </div>
+                    `;
+                    document.querySelector('.checkout-container').appendChild(urlDiv);
+                }
             }
         }
     }
