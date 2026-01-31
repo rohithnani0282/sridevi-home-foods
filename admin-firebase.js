@@ -51,10 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAdmin();
 });
 
-// Immediate test
-console.log('📝 admin-firebase.js loaded successfully!');
-alert('Admin Firebase JavaScript loaded!');
-
 async function initializeAdmin() {
     console.log('🚀 Initializing Admin Panel with Firebase...');
     
@@ -524,27 +520,6 @@ function handleProductSubmit(e) {
     document.getElementById('productId').value = '';
 }
 
-// UI Functions
-function showSection(sectionId) {
-    const sections = document.querySelectorAll('.admin-section');
-    sections.forEach(section => {
-        section.style.display = 'none';
-    });
-    
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-        targetSection.style.display = 'block';
-    }
-    
-    // Update navigation
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('data-section') === sectionId) {
-            link.classList.add('active');
-        }
-    });
-}
 
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
@@ -598,7 +573,9 @@ function deleteProductConfirm(productId, categoryId) {
 function viewOrderDetails(orderId) {
     const order = orders.find(o => o.id === orderId);
     if (order) {
-        alert(`Order Details:\n\nCustomer: ${order.customer?.name || 'N/A'}\nPhone: ${order.customer?.phone || 'N/A'}\nTotal: ₹${order.total || order.pricing?.total || '0'}\nStatus: ${order.status || 'pending'}`);
+        const details = `Order Details:\n\nCustomer: ${order.customer?.name || 'N/A'}\nPhone: ${order.customer?.phone || 'N/A'}\nTotal: ₹${order.total || order.pricing?.total || '0'}\nStatus: ${order.status || 'pending'}`;
+        console.log('Order Details:', details);
+        showNotification('Order details logged to console', 'info');
     }
 }
 
@@ -623,6 +600,162 @@ async function updateOrderStatus(orderId, newStatus) {
 }
 
 // Modal Functions
+function openCategoryModal(categoryId = null) {
+    const modal = document.createElement('div');
+    modal.className = 'modal show';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">${categoryId ? 'Edit Category' : 'Add Category'}</h3>
+                <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <input type="hidden" id="categoryId" value="${categoryId || ''}">
+                    <div class="form-group">
+                        <label class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" required placeholder="Enter category name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="categoryDescription" rows="3" placeholder="Enter description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary" onclick="saveCategoryFromModal()">Save Category</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    if (categoryId) {
+        const category = categories.find(c => c.id === categoryId);
+        if (category) {
+            document.getElementById('categoryName').value = category.name;
+            document.getElementById('categoryDescription').value = category.description;
+        }
+    }
+}
+
+function openPaymentModal(paymentId = null) {
+    const modal = document.createElement('div');
+    modal.className = 'modal show';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">${paymentId ? 'Edit Payment Method' : 'Add Payment Method'}</h3>
+                <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="paymentForm">
+                    <input type="hidden" id="paymentId" value="${paymentId || ''}">
+                    <div class="form-group">
+                        <label class="form-label">Payment Name</label>
+                        <input type="text" class="form-control" id="paymentName" required placeholder="Enter payment name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="form-control" id="paymentType">
+                            <option value="online">Online</option>
+                            <option value="cod">Cash on Delivery</option>
+                            <option value="wallet">Wallet</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="paymentStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closePaymentModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary" onclick="savePaymentFromModal()">Save Payment Method</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    if (paymentId) {
+        const payment = paymentMethods.find(p => p.id === paymentId);
+        if (payment) {
+            document.getElementById('paymentName').value = payment.name;
+            document.getElementById('paymentType').value = payment.type;
+            document.getElementById('paymentStatus').value = payment.status;
+        }
+    }
+}
+
+function closeCategoryModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) modal.remove();
+}
+
+function closePaymentModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) modal.remove();
+}
+
+function saveCategoryFromModal() {
+    const categoryId = document.getElementById('categoryId').value;
+    const category = {
+        name: document.getElementById('categoryName').value,
+        description: document.getElementById('categoryDescription').value
+    };
+    
+    if (categoryId) {
+        category.id = parseInt(categoryId);
+    }
+    
+    saveCategory(category);
+    closeCategoryModal();
+}
+
+function savePaymentFromModal() {
+    const paymentId = document.getElementById('paymentId').value;
+    const payment = {
+        name: document.getElementById('paymentName').value,
+        type: document.getElementById('paymentType').value,
+        status: document.getElementById('paymentStatus').value
+    };
+    
+    if (paymentId) {
+        payment.id = parseInt(paymentId);
+    }
+    
+    // Save payment method
+    if (paymentId) {
+        // Update existing
+        const index = paymentMethods.findIndex(p => p.id === parseInt(paymentId));
+        if (index !== -1) {
+            paymentMethods[index] = payment;
+        }
+    } else {
+        // Add new
+        payment.id = paymentMethods.length + 1;
+        paymentMethods.push(payment);
+    }
+    
+    if (isFirebaseAvailable) {
+        // Save to Firebase
+        paymentMethods.forEach(pm => {
+            firebaseManager.createDocument('paymentMethods', pm);
+        });
+    } else {
+        localStorage.setItem('pindiPaymentMethods', JSON.stringify(paymentMethods));
+    }
+    
+    updatePaymentMethodsUI();
+    closePaymentModal();
+    showNotification('Payment method saved successfully!', 'success');
+}
+
+// Modal Functions
 function openProductModal(productId = null, categoryId = null) {
     console.log('🔧 openProductModal called with:', { productId, categoryId });
     
@@ -632,7 +765,7 @@ function openProductModal(productId = null, categoryId = null) {
     
     if (!modal) {
         console.error('❌ Product modal not found!');
-        alert('Error: Product modal not found!');
+        showNotification('Error: Product modal not found!', 'error');
         return;
     }
     
@@ -746,7 +879,7 @@ function sendPaymentReceipt() {
     const total = document.getElementById('receiptTotal').value;
     
     if (!name || !phone || !total) {
-        alert('Please fill in all required fields');
+        showNotification('Please fill in all required fields', 'error');
         return;
     }
     
@@ -760,13 +893,31 @@ function sendPaymentReceipt() {
     document.getElementById('receiptPhone').value = '';
     document.getElementById('receiptDetails').value = '';
     document.getElementById('receiptTotal').value = '';
+    
+    showNotification('Payment receipt sent successfully!', 'success');
 }
 
 // Test function for debugging
 function testAddProduct() {
     console.log('🧪 Test Add Product button clicked!');
-    alert('Test function called! Now trying to open modal...');
+    console.log('Opening product modal...');
     openProductModal();
+}
+
+// Refresh orders function
+async function refreshOrders() {
+    try {
+        if (isFirebaseAvailable) {
+            orders = await firebaseManager.getAllDocuments('orders');
+        } else {
+            orders = JSON.parse(localStorage.getItem('pindiOrders')) || [];
+        }
+        updateOrdersUI();
+        showNotification('Orders refreshed successfully!', 'success');
+    } catch (error) {
+        console.error('❌ Error refreshing orders:', error);
+        showNotification('Error refreshing orders', 'error');
+    }
 }
 
 // Test function for debugging
@@ -799,6 +950,70 @@ function testOrderSave() {
     
     updateOrdersUI();
     showNotification('Test order added successfully!', 'success');
+}
+
+// Firebase Initialization
+function initializeFirebase() {
+    try {
+        // Check if Firebase is available
+        if (typeof firebase === 'undefined') {
+            console.warn('Firebase SDK not loaded');
+            return null;
+        }
+        
+        // Initialize Firebase with config from firebase-config.js
+        if (typeof firebaseConfig === 'undefined') {
+            console.warn('Firebase config not found');
+            return null;
+        }
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        console.log('✅ Firebase initialized successfully');
+        
+        return {
+            createDocument: async (collection, data) => {
+                const ref = database.ref(collection).push();
+                await ref.set({ ...data, id: ref.key });
+                return ref.key;
+            },
+            
+            updateDocument: async (collection, id, data) => {
+                await database.ref(`${collection}/${id}`).update(data);
+            },
+            
+            deleteDocument: async (collection, id) => {
+                await database.ref(`${collection}/${id}`).remove();
+            },
+            
+            getDocuments: async (collection) => {
+                const snapshot = await database.ref(collection).once('value');
+                const data = snapshot.val();
+                return data ? Object.values(data) : [];
+            },
+            
+            getAllDocuments: async (collection) => {
+                const snapshot = await database.ref(collection).once('value');
+                const data = snapshot.val();
+                return data ? Object.values(data) : [];
+            },
+            
+            onSnapshot: (collection, callback) => {
+                return database.ref(collection).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    callback(data ? Object.values(data) : []);
+                });
+            },
+            
+            cleanup: () => {
+                database.goOffline();
+            }
+        };
+    } catch (error) {
+        console.error('❌ Error initializing Firebase:', error);
+        return null;
+    }
 }
 
 // Cleanup

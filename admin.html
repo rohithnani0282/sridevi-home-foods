@@ -3,326 +3,559 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SRIDEVI HOME FOODS Admin Panel - Professional management dashboard">
     <title>Admin Panel - SRIDEVI HOME FOODS</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    
     <style>
+        /* CSS Variables */
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --sidebar-width: 280px;
+            --right-sidebar-width: 320px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-
+        
         .admin-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 1200px;
-            min-height: 600px;
             display: flex;
-            overflow: hidden;
+            height: 100vh;
+            position: relative;
         }
-
-        /* Login Container */
-        .login-container {
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--white);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            padding: 2rem;
+            font-size: 1.5rem;
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
-
-        .login-form {
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
+        
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.2;
+        }
+        
+        .brand-subtitle {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+        
+        .sidebar-nav {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+        
+        .nav-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 0 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+        
+        .nav-link.active {
+            background: rgba(79, 70, 229, 0.2);
+            color: var(--white);
+            border-left-color: var(--primary);
+        }
+        
+        .nav-link i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .nav-badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 24px;
             text-align: center;
         }
-
-        .admin-logo {
+        
+        /* Main Content */
+        .main-wrapper {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--white);
+            color: var(--gray);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .admin-logo i {
-            color: #27ae60;
-            margin-right: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #27ae60;
-        }
-
-        .btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
             cursor: pointer;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            width: 100%;
+            transition: var(--transition);
+            position: relative;
         }
-
-        .btn:hover {
-            background: #229954;
-            transform: translateY(-2px);
+        
+        .header-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+            border-color: var(--primary);
         }
-
-        .btn-danger {
-            background: #e74c3c;
+        
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid var(--white);
         }
-
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-
-        .login-hint {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        /* Dashboard Container */
-        .dashboard-container {
-            display: none;
-            width: 100%;
-        }
-
-        .sidebar {
-            width: 250px;
-            background: #2c3e50;
-            color: white;
-            padding: 2rem 0;
-        }
-
-        .sidebar-header {
-            padding: 0 1.5rem 2rem;
-            border-bottom: 1px solid #34495e;
-        }
-
-        .sidebar-logo {
+        
+        .user-menu {
             display: flex;
             align-items: center;
-            font-size: 1.5rem;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .user-menu:hover {
+            background: var(--light);
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
             font-weight: 600;
+            font-size: 0.875rem;
         }
-
-        .sidebar-logo i {
-            color: #27ae60;
-            margin-right: 0.5rem;
-        }
-
-        .sidebar-menu {
-            padding: 1rem 0;
-        }
-
-        .menu-item {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
+        
+        .user-info {
             display: flex;
-            align-items: center;
+            flex-direction: column;
         }
-
-        .menu-item:hover {
-            background: #34495e;
+        
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--dark);
+            line-height: 1.2;
         }
-
-        .menu-item.active {
-            background: #27ae60;
+        
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--gray);
+            line-height: 1.2;
         }
-
-        .menu-item i {
-            margin-right: 0.75rem;
-            width: 20px;
-        }
-
-        .main-content {
+        
+        /* Content Area */
+        .content-area {
             flex: 1;
-            background: #f8f9fa;
-            overflow-y: auto;
-        }
-
-        .header {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .logout-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .content {
             padding: 2rem;
+            overflow-y: auto;
+            background: var(--light);
+            min-height: 0;
         }
-
+        
         .content-section {
             display: none;
+            width: 100%;
+            flex: 1;
         }
-
+        
         .content-section.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
-
+        
+        .content-header {
+            margin-bottom: 2rem;
+        }
+        
+        .content-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
-
+        
         .stat-card {
-            background: white;
+            background: var(--white);
             padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
         }
-
-        .stat-card i {
-            font-size: 2rem;
+        
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 1rem;
         }
-
-        .stat-card h3 {
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--white);
+        }
+        
+        .stat-icon.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+        
+        .stat-icon.success {
+            background: linear-gradient(135deg, var(--success), #059669);
+        }
+        
+        .stat-icon.warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+        }
+        
+        .stat-icon.danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+        }
+        
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+        }
+        
+        .stat-change.positive {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .stat-change.negative {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .stat-value {
             font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
             margin-bottom: 0.5rem;
         }
-
-        .stat-card p {
-            color: #666;
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+            font-weight: 500;
         }
-
+        
+        /* Data Tables */
         .data-table {
-            background: white;
-            border-radius: 10px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
+        
         .table-header {
-            background: #27ae60;
-            color: white;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .table-content {
             padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-
-        table {
+        
+        .table-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .table-content {
+            overflow-x: auto;
+        }
+        
+        .table {
             width: 100%;
             border-collapse: collapse;
         }
-
-        th, td {
-            padding: 1rem;
+        
+        .table th {
+            background: var(--light);
+            padding: 0.75rem 1rem;
             text-align: left;
-            border-bottom: 1px solid #e1e1e1;
-        }
-
-        th {
-            background: #f8f9fa;
             font-weight: 600;
+            color: var(--dark);
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border-color);
         }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            margin: 0 0.25rem;
+        
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
         }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
+        
+        .table tr:hover {
+            background: var(--light);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 8px;
-            color: white;
             font-weight: 500;
-            z-index: 1000;
-            display: none;
+            font-size: 0.875rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
         }
-
-        .notification.success {
-            background: #27ae60;
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
         }
-
-        .notification.error {
-            background: #e74c3c;
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
-
+        
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--border-color);
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -330,1590 +563,122 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
             align-items: center;
             justify-content: center;
         }
-
+        
+        .modal.show {
+            display: flex;
+        }
+        
         .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
             width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
+            max-width: 600px;
+            max-height: 90vh;
             overflow-y: auto;
         }
-
+        
         .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            justify-content: space-between;
         }
-
-        .modal-header h3 {
-            font-size: 1.5rem;
-            color: #333;
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
         }
-
-        .close-btn {
-            background: none;
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
             border: none;
-            font-size: 1.5rem;
+            background: var(--light);
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            color: #666;
+            transition: var(--transition);
         }
-
+        
+        .modal-close:hover {
+            background: var(--border-color);
+            color: var(--dark);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .right-sidebar {
+                display: none;
+            }
+            
+            .main-wrapper {
+                margin-right: 0;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .admin-container {
-                flex-direction: column;
-            }
-
             .sidebar {
-                width: 100%;
-                padding: 1rem 0;
+                transform: translateX(-100%);
             }
-
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-wrapper {
+                margin-left: 0;
+                height: 100vh;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .content-section {
+                width: 100%;
+            }
+            
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .search-bar {
+                width: 200px;
+            }
+            
+            .user-info {
+                display: none;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="admin-container">
-        <!-- Login Container -->
-        <div class="login-container" id="loginContainer" style="display: none;">
-            <div class="login-form">
-                <div class="admin-logo">
-                    <i class="fas fa-utensils"></i>
-                    <span>SRIDEVI HOME FOODS</span>
-                </div>
-                <h2>Admin Login</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn">Login</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Dashboard Container -->
-        <div class="dashboard-container" id="dashboardContainer" style="display: block;">
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <div class="sidebar-logo">
-                        <i class="fas fa-utensils"></i>
-                        <span>SRIDEVI HOME FOODS</span>
-                    </div>
-                </div>
-                <div class="sidebar-menu">
-                    <div class="menu-item active" onclick="showSection('dashboard')">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </div>
-                    <div class="menu-item" onclick="showSection('categories')">
-                        <i class="fas fa-tags"></i>
-                        <span>Categories</span>
-                    </div>
-                    <div class="menu-item" onclick="showSection('recipes')">
-                        <i class="fas fa-book"></i>
-                        <span>Recipes</span>
-                    </div>
-                    <div class="menu-item" onclick="showSection('orders')">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Orders</span>
-                    </div>
-                    <div class="menu-item" onclick="showSection('payments')">
-                        <i class="fas fa-credit-card"></i>
-                        <span>Payment Methods</span>
-                    </div>
-                    <div class="menu-item" onclick="showSection('settings')">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </div>
-                    <div class="menu-item" onclick="showSection('sync-status')">
-                        <i class="fas fa-sync"></i>
-                        <span>Sync Status</span>
-                    </div>
-                    <div class="menu-item" onclick="showSection('background')">
-                        <i class="fas fa-image"></i>
-                        <span>Background</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-content">
-                <div class="header">
-                    <div class="header-title">Admin Dashboard</div>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="text-align: right; margin-right: 1rem;">
-                            <div style="font-size: 0.9rem; color: #666;">Logged in as:</div>
-                            <div style="font-weight: 600; color: #333;" id="headerUsername">admin</div>
-                        </div>
-                        <button class="logout-btn" onclick="logout()">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </div>
-                </div>
-
-                <div class="content">
-                    <!-- Dashboard Section -->
-                    <div class="content-section active" id="dashboard">
-                        <h2>Dashboard Overview</h2>
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <i class="fas fa-tags" style="color: #3498db;"></i>
-                                <h3 id="totalCategories">0</h3>
-                                <p>Total Categories</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-book" style="color: #e74c3c;"></i>
-                                <h3 id="totalRecipes">0</h3>
-                                <p>Total Recipes</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-shopping-cart" style="color: #f39c12;"></i>
-                                <h3 id="totalOrders">0</h3>
-                                <p>Total Orders</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fas fa-credit-card" style="color: #27ae60;"></i>
-                                <h3 id="totalPayments">0</h3>
-                                <p>Payment Methods</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Categories Section -->
-                    <div class="content-section" id="categories">
-                        <h2>Categories Management</h2>
-                        <div class="data-table">
-                            <div class="table-header">
-                                <h3>Categories</h3>
-                                <button class="btn btn-small" onclick="openCategoryModal()">Add Category</button>
-                            </div>
-                            <div class="table-content">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="categoriesTable">
-                                        <!-- Categories will be loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recipes Section -->
-                    <div class="content-section" id="recipes">
-                        <h2>Recipes</h2>
-                        <div class="data-table">
-                            <div class="table-header">
-                                <h3>Recipe Management</h3>
-                                <div>
-                                    <button class="btn" onclick="alert('Inline test works!')" style="background: #28a745;">Inline Test</button>
-                                    <button class="btn" onclick="testAddProduct()">Test Add Product</button>
-                                    <button class="btn" onclick="openProductModal()">Add Product</button>
-                                </div>
-                            </div>
-                            <div class="table-content">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Image</th>
-                                            <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Price</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="productsTable">
-                                        <!-- Products will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Orders Section -->
-                    <div class="content-section" id="orders">
-                        <h2>Orders Management</h2>
-                        <div class="data-table">
-                            <div class="table-header">
-                                <h3>Customer Orders</h3>
-                                <div>
-                                    <button class="btn" onclick="testOrderSave()">Add Test Order</button>
-                                    <button class="btn" onclick="refreshOrders()">Refresh Orders</button>
-                                </div>
-                            </div>
-                            <div class="table-content">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Order ID</th>
-                                            <th>Customer Name</th>
-                                            <th>Phone</th>
-                                            <th>Email</th>
-                                            <th>Address</th>
-                                            <th>Items</th>
-                                            <th>Total</th>
-                                            <th>Payment</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="ordersTable">
-                                        <!-- Orders will be loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Payment Methods Section -->
-                    <div class="content-section" id="payments">
-                        <h2>Payment Methods</h2>
-                        <div class="data-table">
-                            <div class="table-header">
-                                <h3>Payment Methods</h3>
-                                <button class="btn btn-small" onclick="openPaymentModal()">Add Payment Method</button>
-                            </div>
-                            <div class="table-content">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Type</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="paymentsTable">
-                                        <!-- Payment methods will be loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Settings Section -->
-                    <div class="content-section" id="settings">
-                        <h2>Settings</h2>
-                        <div class="data-table">
-                            <div class="table-content">
-                                <div style="padding: 2rem;">
-                                    <h3>Admin Credentials</h3>
-                                    <p>Update your admin username and password for security.</p>
-                                    <br>
-                                    
-                                    <form id="adminCredentialsForm">
-                                        <div class="form-group">
-                                            <label for="currentPassword">Current Password</label>
-                                            <input type="password" id="currentPassword" required placeholder="Enter current password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newUsername">New Username</label>
-                                            <input type="text" id="newUsername" required placeholder="Enter new username">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newPassword">New Password</label>
-                                            <input type="password" id="newPassword" required placeholder="Enter new password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="confirmPassword">Confirm New Password</label>
-                                            <input type="password" id="confirmPassword" required placeholder="Confirm new password">
-                                        </div>
-                                        <button type="submit" class="btn">Update Admin Credentials</button>
-                                    </form>
-                                    
-                                    <div style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
-                                        <h4>Current Status:</h4>
-                                        <p><strong>Username:</strong> <span id="currentUsername">admin</span></p>
-                                        <p><strong>Last Updated:</strong> <span id="credentialsLastUpdated">Never</span></p>
-                                    </div>
-                                    
-                                    <br><br>
-                                    <h3>Data Management</h3>
-                                    <button class="btn" onclick="resetData()">Reset All Data</button>
-                                    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sync Status Section -->
-                    <div class="content-section" id="sync-status">
-                        <h2>Real-time Sync Status</h2>
-                        <div class="data-table">
-                            <div class="table-content">
-                                <div style="padding: 2rem;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                                        <div>
-                                            <h3>🔄 Live Synchronization Monitor</h3>
-                                            <p>Monitor real-time sync between admin panel and website</p>
-                                        </div>
-                                        <div>
-                                            <button class="btn" onclick="testSyncNow()">Test Sync</button>
-                                            <button class="btn btn-secondary" onclick="openWebsite()">Open Website</button>
-                                            <button class="btn btn-secondary" onclick="performFullSync()">Full Sync</button>
-                                        </div>
-                                    </div>
-
-                                    <div style="background: #e8f5e8; border-radius: 10px; padding: 1rem; margin-bottom: 2rem; border-left: 4px solid #27ae60;">
-                                        <h4 style="margin-bottom: 0.5rem; color: #27ae60;">🏥 System Health</h4>
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div>
-                                                <span style="font-weight: 600;">Status:</span>
-                                                <span id="systemHealthStatus" style="margin-left: 0.5rem;">Healthy</span>
-                                            </div>
-                                            <div>
-                                                <span style="font-weight: 600;">Total Syncs:</span>
-                                                <span id="totalSyncs" style="margin-left: 0.5rem;">0</span>
-                                            </div>
-                                            <div>
-                                                <span style="font-weight: 600;">Failed:</span>
-                                                <span id="failedSyncs" style="margin-left: 0.5rem;">0</span>
-                                            </div>
-                                            <div>
-                                                <span style="font-weight: 600;">Uptime:</span>
-                                                <span id="systemUptime" style="margin-left: 0.5rem;">0m</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sync-status-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #27ae60;">
-                                            <h4 style="margin-bottom: 1rem; color: #333;">📦 Categories</h4>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Total Items:</span>
-                                                <span style="font-weight: 600; color: #27ae60;" id="syncCategoryCount">0</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Last Sync:</span>
-                                                <span style="font-weight: 600; color: #27ae60;" id="syncCategoryLastSync">Never</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                                                <span>Status:</span>
-                                                <span style="font-weight: 600; color: #27ae60;" id="syncCategoryStatus">Active</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #e74c3c;">
-                                            <h4 style="margin-bottom: 1rem; color: #333;">🍽️ Recipes/Menu Items</h4>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Total Items:</span>
-                                                <span style="font-weight: 600; color: #e74c3c;" id="syncRecipeCount">0</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Last Sync:</span>
-                                                <span style="font-weight: 600; color: #e74c3c;" id="syncRecipeLastSync">Never</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                                                <span>Status:</span>
-                                                <span style="font-weight: 600; color: #e74c3c;" id="syncRecipeStatus">Active</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #f39c12;">
-                                            <h4 style="margin-bottom: 1rem; color: #333;">💳 Payment Methods</h4>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Total Items:</span>
-                                                <span style="font-weight: 600; color: #f39c12;" id="syncPaymentCount">0</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Last Sync:</span>
-                                                <span style="font-weight: 600; color: #f39c12;" id="syncPaymentLastSync">Never</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                                                <span>Status:</span>
-                                                <span style="font-weight: 600; color: #f39c12;" id="syncPaymentStatus">Active</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="sync-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #9b59b6;">
-                                            <h4 style="margin-bottom: 1rem; color: #333;">🔐 Admin Credentials</h4>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Username:</span>
-                                                <span style="font-weight: 600; color: #9b59b6;" id="syncAdminUsername">admin</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                                <span>Last Updated:</span>
-                                                <span style="font-weight: 600; color: #9b59b6;" id="syncAdminLastUpdate">Never</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                                                <span>Status:</span>
-                                                <span style="font-weight: 600; color: #9b59b6;" id="syncAdminStatus">Active</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div style="background: #f8f9fa; border-radius: 10px; padding: 1.5rem;">
-                                        <h4 style="margin-bottom: 1rem; color: #333;">📋 Sync Activity Log</h4>
-                                        <div id="syncActivityLog" style="max-height: 200px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.85rem;">
-                                            <div style="padding: 0.5rem; margin-bottom: 0.5rem; background: #d1ecf1; color: #0c5460; border-radius: 5px;">
-                                                [${new Date().toLocaleTimeString('en-IN')}] ℹ️ Sync status monitor initialized
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div style="margin-top: 2rem; padding: 1rem; background: #d1ecf1; color: #0c5460; border-radius: 8px; border-left: 4px solid #17a2b8;">
-                                        <strong>ℹ️ How it works:</strong><br>
-                                        Any changes made in admin panel (categories, recipes, prices, payment methods) automatically sync to the website within 1 second. This monitor shows the live status of all synchronization activities.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Background Management Section -->
-                    <div class="content-section" id="background">
-                        <h2>Background Management</h2>
-                        <div class="data-table">
-                            <div class="table-content">
-                                <div style="padding: 2rem;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                                        <div>
-                                            <h3>🎨 Website Background Settings</h3>
-                                            <p>Customize the background appearance of your website</p>
-                                        </div>
-                                        <div>
-                                            <button class="btn" onclick="previewBackground()">Preview</button>
-                                            <button class="btn btn-secondary" onclick="resetBackground()">Reset</button>
-                                            <button class="btn btn-secondary" onclick="openWebsite()">View Website</button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Background Type Selection -->
-                                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
-                                        <h4 style="margin-bottom: 1rem;">Background Type</h4>
-                                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                                <input type="radio" name="bgType" value="image" checked onchange="showBackgroundType('image')">
-                                                <span style="margin-left: 0.5rem;">Image Background</span>
-                                            </label>
-                                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                                <input type="radio" name="bgType" value="gradient" onchange="showBackgroundType('gradient')">
-                                                <span style="margin-left: 0.5rem;">Gradient Background</span>
-                                            </label>
-                                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                                <input type="radio" name="bgType" value="color" onchange="showBackgroundType('color')">
-                                                <span style="margin-left: 0.5rem;">Solid Color</span>
-                                            </label>
-                                            <label style="display: flex; align-items: center; cursor: pointer;">
-                                                <input type="radio" name="bgType" value="pattern" onchange="showBackgroundType('pattern')">
-                                                <span style="margin-left: 0.5rem;">Pattern</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Image Background Options -->
-                                    <div id="imageOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
-                                        <h4 style="margin-bottom: 1rem;">Image Background</h4>
-                                        <form id="imageBackgroundForm">
-                                            <div class="form-group">
-                                                <label for="bgImageUrl">Image URL</label>
-                                                <input type="url" id="bgImageUrl" placeholder="https://example.com/image.jpg">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="bgImageSize">Background Size</label>
-                                                <select id="bgImageSize">
-                                                    <option value="cover">Cover (Recommended)</option>
-                                                    <option value="contain">Contain</option>
-                                                    <option value="100% 100%">Stretch</option>
-                                                    <option value="auto">Auto</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="bgImagePosition">Background Position</label>
-                                                <select id="bgImagePosition">
-                                                    <option value="center center">Center</option>
-                                                    <option value="top center">Top</option>
-                                                    <option value="bottom center">Bottom</option>
-                                                    <option value="left center">Left</option>
-                                                    <option value="right center">Right</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="bgImageRepeat">Background Repeat</label>
-                                                <select id="bgImageRepeat">
-                                                    <option value="no-repeat">No Repeat</option>
-                                                    <option value="repeat">Repeat</option>
-                                                    <option value="repeat-x">Repeat Horizontal</option>
-                                                    <option value="repeat-y">Repeat Vertical</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="bgImageOverlay">Overlay Opacity</label>
-                                                <input type="range" id="bgImageOverlay" min="0" max="100" value="30">
-                                                <small>Current: <span id="overlayValue">30</span>%</small>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="bgImageOverlayColor">Overlay Color</label>
-                                                <input type="color" id="bgImageOverlayColor" value="#000000">
-                                            </div>
-                                            <button type="submit" class="btn">Apply Image Background</button>
-                                        </form>
-                                    </div>
-
-                                    <!-- Gradient Background Options -->
-                                    <div id="gradientOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; display: none;">
-                                        <h4 style="margin-bottom: 1rem;">Gradient Background</h4>
-                                        <form id="gradientBackgroundForm">
-                                            <div class="form-group">
-                                                <label for="gradientType">Gradient Type</label>
-                                                <select id="gradientType">
-                                                    <option value="linear">Linear Gradient</option>
-                                                    <option value="radial">Radial Gradient</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="gradientDirection">Direction (Linear)</label>
-                                                <select id="gradientDirection">
-                                                    <option value="135deg">Diagonal (↘)</option>
-                                                    <option value="90deg">Horizontal (→)</option>
-                                                    <option value="180deg">Horizontal (←)</option>
-                                                    <option value="0deg">Vertical (↓)</option>
-                                                    <option value="270deg">Vertical (↑)</option>
-                                                    <option value="45deg">Diagonal (↗)</option>
-                                                    <option value="225deg">Diagonal (↙)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="gradientColor1">Start Color</label>
-                                                <input type="color" id="gradientColor1" value="#667eea">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="gradientColor2">End Color</label>
-                                                <input type="color" id="gradientColor2" value="#764ba2">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="gradientColor3">Middle Color (Optional)</label>
-                                                <input type="color" id="gradientColor3" value="#f093fb">
-                                            </div>
-                                            <button type="submit" class="btn">Apply Gradient Background</button>
-                                        </form>
-                                    </div>
-
-                                    <!-- Solid Color Options -->
-                                    <div id="colorOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; display: none;">
-                                        <h4 style="margin-bottom: 1rem;">Solid Color Background</h4>
-                                        <form id="colorBackgroundForm">
-                                            <div class="form-group">
-                                                <label for="solidColor">Background Color</label>
-                                                <input type="color" id="solidColor" value="#ffffff">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="solidTextColor">Text Color</label>
-                                                <input type="color" id="solidTextColor" value="#333333">
-                                            </div>
-                                            <button type="submit" class="btn">Apply Solid Color</button>
-                                        </form>
-                                    </div>
-
-                                    <!-- Pattern Options -->
-                                    <div id="patternOptions" class="bg-options" style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; display: none;">
-                                        <h4 style="margin-bottom: 1rem;">Pattern Background</h4>
-                                        <form id="patternBackgroundForm">
-                                            <div class="form-group">
-                                                <label for="patternType">Pattern Type</label>
-                                                <select id="patternType">
-                                                    <option value="dots">Dots</option>
-                                                    <option value="lines">Lines</option>
-                                                    <option value="grid">Grid</option>
-                                                    <option value="zigzag">Zigzag</option>
-                                                    <option value="waves">Waves</option>
-                                                    <option value="circles">Circles</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="patternColor">Pattern Color</label>
-                                                <input type="color" id="patternColor" value="#cccccc">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="patternBgColor">Background Color</label>
-                                                <input type="color" id="patternBgColor" value="#ffffff">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="patternSize">Pattern Size</label>
-                                                <input type="range" id="patternSize" min="10" max="100" value="20">
-                                                <small>Current: <span id="patternSizeValue">20</span>px</small>
-                                            </div>
-                                            <button type="submit" class="btn">Apply Pattern</button>
-                                        </form>
-                                    </div>
-
-                                    <!-- Preset Backgrounds -->
-                                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
-                                        <h4 style="margin-bottom: 1rem;">Preset Backgrounds</h4>
-                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                                            <div class="preset-bg" onclick="applyPreset('food')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
-                                                <div style="height: 80px; background: linear-gradient(135deg, #ff6b6b, #feca57); border-radius: 4px; margin-bottom: 0.5rem;"></div>
-                                                <strong>Food Theme</strong>
-                                            </div>
-                                            <div class="preset-bg" onclick="applyPreset('nature')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
-                                                <div style="height: 80px; background: linear-gradient(135deg, #56ab2f, #a8e063); border-radius: 4px; margin-bottom: 0.5rem;"></div>
-                                                <strong>Nature</strong>
-                                            </div>
-                                            <div class="preset-bg" onclick="applyPreset('ocean')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
-                                                <div style="height: 80px; background: linear-gradient(135deg, #2193b0, #6dd5ed); border-radius: 4px; margin-bottom: 0.5rem;"></div>
-                                                <strong>Ocean</strong>
-                                            </div>
-                                            <div class="preset-bg" onclick="applyPreset('sunset')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
-                                                <div style="height: 80px; background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb); border-radius: 4px; margin-bottom: 0.5rem;"></div>
-                                                <strong>Sunset</strong>
-                                            </div>
-                                            <div class="preset-bg" onclick="applyPreset('professional')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
-                                                <div style="height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 4px; margin-bottom: 0.5rem;"></div>
-                                                <strong>Professional</strong>
-                                            </div>
-                                            <div class="preset-bg" onclick="applyPreset('minimal')" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center;">
-                                                <div style="height: 80px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem;"></div>
-                                                <strong>Minimal</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Current Background Preview -->
-                                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
-                                        <h4 style="margin-bottom: 1rem;">Current Background Preview</h4>
-                                        <div id="backgroundPreview" style="height: 200px; border-radius: 8px; border: 2px solid #ddd; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                                            Preview Area
-                                        </div>
-                                        <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
-                                            <strong>Current Settings:</strong>
-                                            <div id="currentBgSettings" style="margin-top: 0.5rem;">
-                                                Type: Default Gradient<br>
-                                                Applied: Never
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div class="notification" id="notification"></div>
-
-    <!-- Category Modal -->
-    <div class="modal" id="categoryModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add Category</h3>
-                <button class="close-btn" onclick="closeModal('categoryModal')">&times;</button>
-            </div>
-            <form id="categoryForm">
-                <div class="form-group">
-                    <label for="categoryName">Category Name</label>
-                    <input type="text" id="categoryName" required>
-                </div>
-                <div class="form-group">
-                    <label for="categoryDescription">Description</label>
-                    <textarea id="categoryDescription" rows="3" style="width: 100%; padding: 10px; border: 2px solid #e1e1e1; border-radius: 6px;"></textarea>
-                </div>
-                <button type="submit" class="btn">Save Category</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Recipe Modal -->
-    <div class="modal" id="recipeModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('recipeModal')">&times;</span>
-            <h2>Add Recipe</h2>
-            <form id="recipeForm">
-                <div class="form-group">
-                    <label for="recipeName">Recipe Name</label>
-                    <input type="text" id="recipeName" required placeholder="Enter recipe name">
-                </div>
-                <div class="form-group">
-                    <label for="recipeCategory">Category</label>
-                    <select id="recipeCategory" required>
-                        <option value="">Select Category</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="recipePrice">Price (₹)</label>
-                    <input type="number" id="recipePrice" required placeholder="Enter price" min="0" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label for="recipeDescription">Description</label>
-                    <textarea id="recipeDescription" required placeholder="Enter recipe description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="recipeImage">Recipe Image</label>
-                    <input type="file" id="recipeImage" accept="image/*" onchange="previewRecipeImage(event)">
-                    <small>Upload an image for this recipe (JPG, PNG, GIF - Max 5MB)</small>
-                    <div id="imagePreview" style="margin-top: 10px; display: none;">
-                        <img id="previewImg" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 1px solid #ddd;">
-                        <button type="button" class="btn btn-small btn-danger" onclick="removeRecipeImage()" style="margin-left: 10px;">Remove</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="recipeImageUrl">Or Enter Image URL</label>
-                    <input type="url" id="recipeImageUrl" placeholder="https://example.com/image.jpg" onchange="previewRecipeImageUrl(event)">
-                    <small>Alternatively, enter a direct image URL</small>
-                </div>
-                <button type="submit" class="btn">Save Recipe</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Payment Modal -->
-    <div class="modal" id="paymentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add Payment Method</h3>
-                <button class="close-btn" onclick="closeModal('paymentModal')">&times;</button>
-            </div>
-            <form id="paymentForm">
-                <div class="form-group">
-                    <label for="paymentName">Payment Name</label>
-                    <input type="text" id="paymentName" required>
-                </div>
-                <div class="form-group">
-                    <label for="paymentType">Type</label>
-                    <select id="paymentType" style="width: 100%; padding: 10px; border: 2px solid #e1e1e1; border-radius: 6px;">
-                        <option value="online">Online</option>
-                        <option value="cod">Cash on Delivery</option>
-                        <option value="wallet">Wallet</option>
-                        <option value="bank">Bank Transfer</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="paymentStatus">Status</label>
-                    <select id="paymentStatus" style="width: 100%; padding: 10px; border: 2px solid #e1e1e1; border-radius: 6px;">
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn">Save Payment Method</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="admin.js"></script>
-    <script src="realtime-sync.js"></script>
-</body>
-</html>
-=======
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Panel - SRIDEVI HOME FOODS AND PICKLES</title>
-  <link rel="icon" href="images/banner.jpeg">
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="styles.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css">
-  
-  <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    :root {
-        --primary: #4f46e5;
-        --primary-dark: #4338ca;
-        --secondary: #06b6d4;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --danger: #ef4444;
-        --dark: #1f2937;
-        --gray: #6b7280;
-        --light: #f3f4f6;
-        --white: #ffffff;
-        --sidebar-width: 280px;
-        --header-height: 70px;
-        --border-radius: 12px;
-        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: var(--light);
-        color: var(--dark);
-        line-height: 1.6;
-        overflow-x: hidden;
-    }
-    
-    .admin-container {
-        display: flex;
-        height: 100vh;
-        position: relative;
-    }
-    
-    /* Sidebar */
-    .sidebar {
-        width: var(--sidebar-width);
-        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-        color: var(--white);
-        position: fixed;
-        height: 100vh;
-        left: 0;
-        top: 0;
-        z-index: 1000;
-        overflow-y: auto;
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-        transition: var(--transition);
-    }
-    
-    .sidebar-header {
-        padding: 2rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    .brand {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .brand-icon {
-        width: 48px;
-        height: 48px;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: var(--white);
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-    }
-    
-    .brand-text {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .brand-name {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--white);
-        line-height: 1.2;
-    }
-    
-    .brand-subtitle {
-        font-size: 0.875rem;
-        color: rgba(255, 255, 255, 0.7);
-        font-weight: 500;
-    }
-    
-    .sidebar-nav {
-        padding: 1.5rem 0;
-    }
-    
-    .nav-section {
-        margin-bottom: 2rem;
-    }
-    
-    .nav-title {
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: rgba(255, 255, 255, 0.5);
-        padding: 0 2rem;
-        margin-bottom: 1rem;
-    }
-    
-    .nav-link {
-        display: flex;
-        align-items: center;
-        padding: 0.875rem 2rem;
-        color: rgba(255, 255, 255, 0.8);
-        text-decoration: none;
-        transition: var(--transition);
-        position: relative;
-        border-left: 3px solid transparent;
-        font-weight: 500;
-    }
-    
-    .nav-link:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--white);
-    }
-    
-    .nav-link.active {
-        background: rgba(79, 70, 229, 0.2);
-        color: var(--white);
-        border-left-color: var(--primary);
-    }
-    
-    .nav-link i {
-        width: 20px;
-        margin-right: 12px;
-        font-size: 1.1rem;
-    }
-    
-    .nav-badge {
-        margin-left: auto;
-        background: var(--primary);
-        color: var(--white);
-        padding: 0.25rem 0.5rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        min-width: 24px;
-        text-align: center;
-    }
-    
-    /* Main Content */
-    .main-wrapper {
-        flex: 1;
-        margin-left: var(--sidebar-width);
-        display: flex;
-        flex-direction: column;
-    }
-    
-    /* Header */
-    .header {
-        height: var(--header-height);
-        background: var(--white);
-        border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 2rem;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-    }
-    
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .search-bar {
-        position: relative;
-        width: 300px;
-    }
-    
-    .search-bar input {
-        width: 100%;
-        padding: 0.625rem 1rem 0.625rem 2.5rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        transition: var(--transition);
-    }
-    
-    .search-bar input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    }
-    
-    .search-bar i {
-        position: absolute;
-        left: 0.875rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--gray);
-    }
-    
-    .header-right {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .header-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
-        background: var(--white);
-        color: var(--gray);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: var(--transition);
-        position: relative;
-    }
-    
-    .header-btn:hover {
-        background: var(--light);
-        color: var(--dark);
-    }
-    
-    .notification-dot {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 8px;
-        height: 8px;
-        background: var(--danger);
-        border-radius: 50%;
-        border: 2px solid var(--white);
-    }
-    
-    .user-menu {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.5rem;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-    
-    .user-menu:hover {
-        background: var(--light);
-    }
-    
-    .user-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        background: var(--primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--white);
-        font-weight: 600;
-    }
-    
-    .user-info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .user-name {
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--dark);
-    }
-    
-    .user-role {
-        font-size: 0.75rem;
-        color: var(--gray);
-    }
-    
-    /* Content Area */
-    .content-area {
-        flex: 1;
-        padding: 2rem;
-        overflow-y: auto;
-    }
-    
-    .content-header {
-        margin-bottom: 2rem;
-    }
-    
-    .content-title {
-        font-size: 1.875rem;
-        font-weight: 700;
-        color: var(--dark);
-        margin-bottom: 0.5rem;
-    }
-    
-    .content-subtitle {
-        color: var(--gray);
-        font-size: 1rem;
-    }
-    
-    /* Stats Grid */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    
-    .stat-card {
-        background: var(--white);
-        border-radius: var(--border-radius);
-        padding: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e5e7eb;
-        transition: var(--transition);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: var(--primary);
-    }
-    
-    .stat-card.success::before {
-        background: var(--success);
-    }
-    
-    .stat-card.warning::before {
-        background: var(--warning);
-    }
-    
-    .stat-card.danger::before {
-        background: var(--danger);
-    }
-    
-    .stat-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-    }
-    
-    .stat-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-    }
-    
-    .stat-icon.primary {
-        background: rgba(79, 70, 229, 0.1);
-        color: var(--primary);
-    }
-    
-    .stat-icon.success {
-        background: rgba(16, 185, 129, 0.1);
-        color: var(--success);
-    }
-    
-    .stat-icon.warning {
-        background: rgba(245, 158, 11, 0.1);
-        color: var(--warning);
-    }
-    
-    .stat-icon.danger {
-        background: rgba(239, 68, 68, 0.1);
-        color: var(--danger);
-    }
-    
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--dark);
-        margin-bottom: 0.25rem;
-    }
-    
-    .stat-label {
-        color: var(--gray);
-        font-size: 0.875rem;
-        font-weight: 500;
-    }
-    
-    .stat-change {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 0.25rem 0.5rem;
-        border-radius: 20px;
-    }
-    
-    .stat-change.positive {
-        color: var(--success);
-        background: rgba(16, 185, 129, 0.1);
-    }
-    
-    .stat-change.negative {
-        color: var(--danger);
-        background: rgba(239, 68, 68, 0.1);
-    }
-    
-    /* Data Tables */
-    .data-table {
-        background: var(--white);
-        border-radius: var(--border-radius);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e5e7eb;
-        overflow: hidden;
-    }
-    
-    .table-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    
-    .table-title {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--dark);
-    }
-    
-    .table-actions {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-    }
-    
-    .btn {
-        padding: 0.625rem 1.25rem;
-        border-radius: 8px;
-        font-weight: 500;
-        font-size: 0.875rem;
-        border: none;
-        cursor: pointer;
-        transition: var(--transition);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-    }
-    
-    .btn-primary {
-        background: var(--primary);
-        color: var(--white);
-    }
-    
-    .btn-primary:hover {
-        background: var(--primary-dark);
-        transform: translateY(-1px);
-    }
-    
-    .btn-secondary {
-        background: var(--white);
-        color: var(--gray);
-        border: 1px solid #e5e7eb;
-    }
-    
-    .btn-secondary:hover {
-        background: var(--light);
-        color: var(--dark);
-    }
-    
-    .btn-success {
-        background: var(--success);
-        color: var(--white);
-    }
-    
-    .btn-success:hover {
-        background: #059669;
-    }
-    
-    .btn-danger {
-        background: var(--danger);
-        color: var(--white);
-    }
-    
-    .btn-danger:hover {
-        background: #dc2626;
-    }
-    
-    .btn-sm {
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-    }
-    
-    .btn-icon {
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-    }
-    
-    .table-content {
-        overflow-x: auto;
-    }
-    
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    .table th {
-        text-align: left;
-        padding: 1rem 1.5rem;
-        font-weight: 600;
-        color: var(--gray);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        border-bottom: 1px solid #e5e7eb;
-        background: var(--light);
-    }
-    
-    .table td {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-        color: var(--dark);
-    }
-    
-    .table tr:hover {
-        background: var(--light);
-    }
-    
-    .table img {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        object-fit: cover;
-    }
-    
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-    
-    .status-badge.active {
-        background: rgba(16, 185, 129, 0.1);
-        color: var(--success);
-    }
-    
-    .status-badge.inactive {
-        background: rgba(107, 114, 128, 0.1);
-        color: var(--gray);
-    }
-    
-    .status-badge.pending {
-        background: rgba(245, 158, 11, 0.1);
-        color: var(--warning);
-    }
-    
-    .status-badge.confirmed {
-        background: rgba(16, 185, 129, 0.1);
-        color: var(--success);
-    }
-    
-    /* Forms */
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-    
-    .form-label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        color: var(--dark);
-        font-size: 0.875rem;
-    }
-    
-    .form-control {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        transition: var(--transition);
-        background: var(--white);
-    }
-    
-    .form-control:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    }
-    
-    .form-control::placeholder {
-        color: var(--gray);
-    }
-    
-    /* Modal */
-    .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 2000;
-        backdrop-filter: blur(4px);
-    }
-    
-    .modal.show {
-        display: flex;
-    }
-    
-    .modal-content {
-        background: var(--white);
-        border-radius: var(--border-radius);
-        width: 90%;
-        max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .modal-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    
-    .modal-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--dark);
-    }
-    
-    .modal-close {
-        width: 32px;
-        height: 32px;
-        border-radius: 6px;
-        border: none;
-        background: var(--light);
-        color: var(--gray);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: var(--transition);
-    }
-    
-    .modal-close:hover {
-        background: var(--danger);
-        color: var(--white);
-    }
-    
-    .modal-body {
-        padding: 1.5rem;
-    }
-    
-    .modal-footer {
-        padding: 1.5rem;
-        border-top: 1px solid #e5e7eb;
-        display: flex;
-        gap: 0.75rem;
-        justify-content: flex-end;
-    }
-    
-    /* Right Sidebar - Quick Actions */
-    .right-sidebar {
-        width: 320px;
-        background: var(--white);
-        border-left: 1px solid #e5e7eb;
-        padding: 1.5rem;
-        overflow-y: auto;
-    }
-    
-    .quick-actions {
-        margin-bottom: 2rem;
-    }
-    
-    .quick-actions h3 {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--dark);
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .quick-action-card {
-        background: var(--light);
-        border-radius: var(--border-radius);
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border: 1px solid #e5e7eb;
-    }
-    
-    .quick-action-card h4 {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--dark);
-        margin-bottom: 0.5rem;
-    }
-    
-    .quick-action-card p {
-        font-size: 0.75rem;
-        color: var(--gray);
-        margin-bottom: 1rem;
-    }
-    
-    /* Responsive */
-    @media (max-width: 1024px) {
-        .sidebar {
-            transform: translateX(-100%);
-        }
-        
-        .sidebar.open {
-            transform: translateX(0);
-        }
-        
-        .main-wrapper {
-            margin-left: 0;
-        }
-        
-        .search-bar {
-            width: 200px;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .content-area {
-            padding: 1rem;
-        }
-        
-        .stats-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .header {
-            padding: 0 1rem;
-        }
-        
-        .user-info {
-            display: none;
-        }
-        
-        .right-sidebar {
-            display: none;
-        }
-    }
-  </style>
 </head>
 <body>
 
@@ -1934,16 +699,16 @@
         <nav class="sidebar-nav">
             <div class="nav-section">
                 <div class="nav-title">Main</div>
-                <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+                <a href="javascript:void(0)" class="nav-link active" onclick="console.log('Dashboard clicked'); showSection('dashboard')">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="nav-link" onclick="showSection('recipes')">
+                <a href="javascript:void(0)" class="nav-link" onclick="console.log('Menu Items clicked'); showSection('recipes')">
                     <i class="fas fa-book"></i>
                     <span>Menu Items</span>
                     <span class="nav-badge" id="recipesCount">0</span>
                 </a>
-                <a href="#" class="nav-link" onclick="showSection('orders')">
+                <a href="javascript:void(0)" class="nav-link" onclick="console.log('Orders clicked'); showSection('orders')">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Orders</span>
                     <span class="nav-badge" id="ordersCount">0</span>
@@ -1951,15 +716,15 @@
             </div>
             <div class="nav-section">
                 <div class="nav-title">Management</div>
-                <a href="#" class="nav-link" onclick="showSection('categories')">
+                <a href="javascript:void(0)" class="nav-link" onclick="console.log('Categories clicked'); showSection('categories')">
                     <i class="fas fa-tags"></i>
                     <span>Categories</span>
                 </a>
-                <a href="#" class="nav-link" onclick="showSection('payments')">
+                <a href="javascript:void(0)" class="nav-link" onclick="console.log('Payments clicked'); showSection('payments')">
                     <i class="fas fa-credit-card"></i>
                     <span>Payments</span>
                 </a>
-                <a href="#" class="nav-link" onclick="showSection('settings')">
+                <a href="javascript:void(0)" class="nav-link" onclick="console.log('Settings clicked'); showSection('settings')">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
@@ -1972,18 +737,12 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search products, orders...">
-                </div>
+                <h2 class="page-title">Admin Panel</h2>
             </div>
             <div class="header-right">
                 <button class="header-btn">
                     <i class="fas fa-bell"></i>
                     <span class="notification-dot"></span>
-                </button>
-                <button class="header-btn">
-                    <i class="fas fa-cog"></i>
                 </button>
                 <div class="user-menu">
                     <div class="user-avatar">A</div>
@@ -1994,7 +753,7 @@
                 </div>
             </div>
         </header>
-
+        
         <!-- Content Area -->
         <main class="content-area">
             <!-- Dashboard Section -->
@@ -2019,7 +778,7 @@
                         <div class="stat-label">Total Categories</div>
                     </div>
                     
-                    <div class="stat-card success">
+                    <div class="stat-card">
                         <div class="stat-header">
                             <div class="stat-icon success">
                                 <i class="fas fa-book"></i>
@@ -2030,10 +789,10 @@
                             </div>
                         </div>
                         <div class="stat-value" id="totalRecipes">0</div>
-                        <div class="stat-label">Total Recipes</div>
+                        <div class="stat-label">Total Menu Items</div>
                     </div>
                     
-                    <div class="stat-card warning">
+                    <div class="stat-card">
                         <div class="stat-header">
                             <div class="stat-icon warning">
                                 <i class="fas fa-shopping-cart"></i>
@@ -2047,7 +806,7 @@
                         <div class="stat-label">Total Orders</div>
                     </div>
                     
-                    <div class="stat-card danger">
+                    <div class="stat-card">
                         <div class="stat-header">
                             <div class="stat-icon danger">
                                 <i class="fas fa-credit-card"></i>
@@ -2102,47 +861,10 @@
                 </div>
             </section>
 
-            <!-- Categories Section -->
-            <section class="content-section" id="categories">
-                <div class="content-header">
-                    <h1 class="content-title">Categories</h1>
-                    <p class="content-subtitle">Manage your product categories and organization.</p>
-                </div>
-                
-                <div class="data-table">
-                    <div class="table-header">
-                        <h3 class="table-title">Category Management</h3>
-                        <div class="table-actions">
-                            <button class="btn btn-primary" onclick="openCategoryModal()">
-                                <i class="fas fa-plus"></i>
-                                Add Category
-                            </button>
-                        </div>
-                    </div>
-                    <div class="table-content">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Products</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="categoriesTable">
-                                <!-- Categories will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
             <!-- Recipes Section -->
             <section class="content-section" id="recipes">
                 <div class="content-header">
-                    <h1 class="content-title">Recipes & Products</h1>
+                    <h1 class="content-title">Menu Items</h1>
                     <p class="content-subtitle">Manage your menu items, pricing, and inventory.</p>
                 </div>
                 
@@ -2218,6 +940,43 @@
                             </thead>
                             <tbody id="ordersTable">
                                 <!-- Orders will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section class="content-section" id="categories">
+                <div class="content-header">
+                    <h1 class="content-title">Categories</h1>
+                    <p class="content-subtitle">Manage your product categories and organization.</p>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="table-title">Category Management</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-primary" onclick="openCategoryModal()">
+                                <i class="fas fa-plus"></i>
+                                Add Category
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Products</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTable">
+                                <!-- Categories will be populated here -->
                             </tbody>
                         </table>
                     </div>
@@ -2300,62 +1059,6 @@
         </main>
     </div>
 
-    <!-- Right Sidebar - Quick Actions -->
-    <aside class="right-sidebar">
-        <div class="quick-actions">
-            <h3>
-                <i class="fas fa-bolt"></i>
-                Quick Actions
-            </h3>
-            
-            <div class="quick-action-card">
-                <h4>Send Payment Receipt</h4>
-                <p>Send payment confirmation to customers via WhatsApp</p>
-                <div class="form-group">
-                    <label class="form-label">Customer Name</label>
-                    <input type="text" class="form-control" id="receiptName" placeholder="Enter name">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="receiptPhone" placeholder="Enter phone">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Order Details</label>
-                    <textarea class="form-control" id="receiptDetails" rows="2" placeholder="Order details"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Total Amount</label>
-                    <input type="number" class="form-control" id="receiptTotal" placeholder="₹0.00">
-                </div>
-                <button class="btn btn-success btn-sm" onclick="sendPaymentReceipt()">
-                    <i class="fab fa-whatsapp"></i>
-                    Send Receipt
-                </button>
-            </div>
-            
-            <div class="quick-action-card">
-                <h4>Quick Stats</h4>
-                <p>Today's performance overview</p>
-                <div style="display: grid; gap: 0.5rem;">
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="color: var(--gray); font-size: 0.875rem;">Today's Orders</span>
-                        <span style="font-weight: 600;" id="todayOrders">0</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="color: var(--gray); font-size: 0.875rem;">Revenue</span>
-                        <span style="font-weight: 600;" id="todayRevenue">₹0</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="color: var(--gray); font-size: 0.875rem;">Active Products</span>
-                        <span style="font-weight: 600;" id="activeProducts">0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </aside>
-</div>
-</main>
-
 <!-- Product Modal -->
 <div id="productModal" class="modal">
     <div class="modal-content">
@@ -2409,9 +1112,71 @@
     </div>
 </div>
 
-<!-- Bootstrap + bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Firebase (compat) - paste your Firebase web config into the firebaseConfig object below -->
 <!-- Firebase Configuration -->
 <script src="firebase-config.js"></script>
 <script src="admin-firebase.js"></script>
+
+<!-- Test Script -->
+<script>
+    // Test if admin panel is loading properly
+    console.log('🚀 Admin Panel Loading Test');
+    
+    // Test if showSection function exists
+    if (typeof showSection === 'function') {
+        console.log('✅ showSection function found');
+    } else {
+        console.error('❌ showSection function not found');
+    }
+    
+    // Test if openProductModal function exists
+    if (typeof openProductModal === 'function') {
+        console.log('✅ openProductModal function found');
+    } else {
+        console.error('❌ openProductModal function not found');
+    }
+    
+    // Test if openCategoryModal function exists
+    if (typeof openCategoryModal === 'function') {
+        console.log('✅ openCategoryModal function found');
+    } else {
+        console.error('❌ openCategoryModal function not found');
+    }
+    
+    // Test if openPaymentModal function exists
+    if (typeof openPaymentModal === 'function') {
+        console.log('✅ openPaymentModal function found');
+    } else {
+        console.error('❌ openPaymentModal function not found');
+    }
+    
+    // Test navigation clicks
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 DOM Ready - Testing admin panel functionality');
+        
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach((link, index) => {
+            console.log(`Nav Link ${index + 1}:`, link.textContent);
+        });
+        
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach((button, index) => {
+            console.log(`Button ${index + 1}:`, button.textContent);
+        });
+        
+        // Add click event listeners to test functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                console.log('Navigation link clicked:', this.textContent);
+            });
+        });
+        
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                console.log('Button clicked:', this.textContent);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
