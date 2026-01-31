@@ -6,7 +6,7 @@ const firebaseConfig = {
     storageBucket: "sridevi-home-foods.appspot.com",
     messagingSenderId: "123456789012",
     appId: "1:123456789012:web:abcdef123456789012345678",
-    databaseURL: "https://sridevi-home-foods-default-rtdb.firebaseio.com/"
+    databaseURL: "https://sridevi-home-foods-f6874-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 
 // Initialize Firebase
