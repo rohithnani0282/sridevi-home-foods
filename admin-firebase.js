@@ -47,8 +47,13 @@ let isFirebaseAvailable = false;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 DOM Content Loaded - Admin Firebase starting...');
     initializeAdmin();
 });
+
+// Immediate test
+console.log('📝 admin-firebase.js loaded successfully!');
+alert('Admin Firebase JavaScript loaded!');
 
 async function initializeAdmin() {
     console.log('🚀 Initializing Admin Panel with Firebase...');
