@@ -5,7 +5,8 @@ const firebaseConfig = {
     projectId: "sridevi-home-foods",
     storageBucket: "sridevi-home-foods.appspot.com",
     messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdef123456789012345678"
+    appId: "1:123456789012:web:abcdef123456789012345678",
+    databaseURL: "https://sridevi-home-foods-default-rtdb.firebaseio.com/"
 };
 
 // Initialize Firebase
@@ -20,21 +21,11 @@ if (typeof firebase !== 'undefined') {
 let db, auth;
 
 if (typeof firebase !== 'undefined') {
-    db = firebase.firestore();
+    // Use Real-time Database instead of Firestore
+    db = firebase.database();
     auth = firebase.auth();
     
-    // Enable offline persistence
-    db.enablePersistence()
-        .then(() => {
-            console.log('✅ Firestore offline persistence enabled');
-        })
-        .catch((err) => {
-            if (err.code == 'failed-precondition') {
-                console.warn('⚠️ Multiple tabs open, persistence can only be enabled in one tab at a time.');
-            } else if (err.code == 'unimplemented') {
-                console.warn('⚠️ The current browser does not support persistence.');
-            }
-        });
+    console.log('✅ Real-time Database initialized');
 }
 
 // Firebase Collections
@@ -46,30 +37,27 @@ const collections = {
     users: 'users'
 };
 
-// Firebase Manager Class
+// Firebase Manager Class for Real-time Database
 class FirebaseManager {
     constructor() {
         this.db = db;
         this.auth = auth;
-        this.unsubscribeFunctions = [];
+        this.listeners = [];
     }
 
-    // Generic CRUD Operations
+    // Generic CRUD Operations for Real-time Database
     async createDocument(collection, data, id = null) {
         try {
-            const docRef = id ? 
-                this.db.collection(collection).doc(id) : 
-                this.db.collection(collection).doc();
-            
+            const docId = id || this.db.ref(collection).push().key;
             const document = {
                 ...data,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
             };
             
-            await docRef.set(document);
-            console.log(`✅ Document created in ${collection}:`, docRef.id);
-            return { id: docRef.id, ...document };
+            await this.db.ref(`${collection}/${docId}`).set(document);
+            console.log(`✅ Document created in ${collection}:`, docId);
+            return { id: docId, ...document };
         } catch (error) {
             console.error(`❌ Error creating document in ${collection}:`, error);
             throw error;
@@ -78,11 +66,11 @@ class FirebaseManager {
 
     async getDocument(collection, id) {
         try {
-            const docRef = this.db.collection(collection).doc(id);
-            const doc = await docRef.get();
+            const snapshot = await this.db.ref(`${collection}/${id}`).once('value');
+            const document = snapshot.val();
             
-            if (doc.exists) {
-                return { id: doc.id, ...doc.data() };
+            if (document) {
+                return { id, ...document };
             } else {
                 console.log(`⚠️ Document not found in ${collection}:`, id);
                 return null;
@@ -93,16 +81,16 @@ class FirebaseManager {
         }
     }
 
-    async getAllDocuments(collection, orderBy = 'createdAt', orderDirection = 'desc') {
+    async getAllDocuments(collection) {
         try {
-            const querySnapshot = await this.db
-                .collection(collection)
-                .orderBy(orderBy, orderDirection)
-                .get();
-            
+            const snapshot = await this.db.ref(collection).once('value');
             const documents = [];
-            querySnapshot.forEach((doc) => {
-                documents.push({ id: doc.id, ...doc.data() });
+            
+            snapshot.forEach((childSnapshot) => {
+                documents.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
             });
             
             console.log(`✅ Retrieved ${documents.length} documents from ${collection}`);
@@ -115,13 +103,12 @@ class FirebaseManager {
 
     async updateDocument(collection, id, data) {
         try {
-            const docRef = this.db.collection(collection).doc(id);
             const document = {
                 ...data,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
             };
             
-            await docRef.update(document);
+            await this.db.ref(`${collection}/${id}`).update(document);
             console.log(`✅ Document updated in ${collection}:`, id);
             
             // Return updated document
@@ -135,7 +122,7 @@ class FirebaseManager {
 
     async deleteDocument(collection, id) {
         try {
-            await this.db.collection(collection).doc(id).delete();
+            await this.db.ref(`${collection}/${id}`).remove();
             console.log(`✅ Document deleted from ${collection}:`, id);
             return true;
         } catch (error) {
@@ -145,22 +132,23 @@ class FirebaseManager {
     }
 
     // Real-time listeners
-    onCollectionChange(collection, callback, orderBy = 'createdAt', orderDirection = 'desc') {
+    onCollectionChange(collection, callback) {
         try {
-            const unsubscribe = this.db
-                .collection(collection)
-                .orderBy(orderBy, orderDirection)
-                .onSnapshot((snapshot) => {
-                    const documents = [];
-                    snapshot.forEach((doc) => {
-                        documents.push({ id: doc.id, ...doc.data() });
+            const ref = this.db.ref(collection);
+            const listener = ref.on('value', (snapshot) => {
+                const documents = [];
+                snapshot.forEach((childSnapshot) => {
+                    documents.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
                     });
-                    callback(documents);
                 });
+                callback(documents);
+            });
             
-            this.unsubscribeFunctions.push(unsubscribe);
+            this.listeners.push({ ref, listener });
             console.log(`✅ Real-time listener attached to ${collection}`);
-            return unsubscribe;
+            return listener;
         } catch (error) {
             console.error(`❌ Error setting up listener for ${collection}:`, error);
             throw error;
@@ -169,38 +157,39 @@ class FirebaseManager {
 
     onDocumentChange(collection, id, callback) {
         try {
-            const unsubscribe = this.db
-                .collection(collection)
-                .doc(id)
-                .onSnapshot((doc) => {
-                    if (doc.exists) {
-                        callback({ id: doc.id, ...doc.data() });
-                    } else {
-                        callback(null);
-                    }
-                });
+            const ref = this.db.ref(`${collection}/${id}`);
+            const listener = ref.on('value', (snapshot) => {
+                const document = snapshot.val();
+                if (document) {
+                    callback({ id, ...document });
+                } else {
+                    callback(null);
+                }
+            });
             
-            this.unsubscribeFunctions.push(unsubscribe);
+            this.listeners.push({ ref, listener });
             console.log(`✅ Real-time listener attached to ${collection}/${id}`);
-            return unsubscribe;
+            return listener;
         } catch (error) {
             console.error(`❌ Error setting up document listener for ${collection}/${id}:`, error);
             throw error;
         }
     }
 
-    // Query operations
-    async queryDocuments(collection, field, operator, value, orderBy = 'createdAt', orderDirection = 'desc') {
+    // Query operations (simplified for Real-time Database)
+    async queryDocuments(collection, field, operator, value) {
         try {
-            const querySnapshot = await this.db
-                .collection(collection)
-                .where(field, operator, value)
-                .orderBy(orderBy, orderDirection)
-                .get();
+            const snapshot = await this.db.ref(collection)
+                .orderByChild(field)
+                .equalTo(value)
+                .once('value');
             
             const documents = [];
-            querySnapshot.forEach((doc) => {
-                documents.push({ id: doc.id, ...doc.data() });
+            snapshot.forEach((childSnapshot) => {
+                documents.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
             });
             
             console.log(`✅ Query returned ${documents.length} documents from ${collection}`);
@@ -213,10 +202,10 @@ class FirebaseManager {
 
     // Cleanup listeners
     cleanup() {
-        this.unsubscribeFunctions.forEach(unsubscribe => {
-            unsubscribe();
+        this.listeners.forEach(({ ref, listener }) => {
+            ref.off('value', listener);
         });
-        this.unsubscribeFunctions = [];
+        this.listeners = [];
         console.log('✅ All Firebase listeners cleaned up');
     }
 
