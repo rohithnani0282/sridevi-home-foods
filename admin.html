@@ -1128,256 +1128,784 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css">
   
   <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    :root {
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --secondary: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark: #1f2937;
+        --gray: #6b7280;
+        --light: #f3f4f6;
+        --white: #ffffff;
+        --sidebar-width: 280px;
+        --header-height: 70px;
+        --border-radius: 12px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--light);
+        color: var(--dark);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+    
     .admin-container {
         display: flex;
         height: 100vh;
-        font-family: 'Poppins', sans-serif;
+        position: relative;
     }
     
+    /* Sidebar */
     .sidebar {
-        width: 250px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        width: var(--sidebar-width);
+        background: linear-gradient(180deg, var(--dark) 0%, #111827 100%);
+        color: var(--white);
+        position: fixed;
+        height: 100vh;
+        left: 0;
+        top: 0;
+        z-index: 1000;
         overflow-y: auto;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        transition: var(--transition);
     }
     
     .sidebar-header {
-        padding: 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
     }
     
     .sidebar-logo {
         display: flex;
         align-items: center;
-        font-size: 18px;
-        font-weight: 600;
+        gap: 12px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--white);
     }
     
     .sidebar-logo i {
-        margin-right: 10px;
-        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
     }
     
     .sidebar-menu {
-        padding: 20px 0;
+        padding: 1.5rem 0;
+    }
+    
+    .menu-section {
+        margin-bottom: 2rem;
+    }
+    
+    .menu-section-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(255, 255, 255, 0.5);
+        padding: 0 2rem;
+        margin-bottom: 0.5rem;
     }
     
     .menu-item {
         display: flex;
         align-items: center;
-        padding: 15px 20px;
+        padding: 0.875rem 2rem;
         cursor: pointer;
-        transition: background 0.3s;
+        transition: var(--transition);
+        position: relative;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-left: 3px solid transparent;
     }
     
     .menu-item:hover {
-        background: rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
     }
     
     .menu-item.active {
-        background: rgba(255,255,255,0.2);
-        border-left: 4px solid #fff;
+        background: rgba(79, 70, 229, 0.2);
+        color: var(--white);
+        border-left-color: var(--primary);
+    }
+    
+    .menu-item.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--primary);
     }
     
     .menu-item i {
-        margin-right: 10px;
         width: 20px;
+        margin-right: 12px;
+        font-size: 1.1rem;
     }
     
-    .main-content {
+    .menu-item span {
+        font-weight: 500;
+    }
+    
+    .menu-badge {
+        margin-left: auto;
+        background: var(--primary);
+        color: var(--white);
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    /* Main Content */
+    .main-wrapper {
         flex: 1;
-        padding: 30px;
-        background: #f8f9fa;
+        margin-left: var(--sidebar-width);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+        height: var(--header-height);
+        background: var(--white);
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .search-bar {
+        position: relative;
+        width: 300px;
+    }
+    
+    .search-bar input {
+        width: 100%;
+        padding: 0.625rem 1rem 0.625rem 2.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: var(--transition);
+    }
+    
+    .search-bar input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    
+    .search-bar i {
+        position: absolute;
+        left: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+    }
+    
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .header-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: var(--white);
+        color: var(--gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+    }
+    
+    .header-btn:hover {
+        background: var(--light);
+        color: var(--dark);
+    }
+    
+    .notification-dot {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 8px;
+        height: 8px;
+        background: var(--danger);
+        border-radius: 50%;
+        border: 2px solid var(--white);
+    }
+    
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .user-menu:hover {
+        background: var(--light);
+    }
+    
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-weight: 600;
+    }
+    
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .user-name {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--dark);
+    }
+    
+    .user-role {
+        font-size: 0.75rem;
+        color: var(--gray);
+    }
+    
+    /* Content Area */
+    .content-area {
+        flex: 1;
+        padding: 2rem;
         overflow-y: auto;
     }
     
-    .content-section {
-        display: none;
+    .content-header {
+        margin-bottom: 2rem;
     }
     
-    .content-section.active {
-        display: block;
+    .content-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
     }
     
-    .content-section h2 {
-        margin-bottom: 30px;
-        color: #333;
+    .content-subtitle {
+        color: var(--gray);
+        font-size: 1rem;
     }
     
+    /* Stats Grid */
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
     }
     
     .stat-card {
-        background: white;
-        padding: 25px;
+        background: var(--white);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--primary);
+    }
+    
+    .stat-card.success::before {
+        background: var(--success);
+    }
+    
+    .stat-card.warning::before {
+        background: var(--warning);
+    }
+    
+    .stat-card.danger::before {
+        background: var(--danger);
+    }
+    
+    .stat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+    
+    .stat-icon {
+        width: 48px;
+        height: 48px;
         border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
     }
     
-    .stat-card i {
-        font-size: 36px;
-        margin-bottom: 15px;
+    .stat-icon.primary {
+        background: rgba(79, 70, 229, 0.1);
+        color: var(--primary);
     }
     
-    .stat-card h3 {
-        font-size: 32px;
-        margin: 10px 0;
-        color: #333;
+    .stat-icon.success {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
     }
     
-    .stat-card p {
-        color: #666;
-        margin: 0;
+    .stat-icon.warning {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning);
     }
     
+    .stat-icon.danger {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+        color: var(--gray);
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .stat-change {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+    }
+    
+    .stat-change.positive {
+        color: var(--success);
+        background: rgba(16, 185, 129, 0.1);
+    }
+    
+    .stat-change.negative {
+        color: var(--danger);
+        background: rgba(239, 68, 68, 0.1);
+    }
+    
+    /* Data Tables */
     .data-table {
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        background: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
         overflow: hidden;
     }
     
     .table-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 20px;
-        border-bottom: 1px solid #eee;
+        justify-content: space-between;
     }
     
-    .table-header h3 {
-        margin: 0;
-        color: #333;
+    .table-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--dark);
+    }
+    
+    .table-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
     }
     
     .btn {
-        background: #007bff;
-        color: white;
+        padding: 0.625rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.875rem;
         border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
         cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
         text-decoration: none;
-        display: inline-block;
     }
     
-    .btn:hover {
-        background: #0056b3;
+    .btn-primary {
+        background: var(--primary);
+        color: var(--white);
+    }
+    
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+        background: var(--white);
+        color: var(--gray);
+        border: 1px solid #e5e7eb;
+    }
+    
+    .btn-secondary:hover {
+        background: var(--light);
+        color: var(--dark);
+    }
+    
+    .btn-success {
+        background: var(--success);
+        color: var(--white);
+    }
+    
+    .btn-success:hover {
+        background: #059669;
+    }
+    
+    .btn-danger {
+        background: var(--danger);
+        color: var(--white);
+    }
+    
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+    
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
     }
     
     .table-content {
         overflow-x: auto;
     }
     
-    .table-content table {
+    .table {
         width: 100%;
         border-collapse: collapse;
     }
     
-    .table-content th,
-    .table-content td {
-        padding: 15px;
+    .table th {
         text-align: left;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .table-content th {
-        background: #f8f9fa;
+        padding: 1rem 1.5rem;
         font-weight: 600;
-        color: #333;
+        color: var(--gray);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #e5e7eb;
+        background: var(--light);
     }
     
-    .right-sidebar {
-        width: 300px;
-        background: white;
-        border-left: 1px solid #eee;
-        overflow-y: auto;
+    .table td {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        color: var(--dark);
     }
     
-    .right-sidebar-header {
-        padding: 20px;
-        border-bottom: 1px solid #eee;
+    .table tr:hover {
+        background: var(--light);
     }
     
-    .right-sidebar-header h3 {
-        margin: 0 0 5px 0;
-        color: #333;
+    .table img {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        object-fit: cover;
     }
     
-    .right-sidebar-content {
-        padding: 20px;
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
     }
     
+    .status-badge.active {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+    }
+    
+    .status-badge.inactive {
+        background: rgba(107, 114, 128, 0.1);
+        color: var(--gray);
+    }
+    
+    .status-badge.pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning);
+    }
+    
+    .status-badge.confirmed {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+    }
+    
+    /* Forms */
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 1.5rem;
     }
     
-    .form-group label {
+    .form-label {
         display: block;
-        margin-bottom: 5px;
-        color: #333;
+        margin-bottom: 0.5rem;
         font-weight: 500;
+        color: var(--dark);
+        font-size: 0.875rem;
     }
     
     .form-control {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 14px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: var(--transition);
+        background: var(--white);
     }
     
     .form-control:focus {
         outline: none;
-        border-color: #007bff;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
     }
     
-    .btn-success {
-        background: #28a745;
+    .form-control::placeholder {
+        color: var(--gray);
     }
     
-    .btn-success:hover {
-        background: #1e7e34;
-    }
-    
-    .btn-block {
+    /* Modal */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        backdrop-filter: blur(4px);
     }
     
-    .settings-grid {
-        display: grid;
-        gap: 20px;
+    .modal.show {
+        display: flex;
     }
     
-    .setting-card {
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    .modal-content {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     }
     
-    .setting-card h3 {
-        margin: 0 0 20px 0;
-        color: #333;
+    .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark);
+    }
+    
+    .modal-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: none;
+        background: var(--light);
+        color: var(--gray);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+    }
+    
+    .modal-close:hover {
+        background: var(--danger);
+        color: var(--white);
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+    }
+    
+    /* Right Sidebar - Quick Actions */
+    .right-sidebar {
+        width: 320px;
+        background: var(--white);
+        border-left: 1px solid #e5e7eb;
+        padding: 1.5rem;
+        overflow-y: auto;
+    }
+    
+    .quick-actions {
+        margin-bottom: 2rem;
+    }
+    
+    .quick-actions h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .quick-action-card {
+        background: var(--light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .quick-action-card h4 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+    
+    .quick-action-card p {
+        font-size: 0.75rem;
+        color: var(--gray);
+        margin-bottom: 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .main-wrapper {
+            margin-left: 0;
+        }
+        
+        .search-bar {
+            width: 200px;
+        }
     }
     
     @media (max-width: 768px) {
-        .admin-container {
-            flex-direction: column;
+        .content-area {
+            padding: 1rem;
         }
         
-        .sidebar {
-            width: 100%;
-            height: auto;
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .header {
+            padding: 0 1rem;
+        }
+        
+        .user-info {
+            display: none;
         }
         
         .right-sidebar {
-            width: 100%;
+            display: none;
         }
     }
   </style>
@@ -1385,7 +1913,7 @@
 <body>
 
 <div class="admin-container">
-    <!-- Left Sidebar - Admin Dashboard -->
+    <!-- Left Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
@@ -1394,285 +1922,480 @@
             </div>
         </div>
         <div class="sidebar-menu">
-            <div class="menu-item active" onclick="showSection('dashboard')">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
+            <div class="menu-section">
+                <div class="menu-section-title">Main</div>
+                <a href="#" class="menu-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showSection('recipes')">
+                    <i class="fas fa-book"></i>
+                    <span>Recipes</span>
+                    <span class="menu-badge" id="recipesCount">0</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showSection('orders')">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                    <span class="menu-badge" id="ordersCount">0</span>
+                </a>
             </div>
-            <div class="menu-item" onclick="showSection('categories')">
-                <i class="fas fa-tags"></i>
-                <span>Categories</span>
-            </div>
-            <div class="menu-item" onclick="showSection('recipes')">
-                <i class="fas fa-book"></i>
-                <span>Recipes</span>
-            </div>
-            <div class="menu-item" onclick="showSection('orders')">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Orders</span>
-            </div>
-            <div class="menu-item" onclick="showSection('payments')">
-                <i class="fas fa-credit-card"></i>
-                <span>Payment Methods</span>
-            </div>
-            <div class="menu-item" onclick="showSection('settings')">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content Area -->
-    <div class="main-content">
-        <!-- Dashboard Section -->
-        <div class="content-section active" id="dashboard">
-            <h2>Dashboard</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-tags" style="color: #3498db;"></i>
-                    <h3 id="totalCategories">0</h3>
-                    <p>Total Categories</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-book" style="color: #e74c3c;"></i>
-                    <h3 id="totalRecipes">0</h3>
-                    <p>Total Recipes</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-shopping-cart" style="color: #f39c12;"></i>
-                    <h3 id="totalOrders">0</h3>
-                    <p>Total Orders</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-credit-card" style="color: #27ae60;"></i>
-                    <h3 id="totalPayments">0</h3>
-                    <p>Payment Methods</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Categories Section -->
-        <div class="content-section" id="categories">
-            <h2>Categories</h2>
-            <div class="data-table">
-                <div class="table-header">
-                    <h3>Category Management</h3>
-                    <button class="btn" onclick="openCategoryModal()">Add Category</button>
-                </div>
-                <div class="table-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="categoriesTable">
-                            <!-- Categories will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recipes Section -->
-        <div class="content-section" id="recipes">
-            <h2>Recipes</h2>
-            <div class="data-table">
-                <div class="table-header">
-                    <h3>Recipe Management</h3>
-                    <div>
-                        <button class="btn" onclick="testAddProduct()">Test Add Product</button>
-                        <button class="btn" onclick="openProductModal()">Add Product</button>
-                    </div>
-                </div>
-                <div class="table-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productsTable">
-                            <!-- Products will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Orders Section -->
-        <div class="content-section" id="orders">
-            <h2>Orders Management</h2>
-            <div class="data-table">
-                <div class="table-header">
-                    <h3>Customer Orders</h3>
-                    <div>
-                        <button class="btn" onclick="testOrderSave()">Add Test Order</button>
-                        <button class="btn" onclick="refreshOrders()">Refresh Orders</button>
-                    </div>
-                </div>
-                <div class="table-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer Name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Payment</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ordersTable">
-                            <!-- Orders will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Payment Methods Section -->
-        <div class="content-section" id="payments">
-            <h2>Payment Methods</h2>
-            <div class="data-table">
-                <div class="table-header">
-                    <h3>Payment Method Management</h3>
-                    <button class="btn" onclick="openPaymentModal()">Add Payment Method</button>
-                </div>
-                <div class="table-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="paymentMethodsTable">
-                            <!-- Payment methods will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Settings Section -->
-        <div class="content-section" id="settings">
-            <h2>Settings</h2>
-            <div class="settings-grid">
-                <div class="setting-card">
-                    <h3>General Settings</h3>
-                    <div class="form-group">
-                        <label>Store Name</label>
-                        <input type="text" value="SRIDEVI HOME FOODS" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Contact Phone</label>
-                        <input type="text" value="+91 98664 06807" class="form-control">
-                    </div>
-                    <button class="btn">Save Settings</button>
-                </div>
+            <div class="menu-section">
+                <div class="menu-section-title">Management</div>
+                <a href="#" class="menu-item" onclick="showSection('categories')">
+                    <i class="fas fa-tags"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showSection('payments')">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Payment Methods</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Right Sidebar - Payment Receipt -->
-    <div class="right-sidebar" id="rightSidebar">
-        <div class="right-sidebar-header">
-            <h3>Send Payment Receipt</h3>
-            <p class="text-muted small">Send payment confirmation to customers</p>
-        </div>
-        <div class="right-sidebar-content">
-            <div class="form-group">
-                <label for="receiptName">Customer Name</label>
-                <input id="receiptName" type="text" class="form-control" placeholder="Enter customer name">
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search products, orders...">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="receiptPhone">Customer Phone</label>
-                <input id="receiptPhone" type="text" class="form-control" placeholder="Enter phone number">
+            <div class="header-right">
+                <button class="header-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="header-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="user-menu">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Admin</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="receiptDetails">Order Details</label>
-                <textarea id="receiptDetails" class="form-control" rows="3" placeholder="Order details, e.g., 2kg Rice, 1 Mango Pickle"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="receiptTotal">Total Amount (₹)</label>
-                <input id="receiptTotal" type="number" class="form-control" placeholder="Enter total amount">
-            </div>
-            <div class="form-group">
-                <label for="receiptPayment">Payment Method</label>
-                <select id="receiptPayment" class="form-control">
-                    <option>Cash on delivery</option>
-                    <option>UPI</option>
-                    <option>QR Code</option>
-                </select>
-            </div>
-            <button id="sendReceiptBtn" class="btn btn-success btn-block">Send Receipt via WhatsApp</button>
-        </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Dashboard Section -->
+            <section class="content-section active" id="dashboard">
+                <div class="content-header">
+                    <h1 class="content-title">Dashboard</h1>
+                    <p class="content-subtitle">Welcome back! Here's what's happening with your business today.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                12%
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalCategories">0</div>
+                        <div class="stat-label">Total Categories</div>
+                    </div>
+                    
+                    <div class="stat-card success">
+                        <div class="stat-header">
+                            <div class="stat-icon success">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                8%
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalRecipes">0</div>
+                        <div class="stat-label">Total Recipes</div>
+                    </div>
+                    
+                    <div class="stat-card warning">
+                        <div class="stat-header">
+                            <div class="stat-icon warning">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i>
+                                3%
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    
+                    <div class="stat-card danger">
+                        <div class="stat-header">
+                            <div class="stat-icon danger">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                15%
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalPayments">0</div>
+                        <div class="stat-label">Payment Methods</div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders Table -->
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="table-title">Recent Orders</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-filter"></i>
+                                Filter
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrdersTable">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 2rem; color: var(--gray);">
+                                        No recent orders found
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section class="content-section" id="categories">
+                <div class="content-header">
+                    <h1 class="content-title">Categories</h1>
+                    <p class="content-subtitle">Manage your product categories and organization.</p>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="table-title">Category Management</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-primary" onclick="openCategoryModal()">
+                                <i class="fas fa-plus"></i>
+                                Add Category
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Products</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTable">
+                                <!-- Categories will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recipes Section -->
+            <section class="content-section" id="recipes">
+                <div class="content-header">
+                    <h1 class="content-title">Recipes & Products</h1>
+                    <p class="content-subtitle">Manage your menu items, pricing, and inventory.</p>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="table-title">Product Management</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary" onclick="testAddProduct()">
+                                <i class="fas fa-bug"></i>
+                                Test
+                            </button>
+                            <button class="btn btn-primary" onclick="openProductModal()">
+                                <i class="fas fa-plus"></i>
+                                Add Product
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTable">
+                                <!-- Products will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Orders Section -->
+            <section class="content-section" id="orders">
+                <div class="content-header">
+                    <h1 class="content-title">Orders Management</h1>
+                    <p class="content-subtitle">View and manage customer orders and fulfillment.</p>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="table-title">Customer Orders</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary" onclick="refreshOrders()">
+                                <i class="fas fa-sync"></i>
+                                Refresh
+                            </button>
+                            <button class="btn btn-primary" onclick="testOrderSave()">
+                                <i class="fas fa-plus"></i>
+                                Test Order
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Phone</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable">
+                                <!-- Orders will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Methods Section -->
+            <section class="content-section" id="payments">
+                <div class="content-header">
+                    <h1 class="content-title">Payment Methods</h1>
+                    <p class="content-subtitle">Configure payment options for your customers.</p>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="table-title">Payment Method Management</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-primary" onclick="openPaymentModal()">
+                                <i class="fas fa-plus"></i>
+                                Add Method
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentMethodsTable">
+                                <!-- Payment methods will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="content-section" id="settings">
+                <div class="content-header">
+                    <h1 class="content-title">Settings</h1>
+                    <p class="content-subtitle">Configure your store settings and preferences.</p>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="table-title">General Settings</h3>
+                    </div>
+                    <div class="table-content">
+                        <div style="padding: 2rem;">
+                            <div class="form-group">
+                                <label class="form-label">Store Name</label>
+                                <input type="text" class="form-control" value="SRIDEVI HOME FOODS">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contact Phone</label>
+                                <input type="text" class="form-control" value="+91 98664 06807">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">WhatsApp Number</label>
+                                <input type="text" class="form-control" value="+91 98664 06807">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" value="admin@sridevihomefoods.com">
+                            </div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
+
+    <!-- Right Sidebar - Quick Actions -->
+    <aside class="right-sidebar">
+        <div class="quick-actions">
+            <h3>
+                <i class="fas fa-bolt"></i>
+                Quick Actions
+            </h3>
+            
+            <div class="quick-action-card">
+                <h4>Send Payment Receipt</h4>
+                <p>Send payment confirmation to customers via WhatsApp</p>
+                <div class="form-group">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" class="form-control" id="receiptName" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="receiptPhone" placeholder="Enter phone">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Order Details</label>
+                    <textarea class="form-control" id="receiptDetails" rows="2" placeholder="Order details"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Total Amount</label>
+                    <input type="number" class="form-control" id="receiptTotal" placeholder="₹0.00">
+                </div>
+                <button class="btn btn-success btn-sm" onclick="sendPaymentReceipt()">
+                    <i class="fab fa-whatsapp"></i>
+                    Send Receipt
+                </button>
+            </div>
+            
+            <div class="quick-action-card">
+                <h4>Quick Stats</h4>
+                <p>Today's performance overview</p>
+                <div style="display: grid; gap: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--gray); font-size: 0.875rem;">Today's Orders</span>
+                        <span style="font-weight: 600;" id="todayOrders">0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--gray); font-size: 0.875rem;">Revenue</span>
+                        <span style="font-weight: 600;" id="todayRevenue">₹0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--gray); font-size: 0.875rem;">Active Products</span>
+                        <span style="font-weight: 600;" id="activeProducts">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
 </div>
 </main>
 
 <!-- Product Modal -->
-<div id="productModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-    <div class="modal-content" style="background: white; margin: 50px auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 10px;">
-        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 id="modalTitle">Add Product</h3>
-            <button onclick="closeProductModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">Add Product</h3>
+            <button class="modal-close" onclick="closeProductModal()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <form id="productForm">
-            <input type="hidden" id="productId">
-            <input type="hidden" id="categoryId">
-            
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="name">Product Name:</label>
-                <input type="text" id="name" name="name" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-            </div>
-            
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="category">Category:</label>
-                <select id="category" name="category" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                    <option value="">Select Category</option>
-                    <option value="Pindi Vantalu">Pindi Vantalu</option>
-                    <option value="Pickles">Pickles</option>
-                    <option value="Sweets">Sweets</option>
-                    <option value="Podi">Podi</option>
-                </select>
-            </div>
-            
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="price">Price (₹):</label>
-                <input type="number" id="price" name="price" required min="0" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-            </div>
-            
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
-            </div>
-            
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="image">Image URL:</label>
-                <input type="url" id="image" name="image" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-            </div>
-            
-            <div class="form-buttons" style="text-align: right;">
-                <button type="button" onclick="closeProductModal()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; margin-right: 10px;">Cancel</button>
-                <button type="submit" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px;">Save Product</button>
-            </div>
-        </form>
+        <div class="modal-body">
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <input type="hidden" id="categoryId">
+                
+                <div class="form-group">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="Enter product name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-control" id="category" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Pindi Vantalu">Pindi Vantalu</option>
+                        <option value="Pickles">Pickles</option>
+                        <option value="Sweets">Sweets</option>
+                        <option value="Podi">Podi</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Price (₹)</label>
+                    <input type="number" class="form-control" id="price" name="price" required min="0" placeholder="0.00">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter product description"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Image URL</label>
+                    <input type="url" class="form-control" id="image" name="image" placeholder="https://example.com/image.jpg">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+        </div>
     </div>
 </div>
 

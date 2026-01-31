@@ -674,13 +674,92 @@ function openProductModal(productId = null, categoryId = null) {
         }
     }
     
-    modal.style.display = 'block';
+    modal.classList.add('show');
     console.log('✅ Modal should be visible now');
 }
 
 function closeProductModal() {
     const modal = document.getElementById('productModal');
-    modal.style.display = 'none';
+    modal.classList.remove('show');
+}
+
+// Show section function
+function showSection(sectionId) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show selected section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    
+    // Update menu items
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('onclick') === `showSection('${sectionId}')`) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// Save product function
+function saveProduct() {
+    const form = document.getElementById('productForm');
+    const formData = new FormData(form);
+    
+    const product = {
+        name: formData.get('name'),
+        category: formData.get('category'),
+        price: parseFloat(formData.get('price')),
+        description: formData.get('description'),
+        image: formData.get('image'),
+        categoryId: parseInt(document.getElementById('categoryId').value) || 1
+    };
+    
+    const productId = document.getElementById('productId').value;
+    if (productId) {
+        product.id = parseInt(productId);
+    }
+    
+    // Save product using Firebase
+    if (typeof adminFirebase !== 'undefined' && adminFirebase.isFirebaseAvailable()) {
+        adminFirebase.saveProduct(product);
+    } else {
+        // Fallback to localStorage
+        console.log('Using localStorage fallback');
+        // Add localStorage logic here
+    }
+    
+    closeProductModal();
+}
+
+// Send payment receipt function
+function sendPaymentReceipt() {
+    const name = document.getElementById('receiptName').value;
+    const phone = document.getElementById('receiptPhone').value;
+    const details = document.getElementById('receiptDetails').value;
+    const total = document.getElementById('receiptTotal').value;
+    
+    if (!name || !phone || !total) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    const message = `Payment Receipt\n\nCustomer: ${name}\nPhone: ${phone}\nOrder Details: ${details}\nTotal: ₹${total}\n\nThank you for your order!`;
+    
+    const whatsappUrl = `https://wa.me/919866406807?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    // Clear form
+    document.getElementById('receiptName').value = '';
+    document.getElementById('receiptPhone').value = '';
+    document.getElementById('receiptDetails').value = '';
+    document.getElementById('receiptTotal').value = '';
 }
 
 // Test function for debugging
@@ -690,7 +769,7 @@ function testAddProduct() {
     openProductModal();
 }
 
-// Test Functions
+// Test function for debugging
 function testOrderSave() {
     const testOrder = {
         id: 'TEST' + Date.now(),
