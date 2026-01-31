@@ -629,29 +629,67 @@
                 <section class="content-section" id="settings">
                     <div class="section-header">
                         <h2 class="section-title">Settings</h2>
-                        <p class="section-subtitle">Configure your store</p>
+                        <p class="section-subtitle">Configure your store and admin account</p>
                     </div>
                     
-                    <div class="data-table">
+                    <!-- General Settings -->
+                    <div class="data-table" style="margin-bottom: 30px;">
                         <div class="table-header">
                             <h3 class="table-title">General Settings</h3>
                         </div>
                         <div style="padding: 30px;">
                             <div class="form-group">
                                 <label class="form-label">Store Name</label>
-                                <input type="text" class="form-control" value="SRIDEVI HOME FOODS">
+                                <input type="text" class="form-control" id="storeName" value="SRIDEVI HOME FOODS">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" value="admin@sridevihomefoods.com">
+                                <input type="email" class="form-control" id="storeEmail" value="admin@sridevihomefoods.com">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Phone</label>
-                                <input type="tel" class="form-control" value="+91 98664 06807">
+                                <input type="tel" class="form-control" id="storePhone" value="+91 98664 06807">
                             </div>
                             <button class="btn btn-success" onclick="saveSettings()">
                                 <i class="fas fa-save"></i> Save Settings
                             </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Account Settings -->
+                    <div class="data-table">
+                        <div class="table-header">
+                            <h3 class="table-title">Admin Account Settings</h3>
+                        </div>
+                        <div style="padding: 30px;">
+                            <div class="form-group">
+                                <label class="form-label">Current Username</label>
+                                <input type="text" class="form-control" id="currentUsername" value="admin" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">New Username</label>
+                                <input type="text" class="form-control" id="newUsername" placeholder="Enter new username">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Current Password</label>
+                                <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn btn-success" onclick="updateAdminCredentials()">
+                                    <i class="fas fa-user-shield"></i> Update Admin Credentials
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetAdminForm()">
+                                    <i class="fas fa-undo"></i> Reset
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -794,7 +832,85 @@
         }
         
         function saveSettings() {
+            const storeName = document.getElementById('storeName').value;
+            const storeEmail = document.getElementById('storeEmail').value;
+            const storePhone = document.getElementById('storePhone').value;
+            
+            // Save to localStorage
+            localStorage.setItem('storeName', storeName);
+            localStorage.setItem('storeEmail', storeEmail);
+            localStorage.setItem('storePhone', storePhone);
+            
             showNotification('Settings saved successfully!', 'success');
+        }
+        
+        function updateAdminCredentials() {
+            const currentUsername = document.getElementById('currentUsername').value;
+            const newUsername = document.getElementById('newUsername').value.trim();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Get current credentials from localStorage
+            const storedUsername = localStorage.getItem('adminUsername') || 'admin';
+            const storedPassword = localStorage.getItem('adminPassword') || 'admin123';
+            
+            // Validate current password
+            if (currentPassword !== storedPassword) {
+                showNotification('Current password is incorrect!', 'error');
+                return;
+            }
+            
+            // Validate new username
+            if (newUsername && newUsername.length < 3) {
+                showNotification('New username must be at least 3 characters long!', 'error');
+                return;
+            }
+            
+            // Validate new password
+            if (newPassword && newPassword.length < 6) {
+                showNotification('New password must be at least 6 characters long!', 'error');
+                return;
+            }
+            
+            // Validate password confirmation
+            if (newPassword && newPassword !== confirmPassword) {
+                showNotification('New passwords do not match!', 'error');
+                return;
+            }
+            
+            // Check if at least one field is being updated
+            if (!newUsername && !newPassword) {
+                showNotification('Please enter a new username or password to update!', 'error');
+                return;
+            }
+            
+            // Update credentials
+            if (newUsername) {
+                localStorage.setItem('adminUsername', newUsername);
+                document.getElementById('currentUsername').value = newUsername;
+                showNotification('Username updated successfully!', 'success');
+            }
+            
+            if (newPassword) {
+                localStorage.setItem('adminPassword', newPassword);
+                showNotification('Password updated successfully!', 'success');
+            }
+            
+            // Clear form
+            resetAdminForm();
+            
+            // Show success message
+            if (newUsername && newPassword) {
+                showNotification('Admin credentials updated successfully!', 'success');
+            }
+        }
+        
+        function resetAdminForm() {
+            document.getElementById('newUsername').value = '';
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
         }
         
         function logout() {

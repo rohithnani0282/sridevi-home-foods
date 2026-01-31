@@ -345,12 +345,12 @@
         </div>
     </div>
     
-    <!-- Login Script -->
+    // Login Script -->
     <script>
-        // Admin credentials
-        const adminCredentials = {
-            username: 'admin',
-            password: 'admin123'
+        // Admin credentials - will be updated from localStorage if available
+        let adminCredentials = {
+            username: localStorage.getItem('adminUsername') || 'admin',
+            password: localStorage.getItem('adminPassword') || 'admin123'
         };
         
         // DOM elements
@@ -360,6 +360,17 @@
         const loginBtn = document.getElementById('loginBtn');
         const usernameError = document.getElementById('usernameError');
         const passwordError = document.getElementById('passwordError');
+        
+        // Update displayed credentials
+        function updateDisplayedCredentials() {
+            const credentialsDiv = document.querySelector('.login-credentials');
+            if (credentialsDiv) {
+                credentialsDiv.innerHTML = `
+                    Username: <code>${adminCredentials.username}</code><br>
+                    Password: <code>${adminCredentials.password}</code>
+                `;
+            }
+        }
         
         // Form validation
         function validateForm() {
@@ -535,6 +546,9 @@
         
         // Check if already logged in
         document.addEventListener('DOMContentLoaded', () => {
+            // Update displayed credentials
+            updateDisplayedCredentials();
+            
             const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
             const loginTime = localStorage.getItem('adminLoginTime');
             
