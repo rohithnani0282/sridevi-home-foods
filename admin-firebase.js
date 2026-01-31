@@ -80,13 +80,18 @@ function checkAuthentication() {
 
 // Logout function
 function logout() {
-    console.log('🚪 Logging out...');
-    localStorage.removeItem('adminLoggedIn');
-    localStorage.removeItem('adminLoginTime');
-    showNotification('Logged out successfully', 'success');
-    setTimeout(() => {
+    console.log('🚪 Logout function called');
+    try {
+        localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminLoginTime');
+        showNotification('Logged out successfully', 'success');
+        setTimeout(() => {
+            window.location.href = 'admin-login.html';
+        }, 1000);
+    } catch (error) {
+        console.error('❌ Logout error:', error);
         window.location.href = 'admin-login.html';
-    }, 1000);
+    }
 }
 
 async function initializeAdmin() {
@@ -1203,10 +1208,70 @@ window.addEventListener('beforeunload', () => {
 // Export for global access
 window.adminFirebase = {
     saveCategory,
+    savePayment,
+    logout,
+    showSection,
+    openProductModal,
+    closeProductModal,
     saveProduct,
-    deleteCategory,
-    deleteProduct,
-    testOrderSave,
-    updateOrderStatus,
-    isFirebaseAvailable: () => isFirebaseAvailable
+    openCategoryModal,
+    openPaymentModal,
+    refreshOrders,
+    showNotification
+};
+
+// Global function availability check
+console.log('🔍 Checking global function availability:');
+console.log('logout:', typeof window.logout);
+console.log('showSection:', typeof window.showSection);
+console.log('openProductModal:', typeof window.openProductModal);
+console.log('openCategoryModal:', typeof window.openCategoryModal);
+console.log('openPaymentModal:', typeof window.openPaymentModal);
+console.log('refreshOrders:', typeof window.refreshOrders);
+
+// Make functions globally available
+window.logout = logout;
+window.showSection = showSection;
+window.openProductModal = openProductModal;
+window.openCategoryModal = openCategoryModal;
+window.openPaymentModal = openPaymentModal;
+window.refreshOrders = refreshOrders;
+window.saveProduct = saveProduct;
+window.closeProductModal = closeProductModal;
+
+// Test function for debugging
+window.testFunctions = function() {
+    console.log('🧪 Testing all admin functions...');
+    
+    const tests = [
+        { name: 'logout', func: window.logout },
+        { name: 'showSection', func: window.showSection },
+        { name: 'openProductModal', func: window.openProductModal },
+        { name: 'openCategoryModal', func: window.openCategoryModal },
+        { name: 'openPaymentModal', func: window.openPaymentModal },
+        { name: 'refreshOrders', func: window.refreshOrders },
+        { name: 'saveProduct', func: window.saveProduct },
+        { name: 'closeProductModal', func: window.closeProductModal }
+    ];
+    
+    let passed = 0;
+    let failed = 0;
+    
+    tests.forEach(test => {
+        if (typeof test.func === 'function') {
+            console.log(`✅ ${test.name} is available`);
+            passed++;
+        } else {
+            console.error(`❌ ${test.name} is NOT available`);
+            failed++;
+        }
+    });
+    
+    console.log(`🧪 Test Results: ${passed} passed, ${failed} failed`);
+    
+    if (failed === 0) {
+        showNotification('All functions are working!', 'success');
+    } else {
+        showNotification(`${failed} functions are not working`, 'error');
+    }
 };
