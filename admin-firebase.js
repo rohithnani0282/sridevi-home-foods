@@ -619,9 +619,19 @@ async function updateOrderStatus(orderId, newStatus) {
 
 // Modal Functions
 function openProductModal(productId = null, categoryId = null) {
+    console.log('🔧 openProductModal called with:', { productId, categoryId });
+    
     const modal = document.getElementById('productModal');
     const form = document.getElementById('productForm');
     const modalTitle = document.getElementById('modalTitle');
+    
+    if (!modal) {
+        console.error('❌ Product modal not found!');
+        alert('Error: Product modal not found!');
+        return;
+    }
+    
+    console.log('✅ Product modal found:', modal);
     
     // Reset form
     form.reset();
@@ -660,11 +670,19 @@ function openProductModal(productId = null, categoryId = null) {
     }
     
     modal.style.display = 'block';
+    console.log('✅ Modal should be visible now');
 }
 
 function closeProductModal() {
     const modal = document.getElementById('productModal');
     modal.style.display = 'none';
+}
+
+// Test function for debugging
+function testAddProduct() {
+    console.log('🧪 Test Add Product button clicked!');
+    alert('Test function called! Now trying to open modal...');
+    openProductModal();
 }
 
 // Test Functions
