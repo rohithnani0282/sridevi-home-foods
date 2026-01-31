@@ -1001,6 +1001,10 @@
                                 <i class="fas fa-bug"></i>
                                 Test Functions
                             </button>
+                            <button class="btn btn-secondary" onclick="simpleTest()">
+                                <i class="fas fa-check"></i>
+                                Simple Test
+                            </button>
                             <button class="btn btn-primary" onclick="openProductModal()">
                                 <i class="fas fa-plus"></i>
                                 Add Product
@@ -1122,6 +1126,34 @@
 <!-- Firebase Configuration -->
 <script src="firebase-config.js"></script>
 <script src="admin-firebase.js"></script>
+
+<!-- Debug Script -->
+<script>
+    // Simple test function
+    function simpleTest() {
+        console.log('🧪 Simple test button clicked!');
+        alert('Simple test button is working!');
+    }
+    
+    // Simple test to check if functions are available
+    setTimeout(() => {
+        console.log('🔍 Debug: Checking if functions are available after page load');
+        console.log('window.logout:', typeof window.logout);
+        console.log('window.showSection:', typeof window.showSection);
+        console.log('window.openProductModal:', typeof window.openProductModal);
+        
+        // Test basic functionality
+        if (typeof window.showSection === 'function') {
+            console.log('✅ showSection is available, testing...');
+            try {
+                window.showSection('dashboard');
+                console.log('✅ showSection test passed');
+            } catch (error) {
+                console.error('❌ showSection test failed:', error);
+            }
+        }
+    }, 2000);
+</script>
 
 </body>
 </html>
