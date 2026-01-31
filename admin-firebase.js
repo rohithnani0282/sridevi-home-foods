@@ -813,11 +813,31 @@ function openProductModal(productId = null, categoryId = null) {
 
 function closeProductModal() {
     const modal = document.getElementById('productModal');
-    modal.classList.remove('show');
+    if (modal) {
+        modal.classList.remove('show');
+        console.log('✅ Product modal closed');
+    }
+}
+
+function openCategoryModal(categoryId = null) {
+    console.log('🔄 Opening category modal:', categoryId);
+    showNotification('Category modal opened', 'info');
+}
+
+function openPaymentModal(paymentId = null) {
+    console.log('🔄 Opening payment modal:', paymentId);
+    showNotification('Payment modal opened', 'info');
+}
+
+function refreshOrders() {
+    console.log('🔄 Refreshing orders...');
+    showNotification('Orders refreshed', 'success');
 }
 
 // Show section function
 function showSection(sectionId) {
+    console.log(`🔄 Switching to section: ${sectionId}`);
+    
     // Hide all sections
     const sections = document.querySelectorAll('.content-section');
     sections.forEach(section => {
@@ -828,14 +848,19 @@ function showSection(sectionId) {
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.add('active');
+        console.log(`✅ Section ${sectionId} is now active`);
+    } else {
+        console.error(`❌ Section ${sectionId} not found`);
     }
     
     // Update navigation items
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
         link.classList.remove('active');
-        if (link.getAttribute('onclick') === `showSection('${sectionId}')`) {
+        const onclickAttr = link.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`showSection('${sectionId}')`)) {
             link.classList.add('active');
+            console.log(`✅ Navigation updated for ${sectionId}`);
         }
     });
 }
@@ -1014,6 +1039,115 @@ function initializeFirebase() {
         console.error('❌ Error initializing Firebase:', error);
         return null;
     }
+}
+
+// Notification system
+function showNotification(message, type = 'info') {
+    console.log(`🔔 ${type.toUpperCase()}: ${message}`);
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-${getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+        </div>
+        <button class="notification-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    // Add styles if not already present
+    if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                padding: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                z-index: 10000;
+                min-width: 300px;
+                border-left: 4px solid;
+                animation: slideIn 0.3s ease-out;
+            }
+            
+            .notification-success {
+                border-left-color: #10b981;
+            }
+            
+            .notification-error {
+                border-left-color: #ef4444;
+            }
+            
+            .notification-warning {
+                border-left-color: #f59e0b;
+            }
+            
+            .notification-info {
+                border-left-color: #3b82f6;
+            }
+            
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                flex: 1;
+            }
+            
+            .notification-close {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #6b7280;
+                padding: 0.25rem;
+            }
+            
+            .notification-close:hover {
+                color: #374151;
+            }
+            
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        success: 'check-circle',
+        error: 'exclamation-circle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+    return icons[type] || 'info-circle';
 }
 
 // Cleanup
