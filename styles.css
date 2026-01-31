@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -1059,40 +1058,41 @@ html {
 ::-webkit-scrollbar-thumb:hover {
     background: #e55a2b;
 }
-=======
-body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-#homeFoodsList .card, #picklesList .card { cursor: default; }
-.qty-input { width: 80px; }
-.card .price { font-weight: 600; color: #0d6efd; } /* blue price */
-.product-img { width: 120px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid #e9ecef; }
 
-/* Admin Panel */
-.admin-product-row { background-color: #fff; }
-.admin-product-row .form-label-sm { font-size: 0.75rem; font-weight: 600; }
-.admin-product-row .form-control-sm, .admin-product-row .form-select-sm { font-size: 0.875rem; }
-
-@media (max-width: 576px) {
-  .product-img { width: 100px; height: 70px; }
+/* WhatsApp Button Styles */
+.btn-whatsapp {
+    background: #25d366;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid #25d366;
 }
 
-/* Small brand image used in navbar */
-.brand-img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+.btn-whatsapp:hover {
+    background: #128c7e;
+    border-color: #128c7e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+}
 
-/* Header banner background (uses images/banner.jpeg) */
-.header-banner {
-  position: relative;
-  background-color: #0d6efd; /* fallback */
-  background-image: url('images/banner.jpeg');
-  background-size: cover;
-  background-position: center;
-  color: white;
+.btn-whatsapp i {
+    font-size: 18px;
 }
-.header-banner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(13,110,253,0.45);
-  z-index: 0;
+
+/* Responsive WhatsApp Button */
+@media (max-width: 768px) {
+    .btn-whatsapp {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .btn-whatsapp i {
+        font-size: 16px;
+    }
 }
-.header-banner .container { position: relative; z-index: 1; }
->>>>>>> 1c20fc364c815c175519b5fb082260c8dc4704af
