@@ -1126,49 +1126,504 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="styles.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css">
+  
+  <style>
+    .admin-container {
+        display: flex;
+        height: 100vh;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .sidebar {
+        width: 250px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        overflow-y: auto;
+    }
+    
+    .sidebar-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .sidebar-logo {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .sidebar-logo i {
+        margin-right: 10px;
+        font-size: 24px;
+    }
+    
+    .sidebar-menu {
+        padding: 20px 0;
+    }
+    
+    .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    
+    .menu-item:hover {
+        background: rgba(255,255,255,0.1);
+    }
+    
+    .menu-item.active {
+        background: rgba(255,255,255,0.2);
+        border-left: 4px solid #fff;
+    }
+    
+    .menu-item i {
+        margin-right: 10px;
+        width: 20px;
+    }
+    
+    .main-content {
+        flex: 1;
+        padding: 30px;
+        background: #f8f9fa;
+        overflow-y: auto;
+    }
+    
+    .content-section {
+        display: none;
+    }
+    
+    .content-section.active {
+        display: block;
+    }
+    
+    .content-section h2 {
+        margin-bottom: 30px;
+        color: #333;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .stat-card i {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+    
+    .stat-card h3 {
+        font-size: 32px;
+        margin: 10px 0;
+        color: #333;
+    }
+    
+    .stat-card p {
+        color: #666;
+        margin: 0;
+    }
+    
+    .data-table {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .table-header h3 {
+        margin: 0;
+        color: #333;
+    }
+    
+    .btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn:hover {
+        background: #0056b3;
+    }
+    
+    .table-content {
+        overflow-x: auto;
+    }
+    
+    .table-content table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .table-content th,
+    .table-content td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .table-content th {
+        background: #f8f9fa;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .right-sidebar {
+        width: 300px;
+        background: white;
+        border-left: 1px solid #eee;
+        overflow-y: auto;
+    }
+    
+    .right-sidebar-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .right-sidebar-header h3 {
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+    
+    .right-sidebar-content {
+        padding: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+    
+    .btn-success {
+        background: #28a745;
+    }
+    
+    .btn-success:hover {
+        background: #1e7e34;
+    }
+    
+    .btn-block {
+        width: 100%;
+    }
+    
+    .settings-grid {
+        display: grid;
+        gap: 20px;
+    }
+    
+    .setting-card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .setting-card h3 {
+        margin: 0 0 20px 0;
+        color: #333;
+    }
+    
+    @media (max-width: 768px) {
+        .admin-container {
+            flex-direction: column;
+        }
+        
+        .sidebar {
+            width: 100%;
+            height: auto;
+        }
+        
+        .right-sidebar {
+            width: 100%;
+        }
+    }
+  </style>
 </head>
 <body>
 
-<main class="container my-5">
-  <!-- Admin Panel Only -->
-  <div id="adminPanel" class="card shadow-sm mb-5" style="background-color: #f8f9fa;">
-    <div class="card-body">
-      <h5 class="card-title">Admin Panel - Manage Menu</h5>
-      <p class="text-muted small">Edit products, prices, and descriptions. Changes are saved automatically to your browser.</p>
-        <div id="adminProductList"></div>
-        <div class="mt-3">
-          <button id="addProductBtn" class="btn btn-sm btn-primary">Add New Product</button>
+<div class="admin-container">
+    <!-- Left Sidebar - Admin Dashboard -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-utensils"></i>
+                <span>SRIDEVI HOME FOODS</span>
+            </div>
         </div>
-
-        <hr class="my-4">
-        <h6>Send Payment Receipt</h6>
-        <p class="text-muted small">Send a payment confirmation receipt to a customer after payment is received.</p>
-        <div class="row g-2">
-          <div class="col-md-6">
-            <input id="receiptName" type="text" class="form-control form-control-sm" placeholder="Customer Name">
-          </div>
-          <div class="col-md-6">
-            <input id="receiptPhone" type="text" class="form-control form-control-sm" placeholder="Customer Phone">
-          </div>
-          <div class="col-12">
-            <textarea id="receiptDetails" class="form-control form-control-sm" rows="3" placeholder="Order details, e.g., 2kg Rice, 1 Mango Pickle"></textarea>
-          </div>
-          <div class="col-md-6">
-            <input id="receiptTotal" type="number" class="form-control form-control-sm" placeholder="Total Amount (₹)">
-          </div>
-          <div class="col-md-6">
-            <select id="receiptPayment" class="form-select form-select-sm">
-              <option>Cash on delivery</option>
-              <option>UPI</option>
-              <option>QR Code</option>
-            </select>
-          </div>
-          <div class="col-12">
-            <button id="sendReceiptBtn" class="btn btn-sm btn-success">Send Receipt via WhatsApp</button>
-          </div>
+        <div class="sidebar-menu">
+            <div class="menu-item active" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="menu-item" onclick="showSection('categories')">
+                <i class="fas fa-tags"></i>
+                <span>Categories</span>
+            </div>
+            <div class="menu-item" onclick="showSection('recipes')">
+                <i class="fas fa-book"></i>
+                <span>Recipes</span>
+            </div>
+            <div class="menu-item" onclick="showSection('orders')">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </div>
+            <div class="menu-item" onclick="showSection('payments')">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment Methods</span>
+            </div>
+            <div class="menu-item" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
         </div>
     </div>
-  </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div class="content-section active" id="dashboard">
+            <h2>Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-tags" style="color: #3498db;"></i>
+                    <h3 id="totalCategories">0</h3>
+                    <p>Total Categories</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-book" style="color: #e74c3c;"></i>
+                    <h3 id="totalRecipes">0</h3>
+                    <p>Total Recipes</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-shopping-cart" style="color: #f39c12;"></i>
+                    <h3 id="totalOrders">0</h3>
+                    <p>Total Orders</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-credit-card" style="color: #27ae60;"></i>
+                    <h3 id="totalPayments">0</h3>
+                    <p>Payment Methods</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="content-section" id="categories">
+            <h2>Categories</h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>Category Management</h3>
+                    <button class="btn" onclick="openCategoryModal()">Add Category</button>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTable">
+                            <!-- Categories will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipes Section -->
+        <div class="content-section" id="recipes">
+            <h2>Recipes</h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>Recipe Management</h3>
+                    <div>
+                        <button class="btn" onclick="testAddProduct()">Test Add Product</button>
+                        <button class="btn" onclick="openProductModal()">Add Product</button>
+                    </div>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTable">
+                            <!-- Products will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="content-section" id="orders">
+            <h2>Orders Management</h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>Customer Orders</h3>
+                    <div>
+                        <button class="btn" onclick="testOrderSave()">Add Test Order</button>
+                        <button class="btn" onclick="refreshOrders()">Refresh Orders</button>
+                    </div>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTable">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods Section -->
+        <div class="content-section" id="payments">
+            <h2>Payment Methods</h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>Payment Method Management</h3>
+                    <button class="btn" onclick="openPaymentModal()">Add Payment Method</button>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentMethodsTable">
+                            <!-- Payment methods will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="content-section" id="settings">
+            <h2>Settings</h2>
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <h3>General Settings</h3>
+                    <div class="form-group">
+                        <label>Store Name</label>
+                        <input type="text" value="SRIDEVI HOME FOODS" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Phone</label>
+                        <input type="text" value="+91 98664 06807" class="form-control">
+                    </div>
+                    <button class="btn">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar - Payment Receipt -->
+    <div class="right-sidebar" id="rightSidebar">
+        <div class="right-sidebar-header">
+            <h3>Send Payment Receipt</h3>
+            <p class="text-muted small">Send payment confirmation to customers</p>
+        </div>
+        <div class="right-sidebar-content">
+            <div class="form-group">
+                <label for="receiptName">Customer Name</label>
+                <input id="receiptName" type="text" class="form-control" placeholder="Enter customer name">
+            </div>
+            <div class="form-group">
+                <label for="receiptPhone">Customer Phone</label>
+                <input id="receiptPhone" type="text" class="form-control" placeholder="Enter phone number">
+            </div>
+            <div class="form-group">
+                <label for="receiptDetails">Order Details</label>
+                <textarea id="receiptDetails" class="form-control" rows="3" placeholder="Order details, e.g., 2kg Rice, 1 Mango Pickle"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="receiptTotal">Total Amount (₹)</label>
+                <input id="receiptTotal" type="number" class="form-control" placeholder="Enter total amount">
+            </div>
+            <div class="form-group">
+                <label for="receiptPayment">Payment Method</label>
+                <select id="receiptPayment" class="form-control">
+                    <option>Cash on delivery</option>
+                    <option>UPI</option>
+                    <option>QR Code</option>
+                </select>
+            </div>
+            <button id="sendReceiptBtn" class="btn btn-success btn-block">Send Receipt via WhatsApp</button>
+        </div>
+    </div>
+</div>
 </main>
 
 <!-- Product Modal -->
