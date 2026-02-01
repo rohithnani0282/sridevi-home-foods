@@ -1,7 +1,22 @@
 // Cart Management System
 class CartManager {
     constructor() {
-        this.cart = JSON.parse(localStorage.getItem('pindiCart')) || [];
+        console.log('🛒 CartManager constructor called');
+        const savedCart = localStorage.getItem('srideviCart');
+        console.log('📦 Raw cart data from localStorage:', savedCart);
+        
+        if (savedCart) {
+            try {
+                this.cart = JSON.parse(savedCart);
+                console.log('✅ Cart loaded successfully:', this.cart);
+            } catch (e) {
+                console.error('❌ Error parsing cart data:', e);
+                this.cart = [];
+            }
+        } else {
+            console.log('📦 No cart data found in localStorage');
+            this.cart = [];
+        }
         this.init();
     }
 
@@ -71,6 +86,8 @@ class CartManager {
             if (newQuantity <= 0) {
                 this.removeFromCart(itemId);
             } else {
+                // Update both qty and quantity for compatibility
+                item.qty = newQuantity;
                 item.quantity = newQuantity;
                 this.saveCart();
                 this.renderCart();
@@ -83,7 +100,11 @@ class CartManager {
     }
 
     calculateSubtotal() {
-        return this.calculateTotal();
+        return this.cart.reduce((total, item) => {
+            const price = item.type === 'home' ? item.unitPrice : item.unitPrice;
+            const quantity = item.qty || item.quantity;
+            return total + (price * quantity);
+        }, 0);
     }
 
     calculateDelivery() {
@@ -95,11 +116,11 @@ class CartManager {
     }
 
     saveCart() {
-        localStorage.setItem('pindiCart', JSON.stringify(this.cart));
+        localStorage.setItem('srideviCart', JSON.stringify(this.cart));
     }
 
     updateCartCount() {
-        const count = this.cart.reduce((total, item) => total + item.quantity, 0);
+        const count = this.cart.reduce((total, item) => total + (item.qty || item.quantity), 0);
         const cartCountElements = document.querySelectorAll('#cartCount');
         cartCountElements.forEach(element => {
             element.textContent = count;
@@ -115,7 +136,7 @@ class CartManager {
                     <i class="fas fa-shopping-cart"></i>
                     <h2>Your cart is empty</h2>
                     <p>Looks like you haven't added any delicious items yet!</p>
-                    <a href="index.html#recipes" class="back-to-shop">
+                    <a href="index.html#menu" class="back-to-shop">
                         <i class="fas fa-arrow-left"></i> Continue Shopping
                     </a>
                 </div>
@@ -123,52 +144,63 @@ class CartManager {
             return;
         }
 
-        const cartItemsHTML = this.cart.map(item => `
+        const cartItemsHTML = this.cart.map(item => {
+            // Handle both old and new data structures
+            const price = item.type === 'home' ? item.unitPrice : item.unitPrice;
+            const quantity = item.qty || item.quantity;
+            const itemTotal = price * quantity;
+            
+            return `
             <div class="cart-item">
                 <div class="item-image">
                     <i class="fas fa-utensils"></i>
                 </div>
                 <div class="item-details">
                     <div class="item-name">${item.name}</div>
-                    <div class="item-price">₹${item.price}</div>
+                    <div class="item-price">₹${price} ${item.type === 'home' ? '/kg' : '/jar'}</div>
                     <div class="item-quantity">
                         <div class="quantity-controls">
-                            <button class="quantity-btn" onclick="cartManager.updateQuantity(${item.id}, ${item.quantity - 1})">
+                            <button class="quantity-btn" onclick="cartManager.updateQuantity('${item.id}', ${quantity - 1})">
                                 <i class="fas fa-minus"></i>
                             </button>
-                            <span class="quantity-value">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="cartManager.updateQuantity(${item.id}, ${item.quantity + 1})">
+                            <span class="quantity-value">${quantity}</span>
+                            <button class="quantity-btn" onclick="cartManager.updateQuantity('${item.id}', ${quantity + 1})">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
-                        <div class="item-total">₹${item.price * item.quantity}</div>
+                        <div class="item-total">₹${itemTotal}</div>
                     </div>
                 </div>
-                <button class="remove-item" onclick="cartManager.removeFromCart(${item.id})">
+                <button class="remove-item" onclick="cartManager.removeFromCart('${item.id}')">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
+        const subtotal = this.calculateSubtotal();
+        const delivery = this.calculateDelivery();
+        const total = this.calculateGrandTotal();
+        
         const summaryHTML = `
             <div class="cart-summary">
                 <h3 class="summary-title">Order Summary</h3>
                 <div class="summary-row">
                     <span>Subtotal (${this.cart.length} items)</span>
-                    <span>₹${this.calculateSubtotal()}</span>
+                    <span>₹${subtotal}</span>
                 </div>
                 <div class="summary-row">
                     <span>Delivery Fee</span>
-                    <span>${this.calculateDelivery() === 0 ? 'FREE' : '₹' + this.calculateDelivery()}</span>
+                    <span>${delivery === 0 ? 'FREE' : '₹' + delivery}</span>
                 </div>
                 <div class="summary-row total">
                     <span>Total</span>
-                    <span>₹${this.calculateGrandTotal()}</span>
+                    <span>₹${total}</span>
                 </div>
                 <button class="checkout-btn" onclick="proceedToCheckout()">
                     <i class="fas fa-credit-card"></i> Proceed to Checkout
                 </button>
-                <a href="index.html#recipes" class="continue-shopping">
+                <a href="index.html#menu" class="continue-shopping">
                     <i class="fas fa-arrow-left"></i> Continue Shopping
                 </a>
             </div>
@@ -285,3 +317,71 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Checkout functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle checkout form submission
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get cart data
+            const cartData = JSON.parse(localStorage.getItem('srideviCart')) || [];
+            if (cartData.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            // Get form data
+            const formData = {
+                customerName: document.getElementById('customerName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                customerAddress: document.getElementById('customerAddress').value,
+                paymentMethod: document.getElementById('paymentMethod').value,
+                orderNotes: document.getElementById('orderNotes').value,
+                items: cartData,
+                total: cartData.reduce((sum, item) => sum + (item.qty * item.unitPrice), 0),
+                date: new Date().toISOString().split('T')[0],
+                status: 'pending'
+            };
+            
+            // Get existing orders from localStorage
+            const existingOrders = JSON.parse(localStorage.getItem('orders')) || [];
+            
+            // Create new order
+            const newOrder = {
+                id: existingOrders.length > 0 ? Math.max(...existingOrders.map(o => o.id)) + 1 : 1,
+                ...formData
+            };
+            
+            // Add to orders
+            existingOrders.push(newOrder);
+            
+            // Save to localStorage
+            localStorage.setItem('orders', JSON.stringify(existingOrders));
+            
+            // Clear cart
+            localStorage.removeItem('srideviCart');
+            cartManager.cart = [];
+            cartManager.updateCartCount();
+            cartManager.renderCart();
+            
+            // Show success message
+            alert('Order placed successfully! Your order ID is #' + newOrder.id + '. We will contact you soon.');
+            
+            // Redirect to thank you page or back to main site
+            window.location.href = 'index.html';
+        });
+    }
+    
+    // Add event listeners to "Add to Cart" buttons
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const recipeName = this.getAttribute('data-recipe');
+            const price = parseInt(this.getAttribute('data-price'));
+            cartManager.addToCart(recipeName, price);
+        });
+    });
+});

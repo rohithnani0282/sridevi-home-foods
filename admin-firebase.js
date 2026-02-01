@@ -1238,6 +1238,9 @@ window.openPaymentModal = openPaymentModal;
 window.refreshOrders = refreshOrders;
 window.saveProduct = saveProduct;
 window.closeProductModal = closeProductModal;
+window.renderProducts = renderProducts;
+window.editProduct = editProduct;
+window.deleteProduct = deleteProduct;
 
 // Test function for debugging
 window.testFunctions = function() {
@@ -1251,7 +1254,10 @@ window.testFunctions = function() {
         { name: 'openPaymentModal', func: window.openPaymentModal },
         { name: 'refreshOrders', func: window.refreshOrders },
         { name: 'saveProduct', func: window.saveProduct },
-        { name: 'closeProductModal', func: window.closeProductModal }
+        { name: 'closeProductModal', func: window.closeProductModal },
+        { name: 'renderProducts', func: window.renderProducts },
+        { name: 'editProduct', func: window.editProduct },
+        { name: 'deleteProduct', func: window.deleteProduct }
     ];
     
     let passed = 0;

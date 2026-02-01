@@ -484,87 +484,8 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Sona Masoori Rice</td>
-                                        <td>Home Foods</td>
-                                        <td>₹320/kg</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(1)">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Mixed Vegetables</td>
-                                        <td>Home Foods</td>
-                                        <td>₹350/kg</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(2)">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Sakinalu</td>
-                                        <td>Home Foods</td>
-                                        <td>₹300/kg</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(3)">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Madugulu</td>
-                                        <td>Home Foods</td>
-                                        <td>₹300/kg</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(4)">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Laddus</td>
-                                        <td>Home Foods</td>
-                                        <td>₹400/kg</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(5)">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Mango Pickle (veg)</td>
-                                        <td>Pickles</td>
-                                        <td>₹150/jar</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(6)">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Lime Pickle (veg)</td>
-                                        <td>Pickles</td>
-                                        <td>₹120/jar</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(7)">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Chicken Pickle (non-veg)</td>
-                                        <td>Pickles</td>
-                                        <td>₹220/jar</td>
-                                        <td><span style="color: #27ae60;">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" onclick="editProduct(8)">Edit</button>
-                                        </td>
-                                    </tr>
+                                <tbody id="productsTableBody">
+                                    <!-- Products will be dynamically loaded here -->
                                 </tbody>
                             </table>
                         </div>
@@ -636,16 +557,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Snacks</td>
-                                    <td>Traditional snacks</td>
-                                    <td>12</td>
-                                    <td>
-                                        <button class="btn btn-secondary" onclick="editCategory(1)">Edit</button>
-                                    </td>
-                                </tr>
+                            <tbody id="categoriesTableBody">
+                                <!-- Categories will be dynamically loaded here -->
                             </tbody>
                         </table>
                     </div>
@@ -675,16 +588,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Cash on Delivery</td>
-                                    <td>COD</td>
-                                    <td><span style="color: #27ae60;">Active</span></td>
-                                    <td>
-                                        <button class="btn btn-secondary" onclick="editPayment(1)">Edit</button>
-                                    </td>
-                                </tr>
+                            <tbody id="paymentsTableBody">
+                                <!-- Payment methods will be dynamically loaded here -->
                             </tbody>
                         </table>
                     </div>
@@ -755,43 +660,151 @@
                                     <i class="fas fa-undo"></i> Reset
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                </section>
             </div>
         </main>
-    </div>
+                <!-- Category Modal -->
+                <div class="modal" id="categoryModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="categoryModalTitle">Add Category</h3>
+                            <button class="close-btn" onclick="closeCategoryModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="categoryForm">
+                                <div class="form-group">
+                                    <label for="categoryName">Category Name</label>
+                                    <input type="text" id="categoryName" name="categoryName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoryDescription">Description</label>
+                                    <textarea id="categoryDescription" name="categoryDescription" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoryStatus">Status</label>
+                                    <select id="categoryStatus" name="categoryStatus">
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Cancel</button>
+                            <button type="button" class="btn btn-success" onclick="saveCategory()">Save Category</button>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Product Modal -->
+                <!-- Payment Modal -->
+                <div class="modal" id="paymentModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="paymentModalTitle">Add Payment Method</h3>
+                            <button class="close-btn" onclick="closePaymentModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="paymentForm">
+                                <div class="form-group">
+                                    <label for="paymentName">Payment Method Name</label>
+                                    <input type="text" id="paymentName" name="paymentName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentType">Type</label>
+                                    <select id="paymentType" name="paymentType">
+                                        <option value="COD">Cash on Delivery</option>
+                                        <option value="UPI">UPI</option>
+                                        <option value="Card">Credit/Debit Card</option>
+                                        <option value="NetBanking">Net Banking</option>
+                                        <option value="Wallet">Wallet</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentDetails">Payment Details</label>
+                                    <textarea id="paymentDetails" name="paymentDetails" rows="3" placeholder="Enter payment details like UPI ID, bank details, etc."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentStatus">Status</label>
+                                    <select id="paymentStatus" name="paymentStatus">
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closePaymentModal()">Cancel</button>
+                            <button type="button" class="btn btn-success" onclick="savePayment()">Save Payment Method</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Modal -->
+                <div class="modal" id="orderModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Order Details</h3>
+                            <button class="close-btn" onclick="closeOrderModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="orderDetails">
+                                <!-- Order details will be populated here -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeOrderModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
     <div id="productModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Add Product</h3>
+                <h3 class="modal-title" id="productModalTitle">Add Product</h3>
+                <button class="close-btn" onclick="closeProductModal()">&times;</button>
             </div>
-            <div class="form-group">
-                <label class="form-label">Product Name</label>
-                <input type="text" class="form-control" id="productName" placeholder="Enter product name">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Category</label>
-                <select class="form-control" id="productCategory">
-                    <option value="">Select category</option>
-                    <option value="snacks">Snacks</option>
-                    <option value="sweets">Sweets</option>
-                    <option value="pickles">Pickles</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Price</label>
-                <input type="number" class="form-control" id="productPrice" placeholder="Enter price">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" id="productDescription" placeholder="Enter description"></textarea>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="form-group">
+                        <label class="form-label">Product Name *</label>
+                        <input type="text" class="form-control" id="productName" placeholder="Enter product name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select class="form-control" id="productCategory" required>
+                            <option value="">Select category</option>
+                            <option value="home">Home Foods</option>
+                            <option value="pickle">Pickles</option>
+                            <option value="sweets">Sweets</option>
+                            <option value="snacks">Snacks</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price *</label>
+                        <input type="number" class="form-control" id="productPrice" placeholder="Enter price" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description *</label>
+                        <textarea class="form-control" id="productDescription" placeholder="Enter description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="productStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Unit Type</label>
+                        <select class="form-control" id="productUnit">
+                            <option value="kg">Per kg</option>
+                            <option value="jar">Per jar</option>
+                            <option value="piece">Per piece</option>
+                        </select>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
-                <button class="btn btn-success" onclick="saveProduct()">Save Product</button>
+                <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="saveProduct()">Save Product</button>
             </div>
         </div>
     </div>
@@ -845,130 +858,513 @@
             document.getElementById('productModal').classList.remove('show');
         }
         
-        function saveProduct() {
-            console.log('Saving product');
-            const name = document.getElementById('productName').value;
-            const category = document.getElementById('productCategory').value;
-            const price = document.getElementById('productPrice').value;
-            const description = document.getElementById('productDescription').value;
-            
-            if (!name || !category || !price) {
-                showNotification('Please fill in all required fields', 'error');
-                return;
+        // Product Management
+        let products = {
+            'home': [
+                { id: 1, name: 'Sona Masoori Rice', category: 'Home Foods', pricePerKg: 320, desc: 'Aromatic everyday rice', type: 'home', status: 'active', unit: 'kg' },
+                { id: 2, name: 'Mixed Vegetables', category: 'Home Foods', pricePerKg: 350, desc: 'Seasonal vegetables, home-style', type: 'home', status: 'active', unit: 'kg' },
+                { id: 3, name: 'Sakinalu', category: 'Home Foods', pricePerKg: 300, desc: 'Crispy sesame rice snack, traditional', type: 'home', status: 'active', unit: 'kg' },
+                { id: 4, name: 'Madugulu', category: 'Home Foods', pricePerKg: 300, desc: 'Steamed rice dumplings, soft and fluffy', type: 'home', status: 'active', unit: 'kg' },
+                { id: 5, name: 'Laddus', category: 'Home Foods', pricePerKg: 400, desc: 'Sweet gram flour laddus, handmade', type: 'home', status: 'active', unit: 'kg' }
+            ],
+            'pickles': [
+                { id: 6, name: 'Mango Pickle (veg)', category: 'Pickles', price: 150, desc: 'Spicy raw mango pickle', type: 'pickle', status: 'active', unit: 'jar' },
+                { id: 7, name: 'Lime Pickle (veg)', category: 'Pickles', price: 120, desc: 'Tangy lime pickle', type: 'pickle', status: 'active', unit: 'jar' },
+                { id: 8, name: 'Chicken Pickle (non-veg)', category: 'Pickles', price: 220, desc: 'Spicy chicken pickle', type: 'pickle', status: 'active', unit: 'jar' }
+            ]
+        };
+
+        // Try to load from localStorage but ensure it's in the correct format
+        try {
+            const savedProducts = JSON.parse(localStorage.getItem('adminMenuItems'));
+            if (savedProducts && typeof savedProducts === 'object') {
+                products = savedProducts;
             }
-            
-            // Save to localStorage to sync with main website
-            const menuItems = {
-                'home-foods': [
-                    { id: 'rice', name: 'Sona Masoori Rice', pricePerKg: 320, desc: 'Aromatic everyday rice', type: 'home' },
-                    { id: 'mixveg', name: 'Mixed Vegetables', pricePerKg: 350, desc: 'Seasonal vegetables, home-style', type: 'home' },
-                    { id: 'sakinalu', name: 'Sakinalu', pricePerKg: 300, desc: 'Crispy sesame rice snack, traditional', type: 'home' },
-                    { id: 'madugulu', name: 'Madugulu', pricePerKg: 300, desc: 'Steamed rice dumplings, soft and fluffy', type: 'home' },
-                    { id: 'laddus', name: 'Laddus', pricePerKg: 400, desc: 'Sweet gram flour laddus, handmade', type: 'home' }
-                ],
-                'pickles': [
-                    { id: 'mango', name: 'Mango Pickle (veg)', price: 150, kind: 'veg', type: 'pickle' },
-                    { id: 'lime', name: 'Lime Pickle (veg)', price: 120, kind: 'veg', type: 'pickle' },
-                    { id: 'chicken', name: 'Chicken Pickle (non-veg)', price: 220, kind: 'non-veg', type: 'pickle' }
-                ]
-            };
-            
-            // Update the item in the data
-            let updated = false;
-            for (let category in menuItems) {
-                const item = menuItems[category].find(item => 
-                    item.name.toLowerCase().includes(name.toLowerCase())
-                );
-                if (item) {
-                    item.name = name;
-                    item.desc = description;
-                    if (item.type === 'home') {
-                        item.pricePerKg = parseFloat(price);
-                    } else {
-                        item.price = parseFloat(price);
-                    }
-                    updated = true;
+        } catch (e) {
+            console.log('Using default products data');
+        }
+
+        // Debug: Log products data
+        console.log('🔍 Products data loaded:', products);
+        console.log('🔍 Products keys:', Object.keys(products));
+        console.log('🔍 Home foods count:', products.home ? products.home.length : 0);
+        console.log('🔍 Pickles count:', products.pickles ? products.pickles.length : 0);
+
+        let currentEditProduct = null;
+
+        function openProductModal() {
+            currentEditProduct = null;
+            document.getElementById('productModalTitle').textContent = 'Add Product';
+            document.getElementById('productName').value = '';
+            document.getElementById('productCategory').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('productStatus').value = 'active';
+            document.getElementById('productUnit').value = 'kg';
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function editProduct(id) {
+            // Find product across all categories
+            let foundProduct = null;
+            for (let category in products) {
+                foundProduct = products[category].find(p => p.id === id);
+                if (foundProduct) {
+                    foundProduct.category = category;
                     break;
                 }
             }
-            
-            if (updated) {
-                // Save to localStorage
-                localStorage.setItem('adminMenuItems', JSON.stringify(menuItems));
+
+            if (foundProduct) {
+                currentEditProduct = foundProduct;
+                document.getElementById('productModalTitle').textContent = 'Edit Product';
+                document.getElementById('productName').value = foundProduct.name;
+                document.getElementById('productCategory').value = foundProduct.type;
+                document.getElementById('productPrice').value = foundProduct.type === 'home' ? foundProduct.pricePerKg : foundProduct.price;
+                document.getElementById('productDescription').value = foundProduct.desc;
+                document.getElementById('productStatus').value = foundProduct.status;
+                document.getElementById('productUnit').value = foundProduct.unit;
+                document.getElementById('productModal').style.display = 'block';
+            }
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const description = document.getElementById('productDescription').value.trim();
+            const status = document.getElementById('productStatus').value;
+            const unit = document.getElementById('productUnit').value;
+
+            if (!name || !category || !price || !description) {
+                showNotification('All required fields must be filled!', 'error');
+                return;
+            }
+
+            if (currentEditProduct) {
+                // Update existing product
+                currentEditProduct.name = name;
+                currentEditProduct.desc = description;
+                currentEditProduct.status = status;
+                currentEditProduct.unit = unit;
+                
+                if (currentEditProduct.type === 'home') {
+                    currentEditProduct.pricePerKg = price;
+                } else {
+                    currentEditProduct.price = price;
+                }
                 
                 showNotification('Product updated successfully!', 'success');
-                closeProductModal();
-                
-                // Reset form
-                document.getElementById('productName').value = '';
-                document.getElementById('productCategory').value = '';
-                document.getElementById('productPrice').value = '';
-                document.getElementById('productDescription').value = '';
-                
-                // Show info about updating main website
-                showNotification('Changes saved! Refresh main website to see updates.', 'info');
             } else {
-                showNotification('Product not found in database', 'error');
+                // Add new product
+                const newProduct = {
+                    id: getNextProductId(),
+                    name: name,
+                    category: category === 'home' ? 'Home Foods' : 'Pickles',
+                    desc: description,
+                    type: category,
+                    status: status,
+                    unit: unit
+                };
+
+                if (category === 'home') {
+                    newProduct.pricePerKg = price;
+                } else {
+                    newProduct.price = price;
+                }
+
+                if (!products[category]) {
+                    products[category] = [];
+                }
+                products[category].push(newProduct);
+                showNotification('Product added successfully!', 'success');
+            }
+
+            localStorage.setItem('adminMenuItems', JSON.stringify(products));
+            closeProductModal();
+            renderProducts();
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                // Find and remove product
+                for (let category in products) {
+                    const index = products[category].findIndex(p => p.id === id);
+                    if (index !== -1) {
+                        products[category].splice(index, 1);
+                        break;
+                    }
+                }
+                
+                localStorage.setItem('adminMenuItems', JSON.stringify(products));
+                showNotification('Product deleted successfully!', 'success');
+                renderProducts();
             }
         }
-        
+
+        function getNextProductId() {
+            let maxId = 0;
+            for (let category in products) {
+                products[category].forEach(product => {
+                    if (product.id > maxId) {
+                        maxId = product.id;
+                    }
+                });
+            }
+            return maxId + 1;
+        }
+
+        function renderProducts() {
+            console.log('🎨 renderProducts() called');
+            const tbody = document.querySelector('#productsTableBody');
+            console.log('🔍 Found tbody:', tbody);
+            
+            if (!tbody) {
+                console.error('❌ productsTableBody not found!');
+                return;
+            }
+
+            let allProducts = [];
+            for (let category in products) {
+                console.log(`🔍 Processing category: ${category}, items: ${products[category].length}`);
+                products[category].forEach(product => {
+                    allProducts.push(product);
+                });
+            }
+
+            console.log('🔍 Total products to render:', allProducts.length);
+
+            if (allProducts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No products found. Click "Add Product" to add your first product.</td></tr>';
+                return;
+            }
+
+            const htmlContent = allProducts.map(product => {
+                const price = product.type === 'home' ? product.pricePerKg : product.price;
+                const unit = product.unit || (product.type === 'home' ? 'kg' : 'jar');
+                
+                console.log(`🔍 Rendering product: ${product.name}, price: ${price}, unit: ${unit}`);
+                
+                return `
+                    <tr style="display: table-row !important; visibility: visible !important; opacity: 1 !important; background: white !important; border: 1px solid #ddd !important;">
+                        <td style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; padding: 12px !important; border: 1px solid #ddd !important;">${product.id}</td>
+                        <td style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; padding: 12px !important; border: 1px solid #ddd !important;">${product.name}</td>
+                        <td style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; padding: 12px !important; border: 1px solid #ddd !important;">${product.category}</td>
+                        <td style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; padding: 12px !important; border: 1px solid #ddd !important;">₹${price}/${unit}</td>
+                        <td style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; padding: 12px !important; border: 1px solid #ddd !important;"><span style="color: ${product.status === 'active' ? '#27ae60' : '#e74c3c'};">${product.status}</span></td>
+                        <td style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; padding: 12px !important; border: 1px solid #ddd !important;">
+                            <button class="btn btn-sm btn-secondary" onclick="editProduct(${product.id})" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 5px; display: inline-block !important; visibility: visible !important; opacity: 1 !important;">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            console.log('🔍 HTML content to insert:', htmlContent.substring(0, 200) + '...');
+            tbody.innerHTML = htmlContent;
+            console.log('🔍 Tbody innerHTML after setting:', tbody.innerHTML.substring(0, 200) + '...');
+            console.log('🔍 Tbody children count:', tbody.children.length);
+            
+            // Force visibility
+            tbody.style.display = 'table-row-group';
+            tbody.style.visibility = 'visible';
+            tbody.style.opacity = '1';
+            tbody.style.background = 'white';
+            
+            // Also style the table
+            const table = tbody.closest('table');
+            if (table) {
+                table.style.display = 'table';
+                table.style.visibility = 'visible';
+                table.style.opacity = '1';
+                table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
+                table.style.background = 'white';
+            }
+            
+            console.log('✅ Products rendered successfully with forced visibility');
+        }
+
         // Other functions
-        function editProduct(id) {
-            console.log('Editing product:', id);
-            
-            // Menu items data
-            const menuItems = {
-                1: { name: 'Sona Masoori Rice', category: 'Home Foods', price: '320', unit: 'kg', description: 'Aromatic everyday rice' },
-                2: { name: 'Mixed Vegetables', category: 'Home Foods', price: '350', unit: 'kg', description: 'Seasonal vegetables, home-style' },
-                3: { name: 'Sakinalu', category: 'Home Foods', price: '300', unit: 'kg', description: 'Crispy sesame rice snack, traditional' },
-                4: { name: 'Madugulu', category: 'Home Foods', price: '300', unit: 'kg', description: 'Steamed rice dumplings, soft and fluffy' },
-                5: { name: 'Laddus', category: 'Home Foods', price: '400', unit: 'kg', description: 'Sweet gram flour laddus, handmade' },
-                6: { name: 'Mango Pickle (veg)', category: 'Pickles', price: '150', unit: 'jar', description: 'Spicy raw mango pickle' },
-                7: { name: 'Lime Pickle (veg)', category: 'Pickles', price: '120', unit: 'jar', description: 'Tangy lime pickle' },
-                8: { name: 'Chicken Pickle (non-veg)', category: 'Pickles', price: '220', unit: 'jar', description: 'Spicy chicken pickle' }
-            };
-            
-            const product = menuItems[id];
-            if (product) {
-                // Fill the modal with product data
-                document.getElementById('productName').value = product.name;
-                document.getElementById('productCategory').value = product.category.toLowerCase().replace(' ', '-');
-                document.getElementById('productPrice').value = product.price;
-                document.getElementById('productDescription').value = product.description;
-                
-                // Change modal title
-                document.querySelector('.modal-title').textContent = 'Edit Product';
-                
-                // Show modal
-                openProductModal();
-                
-                showNotification('Editing product: ' + product.name, 'info');
-            } else {
-                showNotification('Product not found!', 'error');
-            }
-        }
-        
         function viewOrder(id) {
             alert('View Order #' + id + '\n\nCustomer: John Doe\nTotal: ₹420\nStatus: Pending\nDate: 2024-01-31');
         }
         
+        // Category Management
+        let categories = JSON.parse(localStorage.getItem('categories')) || [
+            { id: 1, name: 'Snacks', description: 'Traditional snacks', status: 'active', productCount: 12 },
+            { id: 2, name: 'Pickles', description: 'Homemade pickles', status: 'active', productCount: 8 },
+            { id: 3, name: 'Sweets', description: 'Traditional sweets', status: 'active', productCount: 6 }
+        ];
+
+        let paymentMethods = JSON.parse(localStorage.getItem('paymentMethods')) || [
+            { id: 1, name: 'Cash on Delivery', type: 'COD', details: 'Pay when you receive', status: 'active' },
+            { id: 2, name: 'Google Pay', type: 'UPI', details: 'UPI ID: sridevi@paytm', status: 'active' }
+        ];
+
+        let orders = JSON.parse(localStorage.getItem('orders')) || [
+            { id: 1, customer: 'John Doe', total: 420, status: 'pending', date: '2024-01-31', items: [{ name: 'Sona Masoori Rice', qty: 1, price: 320 }, { name: 'Mango Pickle', qty: 1, price: 100 }] },
+            { id: 2, customer: 'Jane Smith', total: 550, status: 'completed', date: '2024-01-30', items: [{ name: 'Mixed Vegetables', qty: 1, price: 350 }, { name: 'Lime Pickle', qty: 2, price: 240 }] }
+        ];
+
+        let currentEditCategory = null;
+        let currentEditPayment = null;
+
         function addCategory() {
-            alert('Add Category\n\nThis will open a modal to add new categories.\nFeature is ready for implementation!');
+            currentEditCategory = null;
+            document.getElementById('categoryModalTitle').textContent = 'Add Category';
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryDescription').value = '';
+            document.getElementById('categoryStatus').value = 'active';
+            document.getElementById('categoryModal').style.display = 'block';
         }
-        
+
         function editCategory(id) {
-            alert('Edit Category #' + id + '\n\nThis will open the edit modal for categories.\nFeature is ready for implementation!');
+            currentEditCategory = categories.find(cat => cat.id === id);
+            if (currentEditCategory) {
+                document.getElementById('categoryModalTitle').textContent = 'Edit Category';
+                document.getElementById('categoryName').value = currentEditCategory.name;
+                document.getElementById('categoryDescription').value = currentEditCategory.description;
+                document.getElementById('categoryStatus').value = currentEditCategory.status;
+                document.getElementById('categoryModal').style.display = 'block';
+            }
         }
-        
+
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').style.display = 'none';
+        }
+
+        function saveCategory() {
+            const name = document.getElementById('categoryName').value.trim();
+            const description = document.getElementById('categoryDescription').value.trim();
+            const status = document.getElementById('categoryStatus').value;
+
+            if (!name) {
+                showNotification('Category name is required!', 'error');
+                return;
+            }
+
+            if (currentEditCategory) {
+                // Update existing category
+                currentEditCategory.name = name;
+                currentEditCategory.description = description;
+                currentEditCategory.status = status;
+                showNotification('Category updated successfully!', 'success');
+            } else {
+                // Add new category
+                const newCategory = {
+                    id: categories.length > 0 ? Math.max(...categories.map(c => c.id)) + 1 : 1,
+                    name: name,
+                    description: description,
+                    status: status,
+                    productCount: 0
+                };
+                categories.push(newCategory);
+                showNotification('Category added successfully!', 'success');
+            }
+
+            localStorage.setItem('categories', JSON.stringify(categories));
+            closeCategoryModal();
+            renderCategories();
+        }
+
+        function renderCategories() {
+            const tbody = document.querySelector('#categoriesTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = categories.map(category => `
+                <tr>
+                    <td>${category.id}</td>
+                    <td>${category.name}</td>
+                    <td>${category.description}</td>
+                    <td>${category.productCount}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editCategory(${category.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCategory(${category.id})" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 5px;">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Payment Methods Management
         function addPayment() {
-            alert('Add Payment Method\n\nThis will open a modal to add new payment methods.\nFeature is ready for implementation!');
+            currentEditPayment = null;
+            document.getElementById('paymentModalTitle').textContent = 'Add Payment Method';
+            document.getElementById('paymentName').value = '';
+            document.getElementById('paymentType').value = 'COD';
+            document.getElementById('paymentDetails').value = '';
+            document.getElementById('paymentStatus').value = 'active';
+            document.getElementById('paymentModal').style.display = 'block';
         }
-        
+
         function editPayment(id) {
-            alert('Edit Payment Method #' + id + '\n\nThis will open the edit modal for payment methods.\nFeature is ready for implementation!');
+            currentEditPayment = paymentMethods.find(payment => payment.id === id);
+            if (currentEditPayment) {
+                document.getElementById('paymentModalTitle').textContent = 'Edit Payment Method';
+                document.getElementById('paymentName').value = currentEditPayment.name;
+                document.getElementById('paymentType').value = currentEditPayment.type;
+                document.getElementById('paymentDetails').value = currentEditPayment.details;
+                document.getElementById('paymentStatus').value = currentEditPayment.status;
+                document.getElementById('paymentModal').style.display = 'block';
+            }
         }
-        
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        function savePayment() {
+            const name = document.getElementById('paymentName').value.trim();
+            const type = document.getElementById('paymentType').value;
+            const details = document.getElementById('paymentDetails').value.trim();
+            const status = document.getElementById('paymentStatus').value;
+
+            if (!name) {
+                showNotification('Payment method name is required!', 'error');
+                return;
+            }
+
+            if (currentEditPayment) {
+                // Update existing payment method
+                currentEditPayment.name = name;
+                currentEditPayment.type = type;
+                currentEditPayment.details = details;
+                currentEditPayment.status = status;
+                showNotification('Payment method updated successfully!', 'success');
+            } else {
+                // Add new payment method
+                const newPayment = {
+                    id: paymentMethods.length > 0 ? Math.max(...paymentMethods.map(p => p.id)) + 1 : 1,
+                    name: name,
+                    type: type,
+                    details: details,
+                    status: status
+                };
+                paymentMethods.push(newPayment);
+                showNotification('Payment method added successfully!', 'success');
+            }
+
+            localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
+            closePaymentModal();
+            renderPaymentMethods();
+        }
+
+        function renderPaymentMethods() {
+            const tbody = document.querySelector('#paymentsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = paymentMethods.map(payment => `
+                <tr>
+                    <td>${payment.id}</td>
+                    <td>${payment.name}</td>
+                    <td>${payment.type}</td>
+                    <td><span style="color: ${payment.status === 'active' ? '#27ae60' : '#e74c3c'};">${payment.status}</span></td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editPayment(${payment.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deletePayment(${payment.id})" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 5px;">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteCategory(id) {
+            if (confirm('Are you sure you want to delete this category? This action cannot be undone.')) {
+                categories = categories.filter(cat => cat.id !== id);
+                localStorage.setItem('categories', JSON.stringify(categories));
+                showNotification('Category deleted successfully!', 'success');
+                renderCategories();
+            }
+        }
+
+        function deletePayment(id) {
+            if (confirm('Are you sure you want to delete this payment method? This action cannot be undone.')) {
+                paymentMethods = paymentMethods.filter(payment => payment.id !== id);
+                localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
+                showNotification('Payment method deleted successfully!', 'success');
+                renderPaymentMethods();
+            }
+        }
+        function viewOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                const orderDetails = document.getElementById('orderDetails');
+                orderDetails.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <h4>Order #${order.id}</h4>
+                        <p><strong>Customer:</strong> ${order.customer}</p>
+                        <p><strong>Date:</strong> ${order.date}</p>
+                        <p><strong>Status:</strong> <span style="color: ${order.status === 'completed' ? '#27ae60' : '#f39c12'};">${order.status}</span></p>
+                        <p><strong>Total:</strong> ₹${order.total}</p>
+                    </div>
+                    <div>
+                        <h5>Order Items:</h5>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f8f9fa;">
+                                    <th style="padding: 10px; text-align: left;">Item</th>
+                                    <th style="padding: 10px; text-align: center;">Quantity</th>
+                                    <th style="padding: 10px; text-align: right;">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${order.items.map(item => `
+                                    <tr>
+                                        <td style="padding: 10px;">${item.name}</td>
+                                        <td style="padding: 10px; text-align: center;">${item.qty}</td>
+                                        <td style="padding: 10px; text-align: right;">₹${item.price}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'completed')">Mark as Completed</button>
+                        <button class="btn btn-secondary" onclick="updateOrderStatus(${order.id}, 'cancelled')">Cancel Order</button>
+                    </div>
+                `;
+                document.getElementById('orderModal').style.display = 'block';
+            }
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        function updateOrderStatus(id, status) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                order.status = status;
+                localStorage.setItem('orders', JSON.stringify(orders));
+                showNotification(`Order #${id} marked as ${status}!`, 'success');
+                closeOrderModal();
+                renderOrders();
+            }
+        }
+
+        function renderOrders() {
+            const tbody = document.querySelector('#orders tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>#${String(order.id).padStart(3, '0')}</td>
+                    <td>${order.customer}</td>
+                    <td>₹${order.total}</td>
+                    <td><span style="color: ${order.status === 'completed' ? '#27ae60' : order.status === 'cancelled' ? '#e74c3c' : '#f39c12'};">${order.status}</span></td>
+                    <td>${order.date}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="viewOrder(${order.id})">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
         function refreshOrders() {
+            renderOrders();
             showNotification('Orders refreshed!', 'success');
         }
         
@@ -1099,6 +1495,41 @@
             if (!checkAuth()) {
                 return;
             }
+            
+            // Initialize data rendering
+            console.log('🚀 Starting data rendering...');
+            
+            // Test if functions exist
+            console.log('🔍 renderProducts function exists:', typeof renderProducts);
+            console.log('🔍 renderCategories function exists:', typeof renderCategories);
+            console.log('🔍 renderPaymentMethods function exists:', typeof renderPaymentMethods);
+            console.log('🔍 renderOrders function exists:', typeof renderOrders);
+            
+            renderCategories();
+            renderPaymentMethods();
+            renderOrders();
+            renderProducts();
+            
+            // Check if products are still there after 2 seconds
+            setTimeout(() => {
+                const tbody = document.querySelector('#productsTableBody');
+                console.log('🔍 After 2 seconds - tbody children count:', tbody ? tbody.children.length : 'tbody not found');
+                if (tbody && tbody.children.length === 0) {
+                    console.error('❌ Products were cleared! Re-rendering...');
+                    renderProducts();
+                }
+            }, 2000);
+            
+            console.log('✅ Data rendering completed');
+            
+            // Load saved settings
+            const savedStoreName = localStorage.getItem('storeName');
+            const savedStoreEmail = localStorage.getItem('storeEmail');
+            const savedStorePhone = localStorage.getItem('storePhone');
+            
+            if (savedStoreName) document.getElementById('storeName').value = savedStoreName;
+            if (savedStoreEmail) document.getElementById('storeEmail').value = savedStoreEmail;
+            if (savedStorePhone) document.getElementById('storePhone').value = savedStorePhone;
             
             // Show welcome message
             showNotification('Welcome to Admin Panel!', 'success');

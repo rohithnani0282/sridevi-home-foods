@@ -1,0 +1,13 @@
+Main Website: https://sridevi-home-foods-admin.web.app
+Cart Page: https://sridevi-home-foods-admin.web.app/cart.html
+GitHub Pages (Backup):
+
+Main Website: https://rohithnani0282.github.io/sridevi-home-foods/
+Cart Page: https://rohithnani0282.github.io/sridevi-home-foods/cart.html
+⚙️ Admin Panel (For You)
+Firebase Hosting:
+
+Admin Panel: https://sridevi-home-foods-admin.web.app/admin.html
+GitHub Pages (Backup):
+
+Admin Panel: https://rohithnani0282.github.io/sridevi-home-foods/admin.html
